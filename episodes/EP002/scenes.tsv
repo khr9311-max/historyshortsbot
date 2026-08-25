@@ -1,0 +1,10 @@
+scene	kind	move	dur	note
+S01	ai_hero	orbit	5.85	도입 훅 - 명나라 황실 은 창고
+S02	ai_still	dolly_in	5.03	난관 - 16세기 명나라 교역 항구
+S03	diagram	-	6.73	도해 - 픽토그램 대비 : 은 풍요 vs 국고 파산·반란
+S04	diagram	-	4.73	도해 - 인과 화살표 : 조세 은납화 + 공급망 충격
+S05	ai_hero	dolly_in	5.55	해결1 - 관아 앞 은 세금 납부
+S06	diagram	-	6.12	도해 - 수치 그래프 : 은값 폭등과 농민 실질 세부담 3배
+S07	ai_still	dolly_in	5.25	해결2 - 만리장성 북방 초소와 군대
+S08	ai_hero	crane_up	5.55	요약 - 먹구름 낀 자금성 궁궐 실루엣
+S09	diagram	-	6.14	도해 - 인과 요약 + 루프백 (끝 프레임 BG 수렴)
