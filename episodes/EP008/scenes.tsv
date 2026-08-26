@@ -1,0 +1,11 @@
+scene	kind	move	dur	note
+S01	ai_hero	side_track	4.52	도입 훅 - 반사실적 질문
+S02	ai_hero	push_in	2.70	훅 질문 - 험준한 산맥과 수운 개척
+S03	diagram	-	4.05	도해 - 통념 부정 (천혜의 항구 단독 조건 배제)
+S04	diagram	-	5.49	도해 - 지리 장벽과 육로 운송의 한계
+S05	ai_still	dolly_in	6.01	조건 1 - 육로 운송비의 재앙적 수준
+S06	ai_hero	side_track	2.20	조건 2 - 584km 이리 운하 건설
+S07	ai_hero	push_in	4.89	셀프 문답 - 자연 협곡과 경쟁 도시의 탈락
+S08	ai_hero	side_track	3.69	핵심 메커니즘 - 운송비 95% 폭락과 기간 단축
+S09	ai_hero	push_in	3.18	결과 - 물류 및 금융 자본의 뉴욕 독점 집적
+S10	diagram	-	8.37	도해 - 인과 수렴 요약 + 루프백

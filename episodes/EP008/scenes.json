@@ -1,0 +1,195 @@
+{
+  "episode": "EP008",
+  "title": "운하 하나가 도시의 운명을 가른 사례 구조",
+  "hook_text": "뉴욕을 만든 단 하나의 물길",
+  "package": {
+    "youtube_title": "운하 하나가 뉴욕을 세계 수도로 만든 진짜 이유",
+    "description": "1800년대 초 미국의 최대 무역항이자 금융 중심지는 뉴욕이 아니었습니다. 필라델피아와 볼티모어가 치열하게 경쟁하고 있었죠.\n\n그런데 어떻게 뉴욕이 압도적인 1위로 올라서게 되었을까요? 타고난 항구 조건 때문이 아니었습니다.\n\n진짜 원인은 애팔래치아 산맥을 우회해 오대호와 뉴욕항을 직결한 584km의 이리 운하와, 운송비 95% 폭락이 불러온 물류 독점이었습니다.\n\n출처: Peter L. Bernstein, Wedding of the Waters (2005) / Ronald E. Shaw, Canals for a Nation (1990) / Carol Sheriff, The Artificial River (1996)\n\n#역사 #세계사 #뉴욕 #이리운하 #인프라",
+    "hashtags": [
+      "역사",
+      "세계사",
+      "뉴욕",
+      "이리운하",
+      "인프라"
+    ],
+    "thumbnail_scene": "S01",
+    "thumbnail_time": 1.2
+  },
+  "shots": [
+    {
+      "id": "V01",
+      "kind": "veo",
+      "scenes": [
+        "S01",
+        "S02"
+      ],
+      "risk": "low",
+      "golden_ref": "GP-01",
+      "chars": 564,
+      "prompt": "[0-5s] Wide establishing shot of 19th-century New York harbor and waterfront wharves at dusk, slow side tracking shot moving left to right, silhouette masted schooners and warehouse docks against heavy atmospheric haze. [5-8s] Rapid push-in close-up on heavy hemp mooring ropes securing a vessel to weathered wooden pier piles, catching low directional harbor light. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, silhouette figures only, no visible faces, no Korean text, subtle film grain, 9:16 vertical, 8 seconds."
+    },
+    {
+      "id": "I01",
+      "kind": "still",
+      "scenes": [
+        "S05"
+      ],
+      "risk": "low",
+      "golden_ref": "GP-05",
+      "chars": 380,
+      "prompt": "Cinematic documentary still, wide composition of heavy wooden freight wagons struggling along a muddy, rocky mountain pass in the Appalachian mountains at twilight, deep navy blue tone, low saturation, single directional light breaking through dense forest, heavy atmospheric haze, silhouette draft horses, no visible faces, no Korean text, subtle film grain, 9:16 vertical, 2K."
+    },
+    {
+      "id": "V02",
+      "kind": "veo",
+      "scenes": [
+        "S06",
+        "S07"
+      ],
+      "risk": "low",
+      "golden_ref": "GP-02",
+      "chars": 531,
+      "prompt": "[0-5s] Wide shot of the Erie Canal waterway carved through a misty river valley gorge at dusk, slow side tracking shot moving left to right, silhouette stone lock structures along the canal banks. [5-8s] Rapid push-in close-up on heavy timber lock gates holding back canal water, iron fittings catching low directional lantern light. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, silhouette figures only, no visible faces, no Korean text, subtle film grain, 9:16 vertical, 8 seconds."
+    },
+    {
+      "id": "V03",
+      "kind": "veo",
+      "scenes": [
+        "S08",
+        "S09"
+      ],
+      "risk": "low",
+      "golden_ref": "GP-04",
+      "chars": 543,
+      "prompt": "[0-5s] Wide establishing shot of crowded New York shipping docks lined with canal packet barges at dusk, slow side tracking shot, silhouette dockworkers moving cargo crates along the pier. [5-8s] Rapid push-in close-up on stacked grain sacks and wooden shipping barrels unloaded from a canal barge, textured burlap catching raking lantern light. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, silhouette figures only, no visible faces, no Korean text, subtle film grain, 9:16 vertical, 8 seconds."
+    }
+  ],
+  "scenes": [
+    {
+      "id": "S01",
+      "shot": "V01",
+      "beat": "A",
+      "move": "side_track",
+      "pause": 0.20,
+      "note": "도입 훅 - 반사실적 질문",
+      "narration": "운하가 없었다면, 뉴욕은 최대 도시가 못 됐을 겁니다.",
+      "subs": [
+        "운하가 없었다면,",
+        "뉴욕은 *최대 도시가 못 됐을 겁니다.*"
+      ]
+    },
+    {
+      "id": "S02",
+      "shot": "V01",
+      "beat": "B",
+      "move": "push_in",
+      "pause": 0.25,
+      "note": "훅 질문 - 험준한 산맥과 수운 개척",
+      "narration": "왜 산맥을 뚫고 물길을 냈을까요?",
+      "subs": [
+        "왜 산맥을 뚫고",
+        "*물길을 냈을까요?*"
+      ]
+    },
+    {
+      "id": "S03",
+      "kind": "diagram",
+      "plate": "fog",
+      "pause": 1.1,
+      "note": "도해 - 통념 부정 (천혜의 항구 단독 조건 배제)",
+      "narration": "단순히 타고난 천혜의 항구 때문이 아니었습니다.",
+      "subs": [
+        "단순히 타고난",
+        "*천혜의 항구 때문이 아니었습니다.*"
+      ]
+    },
+    {
+      "id": "S04",
+      "kind": "diagram",
+      "plate": "grid",
+      "pause": 1.1,
+      "note": "도해 - 지리 장벽과 육로 운송의 한계",
+      "narration": "진짜 장벽은 동부와 서부를 가로막은 애팔래치아 산맥이었거든요.",
+      "subs": [
+        "진짜 장벽은 동부와 서부를 가로막은",
+        "*애팔래치아 산맥이었거든요.*"
+      ]
+    },
+    {
+      "id": "S05",
+      "shot": "I01",
+      "move": "dolly_in",
+      "pause": 1.0,
+      "note": "조건 1 - 육로 운송비의 재앙적 수준",
+      "narration": "당시 중서부 곡물을 나르는 육로 운송비는 곡물값 자체보다 비쌌습니다.",
+      "subs": [
+        "당시 중서부 곡물을 나르는 육로 운송비는",
+        "*곡물값 자체보다 비쌌습니다.*"
+      ]
+    },
+    {
+      "id": "S06",
+      "shot": "V02",
+      "beat": "A",
+      "move": "side_track",
+      "pause": 0.20,
+      "note": "조건 2 - 584km 이리 운하 건설",
+      "narration": "뉴욕은 직접 운하를 팠죠.",
+      "subs": [
+        "뉴욕은",
+        "*직접 운하를 팠죠.*"
+      ]
+    },
+    {
+      "id": "S07",
+      "shot": "V02",
+      "beat": "B",
+      "move": "push_in",
+      "pause": 0.20,
+      "note": "셀프 문답 - 자연 협곡과 경쟁 도시의 탈락",
+      "narration": "왜 못 따라왔냐고요? 산을 넘을 길이 없었거든요.",
+      "subs": [
+        "왜 못 따라왔냐고요?",
+        "*산을 넘을 길이 없었거든요.*"
+      ]
+    },
+    {
+      "id": "S08",
+      "shot": "V03",
+      "beat": "A",
+      "move": "side_track",
+      "pause": 0.20,
+      "note": "핵심 메커니즘 - 운송비 95% 폭락과 기간 단축",
+      "narration": "운하가 열리자 운송비는 95퍼센트 폭락했고,",
+      "subs": [
+        "운하가 열리자",
+        "*운송비는 95퍼센트 폭락했고,*"
+      ]
+    },
+    {
+      "id": "S09",
+      "shot": "V03",
+      "beat": "B",
+      "move": "push_in",
+      "pause": 0.25,
+      "note": "결과 - 물류 및 금융 자본의 뉴욕 독점 집적",
+      "narration": "모든 물자와 자본이 뉴욕으로 쏟아졌습니다.",
+      "subs": [
+        "모든 물자와 자본이",
+        "*뉴욕으로 쏟아졌습니다.*"
+      ]
+    },
+    {
+      "id": "S10",
+      "kind": "diagram",
+      "plate": "fog",
+      "pause": 0.0,
+      "note": "도해 - 인과 수렴 요약 + 루프백",
+      "narration": "결국 도시의 패권을 가른 건 항구의 위치가 아니라, 광대한 배후지를 독점 연결한 수운 인프라였습니다.",
+      "subs": [
+        "결국 도시의 패권을 가른 건 항구의 위치가 아니라,",
+        "광대한 배후지를 독점 연결한 *수운 인프라*였습니다."
+      ]
+    }
+  ]
+}
