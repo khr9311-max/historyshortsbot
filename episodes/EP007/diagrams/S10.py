@@ -1,8 +1,8 @@
 """
 S10 — 인과 수렴 요약 + 루프백 (마지막 컷)
-나레이션: "결국 교회를 쪼갠 건 교리만이 아니라, 대량 복제가 만든 상업적 유혹과 분권화된 도시들이었습니다."
+나레이션: "결국 역사의 물줄기를 바꾼 건 기술 혁신이 아니라, 활자가 연결한 도시 네트워크였습니다."
 
-인과 화살표 수렴 패턴: 복제비 급감/상업성 + 분권 자치도시 네트워크 → 여론 양극화 & 종교 전쟁
+인과 화살표 수렴 패턴: 복제비 급감/상업성 + 분권 자치도시 네트워크 → 여론 확산 & 정치 갈등 격화
 LOOP_TAIL 로 끝 프레임을 BG 로 수렴시켜 루프 이음매를 만든다.
 """
 import pathlib
@@ -13,16 +13,16 @@ from lib_style import *  # noqa: F403
 
 
 class S10Scene(DiagramScene):
-    DURATION = 8.14   # timing.json 과 일치
+    DURATION = 7.75   # timing.json 과 일치
     LOOP_TAIL = 1.25  # 끝 프레임을 BG 로 수렴 → 반복 재생 이음매 제거
     DRIFT = 0.004
 
     def build(self):
-        head = title_block("종교 갈등으로 이어진 인과 사슬", "기술 · 상업 · 정치 분권의 결합")
+        head = title_block("사회적 갈등으로 이어진 인과 사슬", "기술 혁신 · 상업 생존 · 자치 도시의 결합")
 
         # --- 상단 2가지 조건 카드 ---
         c1 = card(
-            tag("조건 1 · 시장 유혹", color=SUB),
+            tag("조건 1 · 시장 구조", color=SUB),
             txt("정보 복제 비용 급감\n& 자극적 소책자 수익", size=FS_BODY, color=INK),
             width=3.75,
             color=MUTE,
@@ -46,14 +46,14 @@ class S10Scene(DiagramScene):
         # --- 하단 결과 카드 ---
         res = card(
             tag("역사적 귀결", color=ACCENT),
-            txt("중앙 검열 무력화 및 여론 극단화\n→ 타협 없는 종교 전쟁으로 격화", size=FS_LEAD, color=INK),
+            txt("중앙 통제 무력화 및 정보 확산\n→ 타협 없는 정치·사회 갈등으로 격화", size=FS_LEAD, color=INK),
             footnote("출처: E. Eisenstein (1979) / M. Edwards (1994)"),
             width=7.8,
             accent=True,
             pad_y=0.55,
             gap=0.20,
         )
-        res.move_to(DOWN * 2.5)  # guard() 가 세이프 하단 경계까지 끌어올린다
+        res.move_to(DOWN * 2.5)
         guard(res, "result-card")
 
         # --- 수렴 화살표 ---
@@ -67,8 +67,8 @@ class S10Scene(DiagramScene):
 
         # 애니메이션 시퀀스
         self.play(FadeIn(head, shift=DOWN * 0.25), run_time=1.2)
-        self.reveal(c1, c2, run_time=1.4, shift=DOWN * 0.15)
-        self.draw(arrows, run_time=1.2)
-        self.reveal(res, run_time=1.4, shift=UP * 0.2)
+        self.reveal(c1, c2, run_time=1.3, shift=DOWN * 0.15)
+        self.draw(arrows, run_time=1.1)
+        self.reveal(res, run_time=1.3, shift=UP * 0.2)
         self.pulse(res, times=1, scale=1.03, run_time=0.4)
-        self.beat(0.8)
+        self.beat(0.6)

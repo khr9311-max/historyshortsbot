@@ -1,6 +1,6 @@
 """
 S04 — 수치·비용 구조 비교 : 인쇄 시장의 생존 방정식
-나레이션: "진짜 방아쇠는 기술 혁신이 아니라 인쇄업자들의 생존 문제였거든요."
+나레이션: "진짜 연결고리는 인쇄소들의 절박한 생존 문제였거든요."
 
 라틴어 대작(자본 잠식/파산 위험) vs 모국어 소책자(빠른 회전율/폭발적 흑자) 비교.
 """
@@ -12,7 +12,7 @@ from lib_style import *  # noqa: F403
 
 
 class S04Scene(DiagramScene):
-    DURATION = 5.47  # timing.json 과 일치
+    DURATION = 5.04  # timing.json 과 일치
     DRIFT = 0.004
 
     def build(self):
@@ -32,8 +32,6 @@ class S04Scene(DiagramScene):
             color=MUTE,
             pad_y=0.45,
         )
-        # 제목 바로 아래로 바짝 붙이고, card_b 를 세이프 하단까지 끌어내려
-        # 두 카드 사이의 화살표가 화면 중단~하단을 채우게 한다.
         card_a.move_to(UP * 4.3)
         guard(card_a, "card_a")
 
@@ -52,10 +50,10 @@ class S04Scene(DiagramScene):
             accent=True,
             pad_y=0.50,
         )
-        card_b.move_to(DOWN * 2.5)  # guard() 가 세이프 하단 경계까지 끌어올린다
+        card_b.move_to(DOWN * 2.5)
         guard(card_b, "card_b")
 
-        # --- 2. 전환 대비 (두 카드 사이 빈 공간을 화살표로 채운다) ---
+        # --- 2. 전환 대비 ---
         link = Arrow(
             card_a.get_bottom() + DOWN * 0.15,
             card_b.get_top() + UP * 0.15,
@@ -75,9 +73,9 @@ class S04Scene(DiagramScene):
                 FadeIn(card_a, shift=RIGHT * 0.25),
                 lag_ratio=0.3,
             ),
-            run_time=1.4,
+            run_time=1.3,
         )
-        self.beat(0.4)
+        self.beat(0.3)
 
-        self.reveal(link, vs_lbl, card_b, run_time=1.4, shift=UP * 0.25)
+        self.reveal(link, vs_lbl, card_b, run_time=1.3, shift=UP * 0.25)
         self.pulse(card_b, times=1, scale=1.03, run_time=0.4)

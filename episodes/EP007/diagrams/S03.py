@@ -1,6 +1,6 @@
 """
-S03 — 픽토그램 대비 : 통념 부정 (인쇄술 발명 vs 종교 갈등 직행 ✕)
-나레이션: "인쇄기가 종교 갈등을 홀로 만든 건 아니었습니다."
+S03 — 픽토그램 대비 : 통념 부정 (인쇄 기술 자체 vs 사회·경제적 결합)
+나레이션: "인쇄 기술 자체가 갈등을 만든 건 아니었습니다."
 
 색·폰트·크기·세이프에어리어는 scripts/lib_style.py (스타일 바이블) 에서만 가져온다.
 X 표시는 픽토그램 위에만 올린다.
@@ -14,13 +14,13 @@ from lib_style import *  # noqa: F403
 
 
 class S03Scene(DiagramScene):
-    DURATION = 4.07  # timing.json 과 일치
+    DURATION = 4.04  # timing.json 과 일치
     DRIFT = 0.004    # 씬 내내 아주 느린 줌인
 
     def build(self):
-        head = title_block("활자 인쇄와 종교 분열의 경로")
+        head = title_block("활자 인쇄와 사회적 파급의 경로")
 
-        # --- 통념 (인쇄술 발명이 곧바로 종교 분열 직행) ---
+        # --- 통념 (기술 하나가 곧바로 전쟁 직행) ---
         doc = pict_doc(DIM, height=1.35)
         wrong = card(
             VGroup(
@@ -31,8 +31,6 @@ class S03Scene(DiagramScene):
             color=MUTE,
             pad_y=0.50,
         )
-        # 제목 바로 아래로 바짝 붙인다 — 카드가 상단 40%에만 몰리지 않도록
-        # 아래쪽 right-card 를 세이프 하단까지 끌어내려 화면 전체를 쓴다.
         wrong.move_to(UP * 4.3)
         guard(wrong, "wrong-card")
 
@@ -49,21 +47,21 @@ class S03Scene(DiagramScene):
         x_mark = cross_out(doc, DIM, pad=-0.14)
         self.draw(x_mark, run_time=1.2)
 
-        # --- 실제 역사적 결합 (세이프 하단까지 내려 화면 하단을 채운다) ---
+        # --- 실제 역사적 결합 ---
         right = card(
             VGroup(
                 pict_bulb(INK, height=1.35),
-                txt("인쇄업자의 상업적 생존과\n분권 도시 네트워크의 결합", size=FS_LEAD, color=INK),
+                txt("인쇄소의 경제적 생존과\n분권 도시 네트워크의 결합", size=FS_LEAD, color=INK),
                 footnote("출처: E. Eisenstein (1979) / A. Pettegree (2015)"),
             ).arrange(DOWN, buff=0.18),
             width=7.8,
             accent=True,
             pad_y=0.55,
         )
-        right.move_to(DOWN * 2.4)  # guard() 가 세이프 하단 경계까지 끌어올린다
+        right.move_to(DOWN * 2.4)
         guard(right, "right-card")
 
-        # 두 카드 사이 빈 공간을 인과 화살표로 채운다 (바이블 §3 인과 화살표 패턴)
+        # 두 카드 사이 연결 화살표
         link = Arrow(
             wrong.get_bottom() + DOWN * 0.15,
             right.get_top() + UP * 0.15,
