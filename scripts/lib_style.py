@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import math
 
+import numpy as np
 from manim import *  # noqa: F401,F403
 
 # ============================================================
@@ -453,15 +454,26 @@ class DiagramScene(MovingCameraScene):
 
     # --- 애니메이션 헬퍼 (바이블 타이밍 규칙 강제) ---
     def reveal(self, *mobs, run_time: float = MIN_RUN_TIME, shift=None, hold: float = 0.0):
-        """요소 등장. run_time 하한 1.2초를 강제한다."""
+        """요소 등장. run_time 하한 1.2초를 강제한다.
+
+        여러 요소를 한 번에 넘겨도 동시에 튀어나오지 않는다 — 바이블 §3
+        '동시 등장 금지'를 지키도록 살짝 시차(lag_ratio)를 둔다.
+        shift 는 화면에 이미 떠 있는 다른 요소 위로 미끄러져 겹쳐 보이지
+        않도록 이동 거리를 작게 눌러 둔다.
+        """
         rt = max(run_time, MIN_RUN_TIME)
+        capped_shift = None
+        if shift is not None:
+            mag = np.linalg.norm(shift)
+            capped_shift = shift * (0.15 / mag) if mag > 0.15 else shift
         anims = []
         for m in mobs:
             if isinstance(m, Animation):
                 anims.append(m)
             else:
-                anims.append(FadeIn(m, shift=shift if shift is not None else ORIGIN))
-        self.play(AnimationGroup(*anims, lag_ratio=0.0), run_time=rt)
+                anims.append(FadeIn(m, shift=capped_shift if capped_shift is not None else ORIGIN))
+        lag = 0.65 if len(anims) > 1 else 0.0
+        self.play(AnimationGroup(*anims, lag_ratio=lag), run_time=rt)
         if hold:
             self.wait(hold)
 
@@ -555,7 +567,12 @@ class DiagramScene(MovingCameraScene):
 
     def pulse(self, mob: Mobject, times: int = 2, scale: float = 1.06,
               run_time: float = 0.45):
-        """한 요소를 두어 번 맥동시켜 시선을 잡는다. 결정타 자리에만."""
+        """한 요소를 두어 번 맥동시켜 시선을 잡는다. 결정타 자리에만.
+
+        scale 은 1.03 을 넘지 않도록 눌러 둔다 — 갓 fade-in 한 요소가
+        곧바로 커졌다 작아지면 '툭 튀어나오는' 느낌이 과해진다.
+        """
+        scale = min(scale, 1.03)
         for _ in range(times):
             self.play(mob.animate.scale(scale), run_time=run_time / 2,
                       rate_func=rate_functions.ease_out_sine)
