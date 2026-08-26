@@ -22,6 +22,14 @@ cat > "$DIR/scenes.json" <<JSON
 {
   "episode": "${EP}",
   "title": "(제목)",
+  "hook_text": "(0~2초 훅 카드. 12자 이내)",
+  "package": {
+    "youtube_title": "(유튜브 제목)",
+    "description": "(설명란. 인과 구조 한 줄 + 출처)",
+    "hashtags": ["역사", "세계사"],
+    "thumbnail_scene": "S01",
+    "thumbnail_time": 1.0
+  },
   "shots": [
     {
       "id": "V01",

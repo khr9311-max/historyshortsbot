@@ -161,6 +161,7 @@ S03	diagram	-	3.73	도해 - 통념 부정
 python scripts/pipeline.py EP007          # 2. 되는 데까지 진행
                                           #    script → sources(GATE1) → narration
                                           #    → prompt → video → diagram → assemble
+                                          #    → package → review(GATE2) → publish
 
 python scripts/pipeline.py EP007 --status # 어디까지 됐나
 python scripts/pipeline.py EP007 --from prompt --only V02   # 특정 샷만 다시
@@ -187,6 +188,7 @@ manim -qh --resolution 1080,1920 \
 | `prompt` | 2비트 합이 8초 초과 | 대본 축약 또는 `diagram` 전환 |
 | `video` | 생성물 없음 | `prompts/*.txt` 로 생성해 `assets/` 에 배치 |
 | `diagram` | 씬 코드 없음 | Manim 씬 작성 |
+| `package` | `package` 필드 누락(제목/설명/썸네일 씬) | `scenes.json` 의 `package`·`hook_text` 채우기 |
 | `review` | 최종 검수 (GATE2) | 결과물 확인 후 승인 |
 
 ---

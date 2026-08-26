@@ -197,6 +197,7 @@ def txt(
     bold: bool = True,
     line_spacing: float = 0.9,
     max_w: float | None = None,
+    outline: bool = False,
 ) -> Text:
     t = Text(
         s,
@@ -206,6 +207,11 @@ def txt(
         weight=BOLD if bold else NORMAL,
         line_spacing=line_spacing,
     )
+    if outline:
+        # 카드 밖(플레이트 위)에 직접 얹히는 글자용 — 글자 뒤에 BG색 다크닝을
+        # 깔아 대비를 스스로 확보한다. 카드 안에서 쓰면 카드와 같은 색이라
+        # 안 보이므로 무해하다.
+        t.set_stroke(color=BG, width=size * 0.22, background=True, opacity=0.9)
     if max_w is not None:
         fit(t, max_w)
     return t
@@ -250,12 +256,12 @@ def rule(width: float = 6.6, color: str = MUTE) -> Line:
 
 def tag(s: str, color: str = SUB) -> Text:
     """상단 소제목/카테고리 태그."""
-    return txt(s, size=FS_TAG, color=color, bold=True)
+    return txt(s, size=FS_TAG, color=color, bold=True, outline=True)
 
 
 def footnote(s: str) -> Text:
     """학설 구분·출처 각주 — 바이블 §8"""
-    return txt(s, size=FS_TAG, color=DIM, bold=False)
+    return txt(s, size=FS_TAG, color=DIM, bold=False, outline=True)
 
 
 # ============================================================
@@ -637,9 +643,9 @@ class DiagramScene(MovingCameraScene):
 # ============================================================
 def title_block(text: str, sub_text: str | None = None, y: float = SAFE_T) -> VGroup:
     """상단 제목. 세이프 상단에 붙인다."""
-    parts = [txt(text, size=FS_TITLE, color=INK, max_w=SAFE_W)]
+    parts = [txt(text, size=FS_TITLE, color=INK, max_w=SAFE_W, outline=True)]
     if sub_text:
-        parts.append(txt(sub_text, size=FS_CAPTION, color=DIM, bold=False, max_w=SAFE_W))
+        parts.append(txt(sub_text, size=FS_CAPTION, color=DIM, bold=False, max_w=SAFE_W, outline=True))
     g = VGroup(*parts).arrange(DOWN, buff=0.22)
     g.move_to(UP * (y - g.height / 2))
     return guard(g, "title_block")

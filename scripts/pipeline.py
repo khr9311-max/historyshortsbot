@@ -27,6 +27,7 @@ still(이미지) 생성은 여전히 사람이 한다.
     video     veo 생성(API) · still 확인     — veo 는 자동 생성, still 은 사람이 넣는다
     diagram   Manim 도해 렌더
     assemble  조립                           → render/<EP>_final.mp4
+    package   업로드 메타데이터 검증 + 썸네일    → package.md thumbnail.jpg
     review    [GATE2] 최종 검수              — 사람이 보고 승인
     publish   업로드 체크리스트 출력
 
@@ -78,7 +79,7 @@ VEO_NEGATIVE_PROMPT = (
 )
 
 STAGES = ["script", "sources", "narration", "prompt",
-          "video", "diagram", "assemble", "review", "publish"]
+          "video", "diagram", "assemble", "package", "review", "publish"]
 
 ONLY: set[str] | None = None
 
@@ -411,6 +412,64 @@ def stage_assemble(ep: str):
                    check=True)
 
 
+def stage_package(ep: str, ep_dir: Path):
+    """업로드 메타데이터 검증 + 썸네일 추출 + package.md 생성.
+
+    제목·설명·해시태그·썸네일 프레임은 scenes.json 의 `package` 필드가
+    단일 권원이다 — 발행 직전에 사람이 즉흥적으로 짓지 않는다.
+    """
+    doc = lib_scenes.load(ep)
+    err, warn = lib_scenes.validate_package(doc)
+    report(err, warn, "패키징 검증")
+
+    timing = load_timing(ep_dir)
+    scenes_by_id = {s["scene"]: s for s in timing["scenes"]}
+    p = doc.package
+    sc = scenes_by_id.get(p.thumbnail_scene)
+    if sc is None:
+        die(f"thumbnail_scene '{p.thumbnail_scene}' 이 timing.json 에 없습니다.")
+    abs_t = sc["start"] + max(0.0, min(p.thumbnail_time, sc["dur"] - 1 / 25))
+
+    video = ROOT / "render" / f"{ep}_final.mp4"
+    if not video.is_file():
+        die("렌더 결과가 없습니다. assemble 단계를 먼저 돌리세요.")
+
+    import lib_narration
+    ffmpeg = lib_narration.find_ffmpeg()
+    thumb = ep_dir / "thumbnail.jpg"
+    subprocess.run(
+        [ffmpeg, "-y", "-loglevel", "error", "-ss", f"{abs_t:.3f}",
+         "-i", str(video), "-frames:v", "1", "-q:v", "2", str(thumb)],
+        check=True,
+    )
+    say(f"  썸네일: {thumb}  ({p.thumbnail_scene} @ {p.thumbnail_time:.2f}s → 영상 {abs_t:.2f}s)")
+
+    tags = " ".join(f"#{h.lstrip('#')}" for h in p.hashtags)
+    md = f"""# {ep} 발행 패키지
+
+## 제목
+{p.youtube_title}
+
+## 설명
+{p.description}
+
+## 해시태그
+{tags}
+
+## 썸네일
+{thumb.relative_to(ROOT).as_posix()}  ({p.thumbnail_scene} @ {p.thumbnail_time:.2f}s)
+
+## 체크리스트
+- [ ] AI 생성 콘텐츠 라벨 체크 (필수)
+- [ ] 예약 발행: 월/수/금
+- [ ] 제목·설명·해시태그가 위 내용과 일치하는지 확인
+- [ ] 프로덕션 시트에 업로드일 기록 (SOP §6)
+"""
+    pkg_path = ep_dir / "package.md"
+    pkg_path.write_text(md, encoding="utf-8")
+    say(f"  {pkg_path} 작성 완료")
+
+
 def stage_review(ep: str):
     """GATE2 — 사람이 결과를 보고 승인해야 넘어간다."""
     out = ROOT / "render" / f"{ep}_final.mp4"
@@ -419,16 +478,23 @@ def stage_review(ep: str):
     say(f"  결과: {out}")
     say("  QC 체크리스트(docs/03_제작_SOP.md §5)를 확인하세요.")
     say("  자동 검사:  .\\scripts\\qc.ps1 " + ep)
+    pkg = ROOT / "episodes" / ep / "package.md"
+    if pkg.is_file():
+        say(f"  발행 패키지: {pkg}")
     if input("\n  발행 단계로 넘어갈까요? [y/N] ").strip().lower() != "y":
         die("사용자가 보류했습니다.")
 
 
 def stage_publish(ep: str):
-    """업로드는 사람이 한다. 빠뜨리기 쉬운 것만 짚어 준다."""
+    """업로드는 사람이 한다. package.md 에 제목·설명·썸네일이 이미 준비돼 있다."""
+    pkg = ROOT / "episodes" / ep / "package.md"
+    if pkg.is_file():
+        say(f"  {pkg} 의 제목·설명·해시태그·썸네일 그대로 업로드하세요.")
+    else:
+        say(f"  [경고] package.md 가 없습니다 — package 단계를 먼저 돌리세요.")
     say(f"  render/{ep}_final.mp4 를 업로드하세요.")
     say("    - AI 생성 콘텐츠 라벨 체크 (필수)")
     say("    - 예약 발행: 월/수/금")
-    say("    - 제목·설명에 인과 구조 한 줄 + 출처 표기")
     say("    - 프로덕션 시트에 업로드일 기록 (SOP §6)")
 
 
@@ -478,6 +544,8 @@ def main():
             stage_diagram(a.ep, ep_dir)
         elif stage == "assemble":
             stage_assemble(a.ep)
+        elif stage == "package":
+            stage_package(a.ep, ep_dir)
         elif stage == "review":
             stage_review(a.ep)
         elif stage == "publish":

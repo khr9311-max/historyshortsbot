@@ -1,0 +1,3 @@
+# V02  (S06, S07)  비트 경계 3.23s / 사용 7.89s of 8s  risk=low  ref=GP-02  552자
+
+[0-3.2s] Wide shot of a 16th-century European crowded marketplace street at dusk, slow horizontal panning shot, silhouette townspeople gathering around a merchant distributing printed paper pamphlets, heavy atmospheric haze. [3.2-8s] Rapid push-in close-up on an open German vernacular pamphlet page, red bracket lines with a "VERNACULAR PAMPHLET" annotation overlaid on the printed gothic script. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, subtle film grain, 9:16 vertical, 8 seconds. No Korean text.

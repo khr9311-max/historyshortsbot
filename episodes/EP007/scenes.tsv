@@ -1,0 +1,11 @@
+scene	kind	move	dur	note
+S01	ai_hero	side_track	3.49	도입 훅
+S02	ai_hero	push_in	3.48	훅 질문
+S03	diagram	-	4.07	도해 - 통념 부정
+S04	diagram	-	5.47	도해 - 인쇄업자의 상업적 생존
+S05	ai_still	dolly_in	5.30	조건 1 - 라틴어 성경의 높은 비용과 적자
+S06	ai_hero	side_track	3.23	조건 2 - 모국어 소책자의 폭발적 수익
+S07	ai_hero	push_in	4.67	셀프 문답 - 분권적 도시와 통제 불가
+S08	ai_hero	side_track	3.79	조건 3 - 금지령 무력화와 대량 인쇄
+S09	ai_hero	push_in	3.41	결과 - 타협 없는 여론 양극화와 전쟁
+S10	diagram	-	8.14	도해 - 인과 요약 + 루프백

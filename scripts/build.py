@@ -56,6 +56,17 @@ LOOP_FADE_IN = 0.35   # 첫 컷을 BG 에서 연다 (마지막 컷은 BG 로 닫
 AUDIO_FADE_IN = 0.25
 AUDIO_FADE_OUT = 0.90
 
+# --- 훅 카드 (0~2초) ---
+# 스크롤을 멈추게 하는 큰 헤드라인 한 줄. scenes.json 의 hook_text 가 원천이다.
+# 첫 자막 줄("인쇄술은" 같은 4~5글자 파편)은 0.3초에야 뜨고 그마저 짧다 —
+# 스와이프 판정은 그보다 먼저 끝난다. 0초부터 화면에 정보가 있어야 한다.
+HOOK_INK_HEX = "0xE8E4DC"     # 바이블 §1 INK
+HOOK_BOX_HEX = "0x0E1420"     # 바이블 §1 BG — 글자 뒤 다크닝 박스
+HOOK_FONTSIZE = 92
+HOOK_Y = 210
+HOOK_DURATION = 2.0
+HOOK_FADE = 0.30
+
 # --- 오디오 레벨 (바이블 §5) ---
 # 바이블의 -14dB / -20dB 는 '나레이션 대비 상대값'이다.
 # 이전 판은 소스 파일에 그 값을 그냥 곱했다. 그런데 EP001 의 소스는
@@ -86,6 +97,25 @@ def find_exe(name: str) -> str:
 
 FFMPEG = find_exe("ffmpeg")
 FFPROBE = find_exe("ffprobe")
+
+
+def find_font_file() -> str | None:
+    """Pretendard Bold 폰트 파일 경로. drawtext 는 fontconfig 없이 파일 경로가
+    필요하다(libass 의 sub.ass 와 달리). 없으면 맑은 고딕 볼드로 대체한다
+    (바이블 §2 폰트 대체 규칙과 동일)."""
+    for c in (
+        Path("C:/Windows/Fonts/Pretendard-Bold.otf"),
+        Path(os.environ.get("LOCALAPPDATA", "")) / "Microsoft/Windows/Fonts/Pretendard-Bold.otf",
+        Path("C:/Windows/Fonts/malgunbd.ttf"),
+    ):
+        if c.is_file():
+            return str(c)
+    return None
+
+
+def _ffmpeg_path_escape(p: str) -> str:
+    """filtergraph 안에서 ':' 는 key=value 구분자라 드라이브 콜론을 이스케이프한다."""
+    return p.replace("\\", "/").replace(":", r"\:")
 
 
 def run(args: list[str], **kw):
@@ -248,12 +278,19 @@ def _plate_offset(scene_id: str, dur_needed: float) -> float:
     return round(room * (h / 997), 2)
 
 
+# 플레이트 원본은 BG(#0E1420, YAVG≈20) 근처로 너무 어둡게 눌려 있어
+# 합성해도 사실상 안 보인다 (P_fog/P_grid 실측 YAVG 29/33 — BG와 거의 구분 불가).
+# 카드 밖 여백에서 플레이트가 실제로 읽히도록 합성 시점에 들어 올린다.
+# 카드는 자체 불투명(BG 92%) 배경이 있어 텍스트 대비에는 영향이 없다.
+PLATE_GRADE = "eq=brightness=0.20:contrast=1.10:saturation=0.85"
+
+
 def composite_diagram(alpha_src: Path, plate_src: Path, dst: Path,
                        frames: int, scene_id: str):
     """투명 도해 위에 배경 플레이트를 깔아 합성한다."""
     offset = _plate_offset(scene_id, frames / FPS)
     plate_chain = (f"scale={W}:{H}:force_original_aspect_ratio=increase,"
-                    f"crop={W}:{H},fps={FPS},setsar=1")
+                    f"crop={W}:{H},fps={FPS},setsar=1,{PLATE_GRADE}")
     if offset > 0:
         plate_chain += f",trim=start={offset},setpts=PTS-STARTPTS"
     plate_chain += ",tpad=stop_mode=clone:stop_duration=5"
@@ -269,6 +306,30 @@ def composite_diagram(alpha_src: Path, plate_src: Path, dst: Path,
 
 
 # ============================================================
+def hook_overlay_filter(text: str, work: Path) -> str | None:
+    """0~2초 훅 카드 drawtext 필터 문자열. 폰트가 없으면 None (건너뛴다)."""
+    font = find_font_file()
+    if font is None:
+        say("  [경고] Pretendard/맑은 고딕 폰트를 찾지 못해 훅 카드를 건너뜁니다.")
+        return None
+    txt_file = work / "hook.txt"
+    txt_file.write_text(text, encoding="utf-8")
+    fontfile = _ffmpeg_path_escape(font)
+    textfile = _ffmpeg_path_escape(str(txt_file))
+    # 필터 값은 작은따옴표로 감싸 filtergraph 파서(콤마=필터 구분자)로부터
+    # 보호한다 — 따옴표 안의 콤마는 표현식 파서(if/lt/gt 인자 구분)에 그대로
+    # 넘어가야 하므로 여기서 추가로 이스케이프하지 않는다.
+    fade = (f"if(lt(t,{HOOK_FADE}),t/{HOOK_FADE},"
+            f"if(gt(t,{HOOK_DURATION - HOOK_FADE}),max(0,({HOOK_DURATION}-t)/{HOOK_FADE}),1))")
+    return (
+        f"drawtext=fontfile='{fontfile}':textfile='{textfile}':"
+        f"fontsize={HOOK_FONTSIZE}:fontcolor={HOOK_INK_HEX}:"
+        f"x=(w-text_w)/2:y={HOOK_Y}:"
+        f"box=1:boxcolor={HOOK_BOX_HEX}@0.72:boxborderw=22:"
+        f"enable='lt(t,{HOOK_DURATION})':alpha='{fade}'"
+    )
+
+
 def source_gate(ep_dir: Path):
     """sources.md 가 비어 있으면 발행 금지 (바이블 §8)."""
     src = ep_dir / "sources.md"
@@ -297,6 +358,12 @@ def main():
         sys.exit(f"오류: {ep_dir} 가 없습니다.")
 
     source_gate(ep_dir)
+
+    scenes_json = ep_dir / "scenes.json"
+    hook_text = ""
+    if scenes_json.is_file():
+        hook_text = (json.loads(scenes_json.read_text(encoding="utf-8"))
+                     .get("hook_text", "") or "").strip()
 
     scenes, total = load_scenes(ep_dir)
     plan = frame_plan(scenes)
@@ -372,6 +439,11 @@ def main():
         sub_rel = sub.relative_to(ROOT).as_posix()
 
         chain = f"[bl]{SATURATION},{GRAIN},{VIGNETTE}"
+        if hook_text:
+            hook_filter = hook_overlay_filter(hook_text, work)
+            if hook_filter:
+                chain += f",{hook_filter}"
+                say(f"  훅 카드: \"{hook_text}\" (0~{HOOK_DURATION:.1f}s)")
         if sub.is_file() and sub.stat().st_size > 0:
             chain += f",ass={sub_rel}"
         # 마지막 컷은 BG 로 수렴한다. 첫 프레임도 BG 에서 열어 루프를 잇는다.

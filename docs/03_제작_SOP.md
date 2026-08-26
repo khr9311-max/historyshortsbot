@@ -35,8 +35,12 @@ veo 컷이 6개라도 돈이 나가는 건 클립 3개다. 여기가 이 파이�
         정지 이미지 1장 생성 (사람이 실행) ────────────────────┤
         Manim 도해 3컷 + 플레이트 합성 (0원) ──────────────────┤
             ↓                                          ↓
-        [pipeline.py] video → diagram → assemble → review(GATE2) → 업로드
+        [pipeline.py] video → diagram → assemble → package → review(GATE2) → 업로드
 ```
+
+`package` 단계는 `scenes.json` 의 `package` 필드(제목·설명·해시태그·썸네일
+프레임)를 검증하고 `episodes/<EP>/package.md` + `thumbnail.jpg` 를 뽑는다
+(규칙 §6). 업로드 시 제목·설명을 즉흥적으로 짓지 않기 위한 단계다.
 
 **역할 분담**
 - **claude.ai 프로젝트** = 소재·대본·씬 분해·프롬프트·출처 → `scenes.json` 하나로 출력

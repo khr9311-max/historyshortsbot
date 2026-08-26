@@ -1,0 +1,189 @@
+{
+  "episode": "EP007",
+  "title": "활자 인쇄가 종교 갈등으로 이어진 연결고리",
+  "hook_text": "교회가 만든 인쇄술",
+  "package": {
+    "youtube_title": "구텐베르크 인쇄술이 종교 전쟁을 부른 이유",
+    "description": "구텐베르크의 인쇄술은 교회의 축복 속에 태어났습니다. 그런데 왜 100년 뒤 전 유럽을 종교 전쟁으로 몰아넣었을까요?\n\n인쇄기가 종교 갈등을 홀로 만든 건 아니었습니다. 진짜 방아쇠는 인쇄업자들의 생존 문제였습니다.\n\n출처: E. Eisenstein, The Printing Press as an Agent of Change (1979) / A. Pettegree, Brand Luther (2015) / M. Edwards, Printing, Propaganda, and Martin Luther (1994)\n\n#역사 #세계사 #구텐베르크 #종교개혁 #인쇄술",
+    "hashtags": ["역사", "세계사", "구텐베르크", "종교개혁", "인쇄술"],
+    "thumbnail_scene": "S01",
+    "thumbnail_time": 1.2
+  },
+  "shots": [
+    {
+      "id": "V01",
+      "kind": "veo",
+      "scenes": [
+        "S01",
+        "S02"
+      ],
+      "risk": "low",
+      "golden_ref": "GP-01",
+      "chars": 581,
+      "prompt": "[0-5s] Wide establishing shot of a 15th-century Gutenberg printing workshop at dusk, slow side tracking shot moving left to right, heavy atmospheric haze, silhouette apprentice figures operating a wooden screw press, warm candlelight through dim haze. [5-8s] Rapid push-in close-up on the wooden screw press mechanism applying pressure to metal type, thin red measurement lines with a \"1450s MOVABLE TYPE\" annotation overlaid. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, subtle film grain, 9:16 vertical, 8 seconds. No Korean text."
+    },
+    {
+      "id": "I01",
+      "kind": "still",
+      "scenes": [
+        "S05"
+      ],
+      "risk": "low",
+      "golden_ref": "GP-05",
+      "chars": 366,
+      "prompt": "Cinematic documentary still, wide composition of massive leather-bound Latin Bible volumes stacked high on a dark oak table in a dim medieval monastery, deep navy blue tone, low saturation, single directional light from high arched window, heavy atmospheric haze, silhouette monk in background, no visible faces, subtle film grain, 9:16 vertical, 2K. No Korean text."
+    },
+    {
+      "id": "V02",
+      "kind": "veo",
+      "scenes": [
+        "S06",
+        "S07"
+      ],
+      "risk": "low",
+      "golden_ref": "GP-02",
+      "chars": 548,
+      "prompt": "[0-5s] Wide shot of a 16th-century European crowded marketplace street at dusk, slow horizontal panning shot, silhouette townspeople gathering around a merchant distributing printed paper pamphlets, heavy atmospheric haze. [5-8s] Rapid push-in close-up on an open German vernacular pamphlet page, red bracket lines with a \"VERNACULAR PAMPHLET\" annotation overlaid on the printed gothic script. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, subtle film grain, 9:16 vertical, 8 seconds. No Korean text."
+    },
+    {
+      "id": "V03",
+      "kind": "veo",
+      "scenes": [
+        "S08",
+        "S09"
+      ],
+      "risk": "low",
+      "golden_ref": "GP-04",
+      "chars": 518,
+      "prompt": "[0-5s] High aerial view over medieval fortified city ramparts connected across a misty river valley at twilight, slow side tracking shot, faint torchlights along stone walls. [5-8s] Rapid push-in close-up on armed silhouette soldiers carrying halberds and banners clashing at a cathedral gate, red bracket lines with a \"CONFESSIONAL CONFLICT\" annotation overlaid. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, subtle film grain, 9:16 vertical, 8 seconds. No Korean text."
+    }
+  ],
+  "scenes": [
+    {
+      "id": "S01",
+      "shot": "V01",
+      "beat": "A",
+      "move": "side_track",
+      "pause": 0.25,
+      "note": "도입 훅",
+      "narration": "인쇄술은 교회의 축복 속에 태어났습니다.",
+      "subs": [
+        "인쇄술은",
+        "*교회의 축복 속에 태어났습니다.*"
+      ]
+    },
+    {
+      "id": "S02",
+      "shot": "V01",
+      "beat": "B",
+      "move": "push_in",
+      "pause": 0.30,
+      "note": "훅 질문",
+      "narration": "그런데 왜 유럽을 종교 전쟁으로 몰아넣었을까요?",
+      "subs": [
+        "그런데 왜",
+        "*유럽을 종교 전쟁으로 몰아넣었을까요?*"
+      ]
+    },
+    {
+      "id": "S03",
+      "kind": "diagram",
+      "plate": "fog",
+      "pause": 0.70,
+      "note": "도해 - 통념 부정",
+      "narration": "인쇄기가 종교 갈등을 홀로 만든 건 아니었습니다.",
+      "subs": [
+        "인쇄기가 종교 갈등을",
+        "*홀로 만든 건 아니었습니다.*"
+      ]
+    },
+    {
+      "id": "S04",
+      "kind": "diagram",
+      "plate": "grid",
+      "pause": 0.70,
+      "note": "도해 - 인쇄업자의 상업적 생존",
+      "narration": "진짜 방아쇠는 기술 혁신이 아니라 인쇄업자들의 생존 문제였거든요.",
+      "subs": [
+        "진짜 방아쇠는 기술 혁신이 아니라",
+        "*인쇄업자들의 생존 문제였거든요.*"
+      ]
+    },
+    {
+      "id": "S05",
+      "shot": "I01",
+      "move": "dolly_in",
+      "pause": 0.85,
+      "note": "조건 1 - 라틴어 성경의 높은 비용과 적자",
+      "narration": "라틴어 대형 성경은 너무 비싸서 찍을수록 빚더미에 앉았습니다.",
+      "subs": [
+        "라틴어 대형 성경은 너무 비싸서",
+        "*찍을수록 빚더미에 앉았습니다.*"
+      ]
+    },
+    {
+      "id": "S06",
+      "shot": "V02",
+      "beat": "A",
+      "move": "side_track",
+      "pause": 0.20,
+      "note": "조건 2 - 모국어 소책자의 폭발적 수익",
+      "narration": "이들을 살린 건 자극적인 모국어 소책자였죠.",
+      "subs": [
+        "이들을 살린 건",
+        "*자극적인 모국어 소책자였죠.*"
+      ]
+    },
+    {
+      "id": "S07",
+      "shot": "V02",
+      "beat": "B",
+      "move": "push_in",
+      "pause": 0.20,
+      "note": "셀프 문답 - 분권적 도시와 통제 불가",
+      "narration": "왜 못 막았냐고요? 중앙 권력이 없었거든요.",
+      "subs": [
+        "왜 못 막았냐고요?",
+        "*중앙 권력이 없었거든요.*"
+      ]
+    },
+    {
+      "id": "S08",
+      "shot": "V03",
+      "beat": "A",
+      "move": "side_track",
+      "pause": 0.20,
+      "note": "조건 3 - 금지령 무력화와 대량 인쇄",
+      "narration": "독립 도시의 인쇄소들은 금지령을 비웃고 찍어냈고,",
+      "subs": [
+        "독립 도시의 인쇄소들은",
+        "*금지령을 비웃고 찍어냈고,*"
+      ]
+    },
+    {
+      "id": "S09",
+      "shot": "V03",
+      "beat": "B",
+      "move": "push_in",
+      "pause": 0.25,
+      "note": "결과 - 타협 없는 여론 양극화와 전쟁",
+      "narration": "말의 싸움은 타협 없는 피의 전쟁으로 번졌죠.",
+      "subs": [
+        "말의 싸움은",
+        "*타협 없는 피의 전쟁으로 번졌죠.*"
+      ]
+    },
+    {
+      "id": "S10",
+      "kind": "diagram",
+      "plate": "fog",
+      "pause": 0.0,
+      "note": "도해 - 인과 요약 + 루프백",
+      "narration": "결국 교회를 쪼갠 건 교리만이 아니라, 대량 복제가 만든 상업적 유혹과 분권화된 도시들이었습니다.",
+      "subs": [
+        "결국 교회를 쪼갠 건 교리만이 아니라,",
+        "대량 복제가 만든 *상업적 유혹과 분권화된 도시들*이었습니다."
+      ]
+    }
+  ]
+}

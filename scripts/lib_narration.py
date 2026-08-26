@@ -328,7 +328,8 @@ Style: Default,{FONT},{SUB_FONTSIZE},&H00{ASS_INK},&H000000FF,&H00000000,&HA0000
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 """
-    HOLD = 0.14   # 발화가 끝나도 잠깐 남겨 읽을 시간을 준다
+    HOLD = 0.14        # 발화가 끝나도 잠깐 남겨 읽을 시간을 준다
+    MIN_LINE = 0.55    # 자막 1번째 줄이 이보다 짧으면 읽기 전에 넘어간다 (플리커)
     dialogues = []
     for s in scenes:
         a, b_ = s["speech_start"], s["speech_end"]
@@ -343,6 +344,11 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         # 대체한다.
         aligned = _align_split(subs, boundaries) if len(subs) == 2 else None
         if aligned is not None and 0.0 < aligned < span:
+            # 실제 발화가 끝나는 지점이 너무 이르면(예: 짧은 서두어) 1번째
+            # 줄이 0.5초도 못 뜨고 넘어간다 — 최소 노출 시간을 보장하되
+            # 2번째 줄도 최소한은 남겨 둔다(둘 다 짧은 초단문 컷 한정 예외).
+            floor = min(MIN_LINE, max(span - MIN_LINE, span * 0.5))
+            aligned = max(aligned, floor)
             splits = [a, a + aligned, b_]
         else:
             if len(subs) == 2:

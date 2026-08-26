@@ -72,12 +72,16 @@ _ENDING_RUN = 3       # 같은 부류가 이만큼 연속되면 경고
 _BEAT_TOKEN = re.compile(r"\[\s*\d+(?:\.\d+)?\s*-\s*\d+(?:\.\d+)?\s*s\s*\]")
 _HANGUL = re.compile(r"[가-힣]")
 
-# 근거 없는 계측선/숫자 주석 탐지 (docs/06 §GP-01~04).
-# "measurement lines / numeric annotation" 문구는 GP 앵커의 고정 어휘라
-# 씬마다 그대로 복사되기 쉽지만, 딸린 따옴표 라벨("SUBTERRANEAN YIELD" 같은)이
-# 없으면 화면에 근거 없는 숫자만 튀어나온다 (EP005 V01 사고).
+# 마무리·루프백 문장 검사 (문체 규칙 §5) — 반전은 주체·순서·비용 중 하나에
+# 걸어야 하고, "원인의 단일화"로 미끄러지면 안 된다.
+_REVERSAL_MARK = re.compile(r"아니(?:라|었습니다|고|에요|었죠|었네요)")
+_CONJOIN = re.compile(r"[가-힣]+(?:와|과)\s*[가-힣]")
+
+# 계측선/주석 오버레이 탐지 (docs/06 §GP-01~04, §GP-06~08).
+# 라벨 유무와 무관하게 veo/still 프롬프트에는 넣지 않는다 — 디퓨전이
+# 매 클립마다 선과 글자를 새로 그려 흔들리거나 뭉개진다 (EP005 V01,
+# EP007 V01~V03 사고). 화면 정보는 전부 diagram 컷으로 보낸다.
 _ANNOTATION_HINT = re.compile(r"measurement line|numeric annotation|annotation overlaid|leader line", re.I)
-_QUOTED_LABEL = re.compile(r'"[^"]+"')
 
 
 def _norm_for_compare(s: str) -> str:
@@ -123,11 +127,23 @@ class Scene:
 
 
 @dataclass
+class Package:
+    """업로드용 메타데이터 — 발행 단계(package)에서 검증·출력된다."""
+    youtube_title: str = ""
+    description: str = ""
+    hashtags: list[str] = field(default_factory=list)
+    thumbnail_scene: str = ""
+    thumbnail_time: float = 1.0
+
+
+@dataclass
 class Doc:
     episode: str
     title: str
     scenes: list[Scene]
     shots: dict[str, Shot]
+    hook_text: str = ""
+    package: Package = field(default_factory=Package)
 
     def scene(self, scene_id: str) -> Scene | None:
         return next((s for s in self.scenes if s.id == scene_id), None)
@@ -169,8 +185,18 @@ def load(ep: str) -> Doc:
             note=s.get("note", ""), shot=shot_id, beat=s.get("beat", ""),
             move=s.get("move", "-"), plate=plate))
 
+    pkg_raw = raw.get("package") or {}
+    package = Package(
+        youtube_title=pkg_raw.get("youtube_title", ""),
+        description=pkg_raw.get("description", ""),
+        hashtags=list(pkg_raw.get("hashtags") or []),
+        thumbnail_scene=pkg_raw.get("thumbnail_scene", ""),
+        thumbnail_time=float(pkg_raw.get("thumbnail_time", 1.0)),
+    )
+
     return Doc(episode=raw.get("episode", ep), title=raw.get("title", ""),
-               scenes=scenes, shots=shots)
+               scenes=scenes, shots=shots,
+               hook_text=raw.get("hook_text", ""), package=package)
 
 
 # ============================================================
@@ -234,10 +260,10 @@ def validate(doc: Doc) -> tuple[list[str], list[str]]:
             warn.append(f"{sh.id}: chars={sh.chars} 인데 실제 {len(sh.prompt)}자입니다.")
         if not sh.golden_ref:
             warn.append(f"{sh.id}: golden_ref 가 없습니다 (docs/06 의 GP-NN).")
-        if _ANNOTATION_HINT.search(sh.prompt) and not _QUOTED_LABEL.search(sh.prompt):
-            warn.append(f"{sh.id}: 계측선/숫자 주석 문구가 있는데 실제 라벨(따옴표 문자열)이 "
-                       "없습니다 — 근거 없는 숫자가 화면에 튀어나올 수 있습니다 "
-                       "(EP005 V01 사고). \"+25% POPULATION\" 처럼 라벨을 넣거나 문구를 빼세요.")
+        if _ANNOTATION_HINT.search(sh.prompt):
+            warn.append(f"{sh.id}: 계측선/주석 오버레이 문구가 있습니다 — veo/still은 "
+                       "선·글자를 매번 새로 그려 흔들리거나 뭉개집니다 (EP005 V01, "
+                       "EP007 V01~V03 사고). 이 문구를 빼고 정보는 diagram 컷으로 옮기세요.")
 
         missing = [x for x in sh.scenes if x not in ids]
         if missing:
@@ -275,6 +301,7 @@ def validate(doc: Doc) -> tuple[list[str], list[str]]:
                 warn.append(f"{sh.id}: 1비트 클립입니다. 8초를 다 쓰지 못합니다.")
 
     warn += _check_rhythm(doc)
+    warn += _check_ending(doc)
 
     # --- 배치 ---
     kinds = [s.kind for s in doc.scenes]
@@ -346,6 +373,80 @@ def _check_rhythm(doc: Doc) -> list[str]:
         warn.append("셀프 문답이 없습니다. 중반 이후 시청자가 떠올릴 반박을 "
                     "대신 묻고 즉시 답하는 문장을 하나 넣으세요 (문체 규칙 §3).")
     return warn
+
+
+def _check_ending(doc: Doc) -> list[str]:
+    """마지막 컷(루프백)이 나열형 결말로 미끄러졌는지 본다 (문체 규칙 §5).
+
+    "반전 솔루션으로 카타르시스"는 구조상 단일 원인 서사로 미끄러지기
+    쉽다. 반전은 주체·순서·비용 중 하나에만 걸어야 하는데("A가 아니라
+    B였습니다"), 실제로는 "A가 아니라 B와 C였습니다"처럼 반전 뒤에
+    명사를 두 개 이상 나열해 버리는 경우가 많다 — 여전히 원인이 여럿인
+    척하지만 화면 밖에서는 "그냥 다 합쳐서 결론"으로 읽힌다.
+    이건 취향이 아니라 §5가 명시적으로 금지하는 패턴이다. 경고지 오류는
+    아니다 — 의도했으면(예: 두 조건이 정말 대등하게 결합) 그대로 가도 된다.
+    """
+    warn: list[str] = []
+    if not doc.scenes:
+        return warn
+    last = doc.scenes[-1]
+    text = last.narration.strip()
+    if not text:
+        return warn
+
+    m = _REVERSAL_MARK.search(text)
+    if not m:
+        warn.append(
+            f"{last.id}: 마지막 문장(루프백)에 반전 표현('~이 아니라' 등)이 "
+            "없습니다. 결론을 그냥 요약·나열하고 있지 않은지 확인하세요 "
+            "(문체 규칙 §5 — 반전은 주체·순서·비용 중 하나에 걸 것)."
+        )
+    else:
+        tail = text[m.end():]
+        if _CONJOIN.search(tail):
+            warn.append(
+                f"{last.id}: 마지막 문장이 반전 뒤에 명사를 '~와/과'로 "
+                "나열합니다 (예: 'A가 아니라 B와 C였습니다') — 원인의 단일화를 "
+                "피하려다 나열형 결말로 샌 패턴일 수 있습니다 (문체 규칙 §5). "
+                "좋은 예는 '~와/과' 없이 반전 하나로 끝납니다: "
+                "'표준시를 만든 건 정부가 아니라 철도 회사였습니다.' "
+                "반전은 주체·순서·비용 중 하나에만 걸고, 나머지 원인은 도해 "
+                "화면이 설명하게 하세요. 두 조건이 정말 대등하게 결합한다는 "
+                "의도라면 그대로 두어도 됩니다."
+            )
+    return warn
+
+
+def validate_package(doc: Doc) -> tuple[list[str], list[str]]:
+    """업로드 패키징 필드 검증 — package 단계 전용 (script 단계와 분리:
+
+    옛 에피소드는 이 필드가 아예 없으므로 구조 검증과 묶으면 소급 경고가
+    쏟아진다)."""
+    err: list[str] = []
+    warn: list[str] = []
+    p = doc.package
+    ids = [s.id for s in doc.scenes]
+
+    if not p.youtube_title.strip():
+        err.append("package.youtube_title 이 비어 있습니다.")
+    elif len(p.youtube_title) > 100:
+        warn.append(f"package.youtube_title 이 {len(p.youtube_title)}자입니다 "
+                    "(유튜브 제목은 100자 넘으면 잘립니다).")
+    if not p.description.strip():
+        err.append("package.description 이 비어 있습니다.")
+    if not p.hashtags:
+        warn.append("package.hashtags 가 비어 있습니다.")
+    if not p.thumbnail_scene:
+        err.append("package.thumbnail_scene 이 없습니다 — 썸네일로 쓸 씬 id를 지정하세요.")
+    elif p.thumbnail_scene not in ids:
+        err.append(f"package.thumbnail_scene '{p.thumbnail_scene}' 은 없는 씬입니다.")
+    if not doc.hook_text.strip():
+        warn.append("hook_text 가 없습니다 — 0~2초 훅 카드 없이 나갑니다 "
+                    "(영상 프롬프트 규칙 §2 훅 카드).")
+    elif len(doc.hook_text.strip()) > 12:
+        warn.append(f"hook_text 가 {len(doc.hook_text.strip())}자입니다 — 12자를 "
+                    "넘으면 훅 카드 폭에서 잘리거나 줄어듭니다. 짧게 줄이세요.")
+    return err, warn
 
 
 # ============================================================
