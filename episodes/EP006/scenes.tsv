@@ -1,0 +1,11 @@
+scene	kind	move	dur	note
+S01	ai_hero	side_track	3.77	도입 훅
+S02	ai_hero	push_in	3.43	훅 결정타
+S03	diagram	-	6.19	도해 - 통념 부정
+S04	diagram	-	7.29	도해 - 유목 기병 vs 각궁/총 비교
+S05	ai_still	dolly_in	5.38	조건 1 - 판금 갑옷 등장
+S06	ai_hero	side_track	2.58	조건 1 대응 - 총탄의 관통력
+S07	ai_hero	push_in	4.22	셀프 문답 - 훈련 비용의 반전
+S08	ai_hero	side_track	3.27	조건 2 - 훈련 기간 비교
+S09	ai_hero	push_in	2.99	조건 3 - 종 주조 야금술 결합
+S10	diagram	-	7.39	도해 - 인과 요약 + 루프백

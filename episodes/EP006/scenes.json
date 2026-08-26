@@ -1,0 +1,181 @@
+{
+  "episode": "EP006",
+  "title": "왜 화약을 먼저 만든 쪽이 총을 늦게 썼나",
+  "shots": [
+    {
+      "id": "V01",
+      "kind": "veo",
+      "scenes": [
+        "S01",
+        "S02"
+      ],
+      "risk": "low",
+      "golden_ref": "GP-01",
+      "chars": 574,
+      "prompt": "[0-5s] Wide establishing shot of a 13th-century East Asian fortress at dusk, slow side tracking shot moving left to right, black powder smoke drifting over ancient battlements, peasant and soldier silhouettes, heavy atmospheric haze. [5-8s] Rapid push-in close-up on an ancient bronze fire lance discharging sparks and smoke on stone ramparts, thin red measurement lines with a \"1200s EARLY FIREARM\" annotation overlaid. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, subtle film grain, 9:16 vertical, 8 seconds. No Korean text."
+    },
+    {
+      "id": "I01",
+      "kind": "still",
+      "scenes": [
+        "S05"
+      ],
+      "risk": "low",
+      "golden_ref": "GP-05",
+      "chars": 332,
+      "prompt": "Cinematic documentary still, wide composition of a 15th-century European battlefield at dusk, heavy atmospheric haze, silhouette knight in full steel plate armor standing motionless in misty field, deep navy blue tone, low saturation, single directional light, no visible faces, subtle film grain, 9:16 vertical, 2K. No Korean text."
+    },
+    {
+      "id": "V02",
+      "kind": "veo",
+      "scenes": [
+        "S06",
+        "S07"
+      ],
+      "risk": "low",
+      "golden_ref": "GP-02",
+      "chars": 523,
+      "prompt": "[0-5s] Wide shot of a 16th-century European battlefield covered in thick gunsmoke, slow horizontal panning shot, silhouette figures of musket infantry marching in tight formation through heavy mist. [5-8s] Rapid push-in close-up on a heavy matchlock musket mechanism sparking and firing, red bracket lines with \"ARMOR PIERCING\" annotation overlaid on the steel barrel. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, subtle film grain, 9:16 vertical, 8 seconds. No Korean text."
+    },
+    {
+      "id": "V03",
+      "kind": "veo",
+      "scenes": [
+        "S08",
+        "S09"
+      ],
+      "risk": "low",
+      "golden_ref": "GP-04",
+      "chars": 507,
+      "prompt": "[0-5s] Wide shot of a massive stone fortress drill ground at twilight, slow side tracking shot moving left to right, peasant conscript silhouettes training in rows under atmospheric mist. [5-8s] Rapid push-in close-up on a bronze foundry casting heavy cannon and gun barrels, glowing molten metal and sparks with \"3 WEEKS TRAINING\" annotation overlaid. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, subtle film grain, 9:16 vertical, 8 seconds. No Korean text."
+    }
+  ],
+  "scenes": [
+    {
+      "id": "S01",
+      "shot": "V01",
+      "beat": "A",
+      "move": "side_track",
+      "pause": 0.35,
+      "note": "도입 훅",
+      "narration": "화약을 세계 최초로 만든 나라는 중국이었습니다.",
+      "subs": [
+        "화약을 세계 최초로 만든 건",
+        "*중국이었습니다.*"
+      ]
+    },
+    {
+      "id": "S02",
+      "shot": "V01",
+      "beat": "B",
+      "move": "push_in",
+      "pause": 0.35,
+      "note": "훅 결정타",
+      "narration": "그런데 왜 총의 시대를 연 건 유럽이었을까요?",
+      "subs": [
+        "그런데 왜 총의 시대를 연 건",
+        "*유럽이었을까요?*"
+      ]
+    },
+    {
+      "id": "S03",
+      "kind": "diagram",
+      "plate": "fog",
+      "pause": 0.40,
+      "note": "도해 - 통념 부정",
+      "narration": "중국은 이미 10세기에 화약을 무기로 썼지만, 서양처럼 총으로 직행하지 않았습니다.",
+      "subs": [
+        "10세기에 화약 무기를 썼지만,",
+        "*총으로 직행하지 않았습니다.*"
+      ]
+    },
+    {
+      "id": "S04",
+      "kind": "diagram",
+      "plate": "grid",
+      "pause": 0.40,
+      "note": "도해 - 유목 기병 vs 각궁/총 비교",
+      "narration": "초원의 유목 기병을 상대하기엔, 재장전이 느린 총보다 연사력이 빠른 활이 훨씬 치명적이었거든요.",
+      "subs": [
+        "초원의 유목 기병을 상대하기엔",
+        "*연사력이 빠른 활이 치명적이었거든요.*"
+      ]
+    },
+    {
+      "id": "S05",
+      "shot": "I01",
+      "move": "dolly_in",
+      "pause": 0.40,
+      "note": "조건 1 - 판금 갑옷 등장",
+      "narration": "반면 유럽 전장에는 화살이 튕겨 나가는 강철 판금 갑옷이 등장했습니다.",
+      "subs": [
+        "반면 유럽 전장에는 화살을 튕겨내는",
+        "*강철 판금 갑옷이 등장했습니다.*"
+      ]
+    },
+    {
+      "id": "S06",
+      "shot": "V02",
+      "beat": "A",
+      "move": "side_track",
+      "pause": 0.25,
+      "note": "조건 1 대응 - 총탄의 관통력",
+      "narration": "이 철갑을 뚫을 해법이 총탄이었죠.",
+      "subs": [
+        "이 철갑을 뚫을 해법이",
+        "*바로 총탄이었죠.*"
+      ]
+    },
+    {
+      "id": "S07",
+      "shot": "V02",
+      "beat": "B",
+      "move": "push_in",
+      "pause": 0.30,
+      "note": "셀프 문답 - 훈련 비용의 반전",
+      "narration": "왜 썼냐고요? 훈련 비용 때문입니다.",
+      "subs": [
+        "왜 썼냐고요?",
+        "*훈련 비용 때문입니다.*"
+      ]
+    },
+    {
+      "id": "S08",
+      "shot": "V03",
+      "beat": "A",
+      "move": "side_track",
+      "pause": 0.25,
+      "note": "조건 2 - 훈련 기간 비교",
+      "narration": "궁수는 10년이지만 총병은 3주였거든요.",
+      "subs": [
+        "궁수는 10년이지만,",
+        "*총병은 3주였거든요.*"
+      ]
+    },
+    {
+      "id": "S09",
+      "shot": "V03",
+      "beat": "B",
+      "move": "push_in",
+      "pause": 0.30,
+      "note": "조건 3 - 종 주조 야금술 결합",
+      "narration": "종을 깎던 기술이 대량 생산을 열었죠.",
+      "subs": [
+        "종을 깎던 기술이",
+        "*대량 생산을 열었죠.*"
+      ]
+    },
+    {
+      "id": "S10",
+      "kind": "diagram",
+      "plate": "fog",
+      "pause": 0.0,
+      "note": "도해 - 인과 요약 + 루프백",
+      "narration": "결국 무기를 바꾼 건 기술의 우열이 아니라, 눈앞의 적과 병사를 키우는 비용이었습니다.",
+      "subs": [
+        "무기를 바꾼 건 기술 우열이 아니라,",
+        "*눈앞의 적과 병사를 키우는 비용*이었습니다."
+      ]
+    }
+  ]
+}

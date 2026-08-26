@@ -39,6 +39,23 @@ else
   pass "sources.md 채워짐"
 fi
 
+# ---------- 1b. scenes.json 구조 ----------
+echo; echo "[1b] scenes.json"
+OUT=$(python scripts/check_scenes.py "$EP" 2>&1); RC=$?
+if [ "$RC" -eq 2 ]; then
+  warn "scenes.json 없음 — 구 방식 에피소드 (EP001~003)"
+elif [ -z "$OUT" ]; then
+  pass "구조·비트 길이 검증 통과"
+else
+  while IFS= read -r line; do
+    case "$line" in
+      FAIL*) fail "${line#FAIL }" ;;
+      WARN*) warn "${line#WARN }" ;;
+      *)     echo "      $line" ;;
+    esac
+  done <<< "$OUT"
+fi
+
 # ---------- 2. 씬 매니페스트 ----------
 echo; echo "[2] 씬 매니페스트"
 TSV="${DIR}/scenes.tsv"

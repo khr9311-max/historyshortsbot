@@ -1,0 +1,11 @@
+scene	kind	move	dur	note
+S01	ai_hero	side_track	4.76	도입 훅
+S02	ai_hero	push_in	2.84	훅 결정타
+S03	diagram	-	4.64	도해 - 통념 부정
+S04	diagram	-	6.54	도해 - 두 조건 수렴
+S05	ai_still	dolly_in	6.30	조건 1 - 마차 시대의 여유
+S06	ai_hero	side_track	3.60	조건 2 - 단선의 위험 (신설, 옛 diagram S06 이관)
+S07	ai_hero	push_in	3.21	조건 2 결정타 - 정면충돌
+S08	ai_hero	side_track	3.82	조건 3 - 전신 동기화
+S09	ai_hero	push_in	3.54	조건 3 결정타 - 1883 표준시
+S10	diagram	-	6.93	도해 - 인과 요약 + 루프백

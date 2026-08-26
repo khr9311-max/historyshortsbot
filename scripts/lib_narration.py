@@ -34,6 +34,13 @@ import wave
 from dataclasses import dataclass, field
 from pathlib import Path
 
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
+
 ROOT = Path(__file__).resolve().parents[1]
 
 # ============================================================
@@ -81,6 +88,9 @@ class Beat:
     move: str = "-"
     pause: float = 0.40
     note: str = ""
+    shot: str = ""       # 이 컷을 채우는 생성물 (veo 클립 / still 이미지)
+    beat: str = ""       # "A" | "B" — 8초 클립 안에서의 위치
+    plate: str = ""      # diagram 전용. 배경 플레이트 이름 (fog/dust/grid)
 
     def __post_init__(self):
         if not self.subs:
@@ -140,25 +150,87 @@ def _sec(pcm: bytearray) -> float:
 
 
 # ============================================================
-async def _synth(text: str, out_mp3: Path):
+_TICKS = 10_000_000  # edge-tts WordBoundary offset/duration 단위 (100ns)
+_LEAD_TRIM = ("silenceremove=start_periods=1:start_silence=0.02:"
+              "start_threshold=-50dB:detection=peak")
+
+
+async def _synth(text: str, out_mp3: Path) -> list[dict]:
+    """음성을 뽑으면서 단어 경계도 같이 받는다.
+
+    반환값은 원본(무음 트리밍 전) mp3 타임라인 기준의 [{text, start, end}, ...].
+    자막 2줄을 실제 발화 위치에 맞춰 쪼개는 데 쓴다 (아래 _align_split).
+    """
     import edge_tts
-    comm = edge_tts.Communicate(text, voice=VOICE, rate=RATE, pitch=PITCH)
+    comm = edge_tts.Communicate(text, voice=VOICE, rate=RATE, pitch=PITCH,
+                                 boundary="WordBoundary")
+    boundaries = []
     with open(out_mp3, "wb") as f:
         async for chunk in comm.stream():
             if chunk["type"] == "audio":
                 f.write(chunk["data"])
+            elif chunk["type"] == "WordBoundary":
+                start = chunk["offset"] / _TICKS
+                boundaries.append({
+                    "text": chunk["text"],
+                    "start": start,
+                    "end": start + chunk["duration"] / _TICKS,
+                })
+    return boundaries
 
 
 def _decode(ffmpeg: str, mp3: Path, wav: Path):
     """문장 앞뒤의 무음을 잘라내 정지 길이를 우리가 통제한다."""
-    trim = ("silenceremove=start_periods=1:start_silence=0.02:"
-            "start_threshold=-50dB:detection=peak")
     subprocess.run(
         [ffmpeg, "-y", "-loglevel", "error", "-i", str(mp3),
          "-ar", str(SR), "-ac", str(CHANNELS), "-c:a", "pcm_s16le",
-         "-af", f"{trim},areverse,{trim},areverse", str(wav)],
+         "-af", f"{_LEAD_TRIM},areverse,{_LEAD_TRIM},areverse", str(wav)],
         check=True,
     )
+
+
+def _wav_dur(path: Path) -> float:
+    with wave.open(str(path), "rb") as w:
+        return w.getnframes() / float(w.getframerate())
+
+
+def _lead_trim_sec(ffmpeg: str, mp3: Path, tmp: Path, tag: str) -> float:
+    """앞쪽에서 잘려나간 무음 길이(초). WordBoundary 오프셋을 같은 만큼 당긴다."""
+    raw, lead = tmp / f"{tag}_raw.wav", tmp / f"{tag}_lead.wav"
+    subprocess.run([ffmpeg, "-y", "-loglevel", "error", "-i", str(mp3),
+                     "-ar", str(SR), "-ac", str(CHANNELS), "-c:a", "pcm_s16le",
+                     str(raw)], check=True)
+    subprocess.run([ffmpeg, "-y", "-loglevel", "error", "-i", str(mp3),
+                     "-ar", str(SR), "-ac", str(CHANNELS), "-c:a", "pcm_s16le",
+                     "-af", _LEAD_TRIM, str(lead)], check=True)
+    return max(0.0, _wav_dur(raw) - _wav_dur(lead))
+
+
+def _align_split(subs: list[str], boundaries: list[dict]) -> float | None:
+    """자막 2줄일 때, 1번째 줄이 실제로 끝나는 발화 시각(컷 로컬, 초)을 찾는다.
+
+    subs 는 narration 을 그대로 줄바꿈한 게 아니라 화면용으로 다시 쓴 경우가
+    많다(도해 컷이 이미 보여주는 내용은 자막에서 뺀다). 그래서 subs 텍스트의
+    글자 수 비율로 구간을 나누면 실제 발화 위치와 어긋난다 — narration 을
+    합성할 때 받은 WordBoundary 를 1번째 줄 단어들과 순서대로 맞춰 실제
+    끝나는 시각을 찾는다. 못 찾으면 None (호출부가 글자 수 비례로 대체한다).
+    """
+    words = plain(subs[0]).split()
+    if not words or not boundaries:
+        return None
+    ptr, last_end = 0, None
+    for w in words:
+        w = w.strip(",.?!:;")
+        found = None
+        for i in range(ptr, min(ptr + 5, len(boundaries))):
+            bw = boundaries[i]["text"]
+            if bw[:2] == w[:2] or bw in w or w in bw:
+                found = i
+                break
+        if found is not None:
+            ptr = found + 1
+            last_end = boundaries[found]["end"]
+    return last_end
 
 
 async def _run(ep: str, beats: list[Beat]):
@@ -173,12 +245,23 @@ async def _run(ep: str, beats: list[Beat]):
 
     for i, b in enumerate(beats):
         mp3, wav = tmp / f"{b.scene}.mp3", tmp / f"{b.scene}.wav"
-        await _synth(plain(b.vo), mp3)
+        raw_boundaries = await _synth(plain(b.vo), mp3)
         _decode(ffmpeg, mp3, wav)
 
         with wave.open(str(wav), "rb") as w:
             assert w.getframerate() == SR and w.getnchannels() == CHANNELS
             data = w.readframes(w.getnframes())
+
+        # WordBoundary 오프셋은 트리밍 전 mp3 기준이다 — 앞에서 잘려나간
+        # 무음만큼 당겨서 최종 wav(=speech_start 기준) 로컬 시각으로 맞춘다.
+        lead = _lead_trim_sec(ffmpeg, mp3, tmp, b.scene)
+        clip_dur = len(data) / (CHANNELS * SAMPWIDTH) / float(SR)
+        boundaries = [
+            {"text": bd["text"],
+             "start": min(max(0.0, bd["start"] - lead), clip_dur),
+             "end": min(max(0.0, bd["end"] - lead), clip_dur)}
+            for bd in raw_boundaries
+        ]
 
         speech_start = _sec(pcm)
         pcm += data
@@ -189,8 +272,10 @@ async def _run(ep: str, beats: list[Beat]):
         beat_end = _sec(pcm)
 
         timeline.append(dict(scene=b.scene, kind=b.kind, move=b.move, note=b.note,
+                             shot=b.shot or b.scene, beat=b.beat, plate=b.plate,
                              speech_start=speech_start, speech_end=speech_end,
-                             beat_end=beat_end, subs=b.subs, vo=plain(b.vo)))
+                             beat_end=beat_end, subs=b.subs, vo=plain(b.vo),
+                             word_boundaries=boundaries))
         print(f"  {b.scene}  발화 {speech_end - speech_start:5.2f}s  "
               f"+정지 {pause:4.2f}s  → 누적 {beat_end:6.2f}s")
 
@@ -209,6 +294,16 @@ async def _run(ep: str, beats: list[Beat]):
         end = total if i == len(timeline) - 1 else t["beat_end"]
         scenes.append(dict(t, start=prev, end=end, dur=round(end - prev, 3)))
         prev = end
+
+    # --- 소스 클립 안에서의 시작 지점 ---
+    # 8초 t2v 클립 하나가 씬 둘을 채운다. 비트 B 는 A 가 끝난 지점부터 이어 쓴다.
+    # 두 씬이 클립을 연속으로 소진하므로 이음매가 튀지 않고 버려지는 구간도 없다.
+    for i, s in enumerate(scenes):
+        s["clip_offset"] = (
+            round(scenes[i - 1]["dur"], 3)
+            if s["beat"] == "B" and i > 0 and scenes[i - 1]["shot"] == s["shot"]
+            else 0.0
+        )
 
     # --- scenes.tsv ---
     rows = ["scene\tkind\tmove\tdur\tnote"]
@@ -239,13 +334,32 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         a, b_ = s["speech_start"], s["speech_end"]
         span = b_ - a
         subs = s["subs"]
-        # 한 문장 안에서 자막을 나눌 때는 글자 수 비율로 구간을 쪼갠다
-        weights = [max(len(plain(x)), 1) for x in subs]
-        acc, total_w = 0.0, sum(weights)
-        for j, (line, w) in enumerate(zip(subs, weights)):
-            st = a + span * (acc / total_w)
-            acc += w
-            en = b_ + HOLD if j == len(subs) - 1 else a + span * (acc / total_w)
+        boundaries = s.get("word_boundaries") or []
+
+        # 자막이 narration 을 그대로 줄바꿈한 게 아니라 화면용으로 다시 쓴
+        # 경우가 많아(도해가 이미 보여주는 내용은 자막에서 뺀다), 글자 수
+        # 비율로 나누면 실제 발화 위치와 어긋난다. 1번째 줄 단어들을 실제
+        # WordBoundary 에 맞춰본 뒤(_align_split), 못 맞추면 글자 수 비율로
+        # 대체한다.
+        aligned = _align_split(subs, boundaries) if len(subs) == 2 else None
+        if aligned is not None and 0.0 < aligned < span:
+            splits = [a, a + aligned, b_]
+        else:
+            if len(subs) == 2:
+                print(f"  [자막 정렬 실패] {s['scene']}: 자막 1번째 줄이 나레이션과 "
+                      "너무 달라 발화 위치를 못 찾았습니다 — 글자 수 비율로 대체합니다. "
+                      "자막을 나레이션에 더 가깝게 쓰면 해결됩니다.")
+            weights = [max(len(plain(x)), 1) for x in subs]
+            acc, total_w = 0.0, sum(weights)
+            splits = [a]
+            for w in weights:
+                acc += w
+                splits.append(a + span * (acc / total_w))
+
+        for j, line in enumerate(subs):
+            st, en = splits[j], splits[j + 1]
+            if j == len(subs) - 1:
+                en = b_ + HOLD
             # \fad: 딱딱한 on/off 대신 아주 짧은 페이드
             dialogues.append(
                 f"Dialogue: 0,{ass_time(st)},{ass_time(en)},Default,,0,0,0,,"
@@ -258,8 +372,9 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         json.dumps(dict(
             episode=ep, voice=VOICE, rate=RATE, total=round(total, 3),
             lead_in=LEAD_IN, tail=TAIL,
-            scenes=[{k: s[k] for k in ("scene", "kind", "move", "start", "end",
-                                       "dur", "speech_start", "speech_end", "vo")}
+            scenes=[{k: s[k] for k in ("scene", "kind", "move", "shot", "beat",
+                                       "plate", "clip_offset", "start", "end", "dur",
+                                       "speech_start", "speech_end", "vo")}
                     for s in scenes],
         ), ensure_ascii=False, indent=2),
         encoding="utf-8",
@@ -294,3 +409,37 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 
 def generate(ep: str, beats: list[Beat]):
     asyncio.run(_run(ep, beats))
+
+
+def generate_from_scenes(ep: str, strict: bool = True):
+    """scenes.json 을 읽어 나레이션·자막·컷 길이를 만든다.
+
+    에피소드 쪽 generate_audio_and_subs.py 는 이 함수만 부른다.
+    대본은 scenes.json 에만 있다 (단일 권원).
+    """
+    import lib_scenes                       # 순환 import 를 피해 여기서 부른다
+
+    doc = lib_scenes.load(ep)
+    err, warn = lib_scenes.validate(doc)
+    for w in warn:
+        print(f"  [경고] {w}")
+    if err:
+        print("\n구조 오류:")
+        for e in err:
+            print(f"  - {e}")
+        if strict:
+            sys.exit("\nscenes.json 을 고친 뒤 다시 실행하세요.")
+
+    generate(ep, lib_scenes.to_beats(doc))
+
+    timing = json.loads((ROOT / "episodes" / ep / "timing.json")
+                        .read_text(encoding="utf-8"))
+    terr, twarn = lib_scenes.validate_timing(doc, timing)
+    for w in twarn:
+        print(f"  [경고] {w}")
+    if terr:
+        print("\n실측 길이 오류:")
+        for e in terr:
+            print(f"  - {e}")
+        if strict:
+            sys.exit(1)

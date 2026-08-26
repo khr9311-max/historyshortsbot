@@ -8,12 +8,21 @@ episodes/*/assets/
 # scenes.tsv · sub.ass · timing.json 은 자동 생성물이지만 작고
 # 타임라인 근거라서 커밋한다.
 
+# 파이프라인 진행 상태 — 기계마다 다르다
+episodes/*/.state.json
+
 # 파이썬
 __pycache__/
 *.pyc
 .venv/
 venv/
 
-# OS
+# OS / 클라우드 동기화 임시 파일
 Thumbs.db
 .DS_Store
+.tmp.driveupload/
+*.driveupload/
+
+# 비밀키 — GEMINI_API_KEY 등. 절대 커밋하지 않는다
+.env
+

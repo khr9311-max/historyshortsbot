@@ -42,6 +42,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 W, H, FPS = 1080, 1920, 25
+CLIP_SEC = 8.0  # t2v 클립 · 배경 플레이트 공통 길이 (규칙 §2)
 
 # --- 스타일 바이블 §6 후처리 3종 (예외 없음) ---
 GRAIN = "noise=alls=8:allf=t+u"
@@ -197,29 +198,74 @@ def make_still(src: Path, dst: Path, move: str, frames: int):
          "-c:v", "libx264", "-crf", "18", "-pix_fmt", "yuv420p", str(dst)])
 
 
-def make_clip(src: Path, dst: Path, frames: int):
+def make_clip(src: Path, dst: Path, frames: int, offset: float = 0.0):
     """
-    i2v 결과 / Manim 렌더 공통 정규화.
+    t2v 결과 / Manim 렌더 공통 정규화.
     tpad 로 마지막 프레임을 복제해 늘린 뒤 정확히 frames 장만 취한다.
     → 소스가 짧아도 길어도 결과는 항상 frames 장. 드리프트가 생길 수 없다.
+
+    offset: 8초 2비트 클립에서 비트 B 가 시작하는 지점(초).
+            fps 정규화 뒤에 프레임 번호로 잘라내 반올림 오차가 남지 않는다.
     """
+    chain = (f"scale={W}:{H}:force_original_aspect_ratio=increase,"
+             f"crop={W}:{H},fps={FPS},setsar=1")
+    if offset > 0:
+        chain += f",trim=start_frame={int(round(offset * FPS))},setpts=PTS-STARTPTS"
+    chain += ",tpad=stop_mode=clone:stop_duration=5"
     run([FFMPEG, "-y", "-loglevel", "error", "-i", str(src),
-         "-vf", (f"scale={W}:{H}:force_original_aspect_ratio=increase,"
-                 f"crop={W}:{H},fps={FPS},setsar=1,"
-                 f"tpad=stop_mode=clone:stop_duration=5"),
-         "-frames:v", str(frames), "-an",
+         "-vf", chain, "-frames:v", str(frames), "-an",
          "-c:v", "libx264", "-crf", "18", "-pix_fmt", "yuv420p", str(dst)])
 
 
 def render_diagram(ep_dir: Path, scene: str, out: Path):
-    say(f"    Manim 렌더: {scene}")
-    run([sys.executable, "-m", "manim", "-qh", "--format=mp4",
+    """알파 채널 렌더 (qtrle/.mov). 배경은 build.py 가 플레이트와 합성한다."""
+    say(f"    Manim 렌더: {scene} (투명)")
+    run([sys.executable, "-m", "manim", "-qh", "-t",
          "--resolution", f"{W},{H}",
          str(ep_dir / "diagrams" / f"{scene}.py"), "-o", scene])
-    hits = sorted(ROOT.glob(f"media/videos/{scene}/**/{scene}.mp4"))
+    hits = sorted(ROOT.glob(f"media/videos/{scene}/**/{scene}.mov"))
     if not hits:
         sys.exit(f"오류: {scene} Manim 출력물을 찾지 못했습니다.")
     shutil.copyfile(hits[-1], out)
+
+
+# ============================================================
+# 배경 플레이트 합성 — 도해(알파) 를 전역 루프 위에 얹는다
+# ============================================================
+PLATES_DIR = ROOT / "assets_global" / "plates"
+
+
+def plate_path(name: str) -> Path:
+    return PLATES_DIR / f"P_{name}.mp4"
+
+
+def _plate_offset(scene_id: str, dur_needed: float) -> float:
+    """같은 플레이트가 반복돼 보이지 않도록 씬마다 다른 지점에서 시작한다."""
+    room = max(CLIP_SEC - dur_needed - 0.1, 0.0)
+    if room <= 0:
+        return 0.0
+    h = int.from_bytes(scene_id.encode("utf-8"), "big") % 997
+    return round(room * (h / 997), 2)
+
+
+def composite_diagram(alpha_src: Path, plate_src: Path, dst: Path,
+                       frames: int, scene_id: str):
+    """투명 도해 위에 배경 플레이트를 깔아 합성한다."""
+    offset = _plate_offset(scene_id, frames / FPS)
+    plate_chain = (f"scale={W}:{H}:force_original_aspect_ratio=increase,"
+                    f"crop={W}:{H},fps={FPS},setsar=1")
+    if offset > 0:
+        plate_chain += f",trim=start={offset},setpts=PTS-STARTPTS"
+    plate_chain += ",tpad=stop_mode=clone:stop_duration=5"
+    diagram_chain = f"fps={FPS},format=yuva420p,tpad=stop_mode=clone:stop_duration=5"
+    fc = (f"[0:v]{plate_chain}[bg];"
+          f"[1:v]{diagram_chain}[fg];"
+          f"[bg][fg]overlay=0:0:format=auto[v]")
+    run([FFMPEG, "-y", "-loglevel", "error",
+         "-i", str(plate_src), "-i", str(alpha_src),
+         "-filter_complex", fc, "-map", "[v]",
+         "-frames:v", str(frames),
+         "-c:v", "libx264", "-crf", "18", "-pix_fmt", "yuv420p", str(dst)])
 
 
 # ============================================================
@@ -264,34 +310,47 @@ def main():
         concat = []
         for s, frames in zip(scenes, plan):
             name, kind = s["scene"], s["kind"]
+            # veo/still 원본은 씬이 아니라 **샷** 이름을 쓴다 (8초 클립 하나가 씬 둘을 채운다).
+            # 샷 표기가 없는 옛 에피소드는 씬 이름이 곧 샷 이름이다.
+            shot = s.get("shot") or name
+            offset = float(s.get("clip_offset") or 0.0)
             dst = work / f"{name}.mp4"
-            say(f"  {name}  {kind:<8} {frames:4d}f  {frames / FPS:5.2f}s")
+            tag = f"{shot}" + (f" @{offset:.2f}s" if offset else "")
+            say(f"  {name}  {kind:<8} {frames:4d}f  {frames / FPS:5.2f}s  ← {tag}")
 
             if kind == "diagram":
-                clip = assets / "clips" / f"{name}.mp4"
+                clip = assets / "clips" / f"{name}.mov"
                 py = ep_dir / "diagrams" / f"{name}.py"
                 if not py.is_file():
                     sys.exit(f"오류: {py} 가 없습니다.")
                 # 소스가 더 새로우면 다시 렌더한다 (수정하고 반영을 잊는 사고 방지)
                 if not clip.is_file() or py.stat().st_mtime > clip.stat().st_mtime:
                     render_diagram(ep_dir, name, clip)
-                make_clip(clip, dst, frames)
+                plate = plate_path(s.get("plate") or "fog")
+                if not plate.is_file():
+                    sys.exit(f"오류: 배경 플레이트가 없습니다 — {plate}")
+                composite_diagram(clip, plate, dst, frames, name)
 
             elif kind == "ai_still":
-                img = assets / "images" / f"{name}.png"
+                img = assets / "images" / f"{shot}.png"
                 if not img.is_file():
                     sys.exit(f"오류: {img} 가 없습니다.")
                 make_still(img, dst, s.get("move") or "dolly_in", frames)
 
             elif kind == "ai_hero":
-                clip = assets / "clips" / f"{name}.mp4"
+                clip = assets / "clips" / f"{shot}.mp4"
                 if clip.is_file():
-                    make_clip(clip, dst, frames)
-                else:  # i2v 결과가 아직 없으면 정지 이미지로 대체
-                    img = assets / "images" / f"{name}.png"
+                    src_len = probe(clip)
+                    need = offset + frames / FPS
+                    if src_len + 0.05 < need:
+                        say(f"    [경고] {shot} 이 {src_len:.2f}s 인데 "
+                            f"{need:.2f}s 지점까지 필요합니다 → 끝 프레임을 복제합니다.")
+                    make_clip(clip, dst, frames, offset)
+                else:  # 생성물이 아직 없으면 정지 이미지로 대체
+                    img = assets / "images" / f"{shot}.png"
                     if not img.is_file():
-                        sys.exit(f"오류: {name} 의 클립도 이미지도 없습니다.")
-                    say(f"    [경고] {name} i2v 클립 없음 → 정지 컷으로 대체")
+                        sys.exit(f"오류: {shot} 의 클립도 이미지도 없습니다.")
+                    say(f"    [경고] {shot} t2v 클립 없음 → 정지 컷으로 대체")
                     make_still(img, dst, s.get("move") or "dolly_in", frames)
             else:
                 sys.exit(f"오류: 알 수 없는 kind '{kind}' ({name})")

@@ -398,7 +398,7 @@ MIN_RUN_TIME = 1.2  # 바이블 §3: run_time 최소 1.2초
 _TIMING_STRICT = True
 
 
-class DiagramScene(Scene):
+class DiagramScene(MovingCameraScene):
     """
     도해 컷 공통 베이스.
 
@@ -407,16 +407,24 @@ class DiagramScene(Scene):
       (모자라면 마지막 프레임을 유지, 넘치면 렌더 시 에러)
       => scenes.tsv 와 오디오 사이의 타임라인 드리프트가 구조적으로 불가능해진다
     - 마지막 LOOP_TAIL 초 동안 배경색으로 수렴시켜 반복 재생 이음매를 지운다
+
+    MovingCameraScene 을 상속하므로 `dolly()` 로 카메라를 움직일 수 있다.
+    기존 씬은 프레임을 건드리지 않으므로 동작이 달라지지 않는다.
     """
 
     DURATION: float | None = None
     LOOP_TAIL: float = 0.0  # >0 이면 씬 끝에서 BG 로 수렴 (마지막 컷 전용)
     SHOW_GRID: bool = True
+    DRIFT: float = 0.0      # >0 이면 씬 내내 아주 느린 줌인 (초당 배율 증가분)
 
     def construct(self):
         self.camera.background_color = BG
+        self._home = self.camera.frame.get_center()
+        self._home_h = self.camera.frame.height
         if self.SHOW_GRID:
             self.add(self.backdrop())
+        if self.DRIFT:
+            self._start_drift()
         self.build()
         self._settle()
 
@@ -466,6 +474,107 @@ class DiagramScene(Scene):
     def beat(self, t: float = 0.8):
         """등장 후 정지 — 바이블 §3 최소 0.8초."""
         self.wait(max(t, 0.0))
+
+    # --- 카메라 (달리 인/아웃) ---
+    def dolly(self, target=None, zoom: float = 1.0, run_time: float = MIN_RUN_TIME,
+              hold: float = 0.0):
+        """카메라를 밀거나 당긴다.
+
+            self.dolly(card, zoom=0.62)   # card 로 달리 인
+            self.dolly(zoom=1.0)          # 전체 뷰로 달리 아웃 (원위치)
+
+        zoom < 1 이면 프레임이 좁아진다(= 확대). 안전 범위는 0.55~1.0.
+        요소를 새로 만들지 않고 프레임만 움직이므로 guard() 와 충돌하지 않는다.
+        """
+        z = min(max(zoom, 0.45), 1.0)
+        frame = self.camera.frame
+        anims = [frame.animate.set(height=self._home_h * z)]
+        if target is not None:
+            c = target.get_center() if isinstance(target, Mobject) else target
+            if isinstance(target, Mobject):
+                # 대상을 화면 밖으로 잘라내는 줌은 허용하지 않는다.
+                # guard() 가 요소를 지키듯 여기서는 프레임이 대상을 지킨다.
+                aspect = config.frame_width / config.frame_height
+                need = max(target.height, target.width / aspect) * 1.14
+                z = max(z, need / self._home_h)
+                z = min(z, 1.0)
+            anims = [frame.animate.set(height=self._home_h * z).move_to(c)]
+        elif z >= 1.0:
+            anims = [frame.animate.set(height=self._home_h).move_to(self._home)]
+        self.play(*anims, run_time=max(run_time, MIN_RUN_TIME),
+                  rate_func=rate_functions.ease_in_out_sine)
+        if hold:
+            self.wait(hold)
+
+    def _start_drift(self):
+        """씬 내내 아주 느린 줌인. updater 라 다른 애니메이션과 겹쳐 돈다."""
+        rate = self.DRIFT
+        frame = self.camera.frame
+
+        def _creep(m, dt):
+            m.set(height=m.height * (1.0 - rate * dt))
+
+        frame.add_updater(_creep)
+
+    # --- 동적 강조 ---
+    def count_up(self, target: str, color: str = ACCENT, size: float = FS_NUM,
+                 run_time: float = MIN_RUN_TIME, at=ORIGIN, unit: str = ""):
+        """숫자가 0 에서 목표값까지 굴러 올라간다. 수치 컷의 기본기.
+
+            self.count_up("1,750", unit="km")
+
+        정수·소수·천단위 콤마를 그대로 복원한다. 반환값은 화면에 남는 VGroup.
+        """
+        digits = target.replace(",", "")
+        dec = len(digits.split(".")[1]) if "." in digits else 0
+        value = float(digits)
+        comma = "," in target
+
+        tracker = ValueTracker(0.0)
+        label = num("0", color=color, size=size)
+        u = tag(unit, color=color) if unit else None
+
+        def _fmt(m):
+            v = tracker.get_value()
+            s = f"{v:,.{dec}f}" if comma else f"{v:.{dec}f}"
+            m.become(num(s, color=color, size=size).move_to(at))
+            # 자릿수가 늘면 폭이 커진다. 단위는 매 프레임 따라붙어야 겹치지 않는다.
+            if u is not None:
+                u.next_to(m, RIGHT, buff=0.18).align_to(m, DOWN)
+
+        label.add_updater(_fmt)
+        group = VGroup(label)
+        if u is not None:
+            group.add(u)
+        self.add(group)
+        self.play(tracker.animate.set_value(value),
+                  run_time=max(run_time, MIN_RUN_TIME),
+                  rate_func=rate_functions.ease_out_expo)
+        label.remove_updater(_fmt)
+        return group
+
+    def pulse(self, mob: Mobject, times: int = 2, scale: float = 1.06,
+              run_time: float = 0.45):
+        """한 요소를 두어 번 맥동시켜 시선을 잡는다. 결정타 자리에만."""
+        for _ in range(times):
+            self.play(mob.animate.scale(scale), run_time=run_time / 2,
+                      rate_func=rate_functions.ease_out_sine)
+            self.play(mob.animate.scale(1 / scale), run_time=run_time / 2,
+                      rate_func=rate_functions.ease_in_sine)
+
+    def sweep(self, mob: Mobject, color: str = ACCENT, run_time: float = MIN_RUN_TIME):
+        """요소 위를 빛줄기가 한 번 훑고 지나간다 (계측선 연출)."""
+        box = mob.get_critical_point(UL), mob.get_critical_point(DR)
+        line = Line(
+            [box[0][0], box[0][1] + 0.1, 0],
+            [box[0][0], box[1][1] - 0.1, 0],
+            stroke_color=color, stroke_width=5, stroke_opacity=0.9,
+        )
+        self.add(line)
+        self.play(line.animate.shift(RIGHT * (box[1][0] - box[0][0])),
+                  run_time=max(run_time, MIN_RUN_TIME),
+                  rate_func=rate_functions.ease_in_out_sine)
+        self.play(FadeOut(line), run_time=0.3)
 
     # --- 길이 정합 ---
     def _settle(self):

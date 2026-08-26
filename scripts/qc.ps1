@@ -47,6 +47,22 @@ if (-not (Test-Path $sourcesPath)) {
     Pass "sources.md 채워짐"
 }
 
+# ---------- 1b. scenes.json 구조 ----------
+Write-Host "`n[1b] scenes.json" -ForegroundColor Cyan
+$check = & python (Join-Path $PSScriptRoot 'check_scenes.py') $Episode 2>&1
+if ($LASTEXITCODE -eq 2) {
+    Warn "scenes.json 없음 — 구 방식 에피소드 (EP001~003)"
+} elseif (-not $check) {
+    Pass "구조·비트 길이 검증 통과"
+} else {
+    foreach ($line in $check) {
+        $text = [string]$line
+        if ($text.StartsWith('FAIL ')) { Fail $text.Substring(5) }
+        elseif ($text.StartsWith('WARN ')) { Warn $text.Substring(5) }
+        else { Write-Host "      $text" }
+    }
+}
+
 # ---------- 2. 씬 매니페스트 ----------
 Write-Host "`n[2] 씬 매니페스트" -ForegroundColor Cyan
 $tsvPath = Join-Path $dir 'scenes.tsv'
@@ -109,14 +125,28 @@ foreach ($f in @('assets\bgm\bgm.mp3', 'assets\bgm\amb.wav')) {
     if (-not (Test-Path (Join-Path $dir $f))) { Warn "$f 없음 — 분위기 레이어가 빠짐" }
 }
 if ($scenes) {
+    $shotMap = @{}
+    $timingPath = Join-Path $dir 'timing.json'
+    if (Test-Path $timingPath) {
+        $tj = Get-Content $timingPath -Raw -Encoding UTF8 | ConvertFrom-Json
+        foreach ($item in $tj.scenes) {
+            $shotMap[$item.scene] = $item.shot
+        }
+    }
+
     foreach ($s in $scenes) {
-        if ($s.kind -eq 'ai_still' -and -not (Test-Path (Join-Path $dir "assets\images\$($s.scene).png"))) {
-            Fail "$($s.scene): images\$($s.scene).png 없음"
+        $shotName = if ($shotMap.ContainsKey($s.scene) -and $shotMap[$s.scene]) { $shotMap[$s.scene] } else { $s.scene }
+        if ($s.kind -eq 'ai_still') {
+            $img1 = Test-Path (Join-Path $dir "assets\images\$shotName.png")
+            $img2 = Test-Path (Join-Path $dir "assets\images\$($s.scene).png")
+            if (-not $img1 -and -not $img2) {
+                Fail "$($s.scene): images\$shotName.png 없음"
+            }
         }
         if ($s.kind -eq 'ai_hero') {
-            $c = Test-Path (Join-Path $dir "assets\clips\$($s.scene).mp4")
-            $i = Test-Path (Join-Path $dir "assets\images\$($s.scene).png")
-            if (-not $c -and -not $i) { Fail "$($s.scene): 클립도 이미지도 없음" }
+            $c = (Test-Path (Join-Path $dir "assets\clips\$shotName.mp4")) -or (Test-Path (Join-Path $dir "assets\clips\$($s.scene).mp4"))
+            $i = (Test-Path (Join-Path $dir "assets\images\$shotName.png")) -or (Test-Path (Join-Path $dir "assets\images\$($s.scene).png"))
+            if (-not $c -and -not $i) { Fail "$($s.scene): 클립($shotName.mp4)도 이미지도 없음" }
             elseif (-not $c) { Warn "$($s.scene): i2v 클립 없음 — 정지 컷으로 대체됨" }
         }
     }

@@ -1,0 +1,3 @@
+# V02  (S06, S07)  비트 경계 3.60s / 사용 6.82s of 8s  risk=low  ref=GP-01  549자
+
+[0-3.6s] Wide shot of a single railway track curving through misty countryside at dusk, slow side tracking shot moving left to right, heavy atmospheric haze, a distant silhouette signal post standing beside the rails, no visible faces. [3.6-8s] Rapid push-in close-up on the signal post's semaphore arm, thin red measurement lines and a numeric annotation appearing over the single track gauge. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, subtle film grain, 9:16 vertical, 8 seconds. No Korean text.

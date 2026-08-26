@@ -1,0 +1,181 @@
+{
+  "episode": "EP004",
+  "title": "철도가 표준시간대를 만들어낸 과정",
+  "shots": [
+    {
+      "id": "V01",
+      "kind": "veo",
+      "scenes": [
+        "S01",
+        "S02"
+      ],
+      "risk": "low",
+      "golden_ref": "GP-01",
+      "chars": 561,
+      "prompt": "[0-5s] Wide establishing shot of a 19th-century European town square at noon, slow side tracking shot moving left to right, tall stone clock tower silhouette with sun overhead, heavy atmospheric haze, tiny silhouette figures on cobblestone streets. [5-8s] Rapid push-in close-up on an antique brass pocket watch on a wooden table, thin red measurement lines and numeric annotations appearing over the dial. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, subtle film grain, 9:16 vertical, 8 seconds. No Korean text."
+    },
+    {
+      "id": "V02",
+      "kind": "veo",
+      "scenes": [
+        "S06",
+        "S07"
+      ],
+      "risk": "low",
+      "golden_ref": "GP-01",
+      "chars": 545,
+      "prompt": "[0-5s] Wide shot of a single railway track curving through misty countryside at dusk, slow side tracking shot moving left to right, heavy atmospheric haze, a distant silhouette signal post standing beside the rails, no visible faces. [5-8s] Rapid push-in close-up on the signal post's semaphore arm, thin red measurement lines with a \"SINGLE TRACK\" annotation appearing over the rail gauge. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, subtle film grain, 9:16 vertical, 8 seconds. No Korean text."
+    },
+    {
+      "id": "V03",
+      "kind": "veo",
+      "scenes": [
+        "S08",
+        "S09"
+      ],
+      "risk": "low",
+      "golden_ref": "GP-02",
+      "chars": 533,
+      "prompt": "[0-5s] Interior of a dim 19th-century railway dispatch office, slow horizontal panning shot, silhouette figure operating a telegraph machine beside glowing vacuum tubes and wires, heavy atmospheric haze. [5-8s] Rapid push-in close-up on a large railway timetable board mounted on the brick wall, thin red boundary lines and numeric zone annotations overlaid across four columns. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, subtle film grain, 9:16 vertical, 8 seconds. No Korean text."
+    },
+    {
+      "id": "I01",
+      "kind": "still",
+      "scenes": [
+        "S05"
+      ],
+      "risk": "low",
+      "golden_ref": "GP-05",
+      "chars": 318,
+      "prompt": "Cinematic documentary still, wide composition of a 19th-century horse-drawn carriage traveling on a misty rural dirt road at overcast dawn, deep navy blue tone, low saturation, single directional light, heavy atmospheric haze, silhouette figures, no visible faces, subtle film grain, 9:16 vertical, 2K. No Korean text."
+    }
+  ],
+  "scenes": [
+    {
+      "id": "S01",
+      "shot": "V01",
+      "beat": "A",
+      "move": "side_track",
+      "pause": 0.35,
+      "note": "도입 훅",
+      "narration": "19세기 이전엔, 도시마다 낮 12시가 달랐습니다.",
+      "subs": [
+        "19세기 이전엔,",
+        "*도시마다 낮 12시가 달랐습니다.*"
+      ]
+    },
+    {
+      "id": "S02",
+      "shot": "V01",
+      "beat": "B",
+      "move": "push_in",
+      "pause": 0.4,
+      "note": "훅 결정타",
+      "narration": "그런데 왜 지금은 시간이 같을까요?",
+      "subs": [
+        "그런데 왜 지금은",
+        "*시간이 같을까요?*"
+      ]
+    },
+    {
+      "id": "S03",
+      "kind": "diagram",
+      "plate": "fog",
+      "pause": 0.38,
+      "note": "도해 - 통념 부정",
+      "narration": "정부가 국민을 통제하려고 법으로 시간을 강제한 것이 아닙니다.",
+      "subs": [
+        "정부가 국민을 통제하려고",
+        "*법으로 시간을 강제한 것이 아닙니다.*"
+      ]
+    },
+    {
+      "id": "S04",
+      "kind": "diagram",
+      "plate": "grid",
+      "pause": 0.4,
+      "note": "도해 - 두 조건 수렴",
+      "narration": "시속 60킬로의 고속 철도와, 마주보고 달리는 단선 선로가 겹친 결과였습니다.",
+      "subs": [
+        "시속 60킬로의 고속 철도와,",
+        "*마주보고 달리는 단선 선로가 겹친 결과*였습니다."
+      ]
+    },
+    {
+      "id": "S05",
+      "shot": "I01",
+      "move": "dolly_in",
+      "pause": 0.38,
+      "note": "조건 1 - 마차 시대의 여유",
+      "narration": "말과 마차가 달리던 시절엔, 도시마다 10분씩 차이가 나도 아무 문제 없었습니다.",
+      "subs": [
+        "말과 마차가 달리던 시절엔,",
+        "*도시마다 10분씩 차이가 나도 아무 문제 없었습니다.*"
+      ]
+    },
+    {
+      "id": "S06",
+      "shot": "V02",
+      "beat": "A",
+      "move": "side_track",
+      "pause": 0.35,
+      "note": "조건 2 - 단선의 위험 (신설, 옛 diagram S06 이관)",
+      "narration": "하지만 기차 시간표가 단 몇 분만 어긋나도,",
+      "subs": [
+        "하지만 기차 시간표가",
+        "*단 몇 분만 어긋나도,*"
+      ]
+    },
+    {
+      "id": "S07",
+      "shot": "V02",
+      "beat": "B",
+      "move": "push_in",
+      "pause": 0.42,
+      "note": "조건 2 결정타 - 정면충돌",
+      "narration": "마주 오는 열차와 정면으로 충돌했습니다.",
+      "subs": [
+        "마주 오는 열차와",
+        "*정면으로 충돌했습니다.*"
+      ]
+    },
+    {
+      "id": "S08",
+      "shot": "V03",
+      "beat": "A",
+      "move": "side_track",
+      "pause": 0.35,
+      "note": "조건 3 - 전신 동기화",
+      "narration": "철도 회사들은 전신망으로 천문대 시계를 맞췄고,",
+      "subs": [
+        "철도 회사들은 전신망으로",
+        "*천문대 시계를 맞췄고,*"
+      ]
+    },
+    {
+      "id": "S09",
+      "shot": "V03",
+      "beat": "B",
+      "move": "push_in",
+      "pause": 0.4,
+      "note": "조건 3 결정타 - 1883 표준시",
+      "narration": "300개가 넘던 정오를 단 4개로 묶었습니다.",
+      "subs": [
+        "300개가 넘던 정오를",
+        "*단 4개로 묶었습니다.*"
+      ]
+    },
+    {
+      "id": "S10",
+      "kind": "diagram",
+      "plate": "fog",
+      "pause": 0.0,
+      "note": "도해 - 인과 요약 + 루프백",
+      "narration": "세상의 시계를 하나로 맞춘 건 하늘의 해가 아니라, 선로 위를 달리는 기차였습니다.",
+      "subs": [
+        "세상의 시계를 하나로 맞춘 건 하늘의 해가 아니라,",
+        "*선로 위를 달리는 기차*였습니다."
+      ]
+    }
+  ]
+}

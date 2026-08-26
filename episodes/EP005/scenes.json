@@ -1,0 +1,181 @@
+{
+  "episode": "EP005",
+  "title": "감자 하나가 유럽 인구를 바꾼 메커니즘",
+  "shots": [
+    {
+      "id": "V01",
+      "kind": "veo",
+      "scenes": [
+        "S01",
+        "S02"
+      ],
+      "risk": "low",
+      "golden_ref": "GP-01",
+      "chars": 578,
+      "prompt": "[0-5s] Wide establishing shot of an 18th-century European rural farmland at dawn, slow side tracking shot moving left to right, peasant silhouette figures digging rough soil with spades under heavy atmospheric haze, overcast foggy sky. [5-8s] Rapid push-in close-up on freshly harvested raw potatoes in a rustic wicker basket on the dirt, thin red measurement lines and numeric annotations appearing over the potato tubers. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, subtle film grain, 9:16 vertical, 8 seconds. No Korean text."
+    },
+    {
+      "id": "I01",
+      "kind": "still",
+      "scenes": [
+        "S05"
+      ],
+      "risk": "low",
+      "golden_ref": "GP-05",
+      "chars": 337,
+      "prompt": "Cinematic documentary still, wide composition of a scorched European wheat field after battle at overcast dusk, charred ground and smoke rising, deep navy blue tone, low saturation, single directional light, heavy atmospheric haze, silhouette figure at the far edge, no visible faces, subtle film grain, 9:16 vertical, 2K. No Korean text."
+    },
+    {
+      "id": "V02",
+      "kind": "veo",
+      "scenes": [
+        "S06",
+        "S07"
+      ],
+      "risk": "low",
+      "golden_ref": "GP-02",
+      "chars": 554,
+      "prompt": "[0-5s] Wide shot of a desolate European farmland after an army marched through, slow horizontal panning shot, silhouette figures searching through devastated soil in the heavy mist, no visible faces. [5-8s] Rapid push-in close-up on a subterranean cross-section of damp soil revealing intact potato roots beneath the trampled surface, red bracket lines with \"SUBTERRANEAN YIELD\" annotation overlaid. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, subtle film grain, 9:16 vertical, 8 seconds. No Korean text."
+    },
+    {
+      "id": "V03",
+      "kind": "veo",
+      "scenes": [
+        "S08",
+        "S09"
+      ],
+      "risk": "low",
+      "golden_ref": "GP-04",
+      "chars": 569,
+      "prompt": "[0-5s] Wide shot of an 18th-century royal farm perimeter at twilight, slow side tracking shot moving left to right, armed royal sentry silhouettes guarding a fenced potato patch to arouse peasant curiosity, heavy atmospheric haze. [5-8s] Rapid push-in close-up on an industrial cityscape with silhouette worker crowds marching toward factory chimneys, thin red line graph and \"+25% POPULATION\" annotation overlaid. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, subtle film grain, 9:16 vertical, 8 seconds. No Korean text."
+    }
+  ],
+  "scenes": [
+    {
+      "id": "S01",
+      "shot": "V01",
+      "beat": "A",
+      "move": "side_track",
+      "pause": 0.35,
+      "note": "도입 훅",
+      "narration": "돼지도 피하던 악마의 작물이 있었습니다.",
+      "subs": [
+        "돼지도 피하던",
+        "*악마의 작물*이 있었습니다."
+      ]
+    },
+    {
+      "id": "S02",
+      "shot": "V01",
+      "beat": "B",
+      "move": "push_in",
+      "pause": 0.35,
+      "note": "훅 결정타",
+      "narration": "그런데 이게 유럽 인구를 폭발시켰다면요?",
+      "subs": [
+        "그런데 이게",
+        "*유럽 인구를 폭발*시켰다면요?"
+      ]
+    },
+    {
+      "id": "S03",
+      "kind": "diagram",
+      "plate": "fog",
+      "pause": 0.4,
+      "note": "도해 - 통념 부정",
+      "narration": "유럽인들은 성경에도 없고 나병을 유발한다며 감자를 악마의 독초로 여겼습니다.",
+      "subs": [
+        "유럽인들은 성경에도 없고 나병을 유발한다며",
+        "*감자를 악마의 독초로 여겼습니다.*"
+      ]
+    },
+    {
+      "id": "S04",
+      "kind": "diagram",
+      "plate": "grid",
+      "pause": 0.4,
+      "note": "도해 - 칼로리 생산성 비교",
+      "narration": "하지만 1헥타르당 밀의 3배가 넘는 칼로리를 쏟아내며 기근의 사슬을 끊어냈죠.",
+      "subs": [
+        "하지만 1헥타르당 밀의 3배가 넘는",
+        "*칼로리를 쏟아내며 기근의 사슬을 끊어냈죠.*"
+      ]
+    },
+    {
+      "id": "S05",
+      "shot": "I01",
+      "move": "dolly_in",
+      "pause": 0.4,
+      "note": "조건 1 - 전시 곡물 약탈 취약성",
+      "narration": "전쟁이 터지면 지나가는 군대마다 지상의 밀밭을 모조리 짓밟고 불태웠지만,",
+      "subs": [
+        "전쟁이 터지면 지나가는 군대마다",
+        "*지상의 밀밭을 모조리 짓밟고 불태웠지만,*"
+      ]
+    },
+    {
+      "id": "S06",
+      "shot": "V02",
+      "beat": "A",
+      "move": "side_track",
+      "pause": 0.3,
+      "note": "조건 1 대응 - 지하 생존력",
+      "narration": "하지만 땅속의 감자는 빼앗지 못했습니다.",
+      "subs": [
+        "하지만 땅속의 감자는",
+        "*빼앗지 못했습니다.*"
+      ]
+    },
+    {
+      "id": "S07",
+      "shot": "V02",
+      "beat": "B",
+      "move": "push_in",
+      "pause": 0.35,
+      "note": "셀프 문답 - 지하 식량 안보",
+      "narration": "왜냐고요? 짓밟혀도 살아남았거든요.",
+      "subs": [
+        "왜냐고요?",
+        "*짓밟혀도 살아남았거든요.*"
+      ]
+    },
+    {
+      "id": "S08",
+      "shot": "V03",
+      "beat": "A",
+      "move": "side_track",
+      "pause": 0.3,
+      "note": "조건 2 - 국가 주도 보급과 심리전",
+      "narration": "왕들은 칙령을 내려 심리전으로 보급했고,",
+      "subs": [
+        "왕들은 칙령을 내려",
+        "*심리전으로 보급*했고,"
+      ]
+    },
+    {
+      "id": "S09",
+      "shot": "V03",
+      "beat": "B",
+      "move": "push_in",
+      "pause": 0.35,
+      "note": "인구 폭발과 도시화",
+      "narration": "인구를 25% 늘려 공장 노동자를 키워냈습니다.",
+      "subs": [
+        "인구를 25% 늘려",
+        "*공장 노동자를 키워냈습니다.*"
+      ]
+    },
+    {
+      "id": "S10",
+      "kind": "diagram",
+      "plate": "fog",
+      "pause": 0.0,
+      "note": "도해 - 인과 요약 + 루프백",
+      "narration": "산업혁명의 배를 불린 건 화려한 밀밭이 아니라, 땅속에 숨죽여 있던 감자였습니다.",
+      "subs": [
+        "산업혁명의 배를 불린 건 화려한 밀밭이 아니라,",
+        "*땅속에 숨죽여 있던 감자*였습니다."
+      ]
+    }
+  ]
+}

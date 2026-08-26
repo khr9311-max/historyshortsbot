@@ -1,0 +1,11 @@
+scene	kind	move	dur	note
+S01	ai_hero	side_track	3.42	도입 훅
+S02	ai_hero	push_in	3.09	훅 결정타
+S03	diagram	-	5.96	도해 - 통념 부정
+S04	diagram	-	5.90	도해 - 칼로리 생산성 비교
+S05	ai_still	dolly_in	5.96	조건 1 - 전시 곡물 약탈 취약성
+S06	ai_hero	side_track	3.18	조건 1 대응 - 지하 생존력
+S07	ai_hero	push_in	4.48	셀프 문답 - 지하 식량 안보
+S08	ai_hero	side_track	3.05	조건 2 - 국가 주도 보급과 심리전
+S09	ai_hero	push_in	4.25	인구 폭발과 도시화
+S10	diagram	-	7.00	도해 - 인과 요약 + 루프백

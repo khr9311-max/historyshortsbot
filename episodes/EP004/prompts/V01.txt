@@ -1,0 +1,3 @@
+# V01  (S01, S02)  비트 경계 4.76s / 사용 7.61s of 8s  risk=low  ref=GP-01  565자
+
+[0-4.8s] Wide establishing shot of a 19th-century European town square at noon, slow side tracking shot moving left to right, tall stone clock tower silhouette with sun overhead, heavy atmospheric haze, tiny silhouette figures on cobblestone streets. [4.8-8s] Rapid push-in close-up on an antique brass pocket watch on a wooden table, thin red measurement lines and numeric annotations appearing over the dial. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, subtle film grain, 9:16 vertical, 8 seconds. No Korean text.

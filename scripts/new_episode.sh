@@ -8,117 +8,161 @@ DIR="episodes/${EP}"
 
 [ -d "$DIR" ] && { echo "이미 존재합니다: $DIR" >&2; exit 1; }
 
-mkdir -p "$DIR"/{diagrams,assets/{images,clips,vo,bgm}}
+mkdir -p "$DIR"/{diagrams,prompts,assets/{images,clips,vo,bgm}}
 
 # ------------------------------------------------------------
-# 대본 → 음성·자막·컷 길이 생성기
-# scenes.tsv 는 여기서 자동 생성되므로 스캐폴드에 만들지 않는다.
+# scenes.json — 대본 · 씬 분해 · 프롬프트의 단일 권원
+#
+# 골격을 채워 둔다. 비워 두면 매번 다른 구조가 나오기 때문이다.
+#   샷(shot)  = 돈이 나가는 생성 단위. veo 클립 1개가 씬 2개를 채운다.
+#   씬(scene) = 나레이션 한 덩어리 = 컷 하나.
+# scenes.tsv / timing.json / sub.ass 는 전부 여기서 파생된다.
+# ------------------------------------------------------------
+cat > "$DIR/scenes.json" <<JSON
+{
+  "episode": "${EP}",
+  "title": "(제목)",
+  "shots": [
+    {
+      "id": "V01",
+      "kind": "veo",
+      "scenes": ["S01", "S02"],
+      "risk": "low",
+      "golden_ref": "GP-01",
+      "chars": 0,
+      "prompt": "[0-5s] Beat A - wide situation, slow side tracking shot. [5-8s] Beat B - rapid push-in close-up on the decisive detail. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, heavy atmospheric haze, silhouette figures only, no visible faces, subtle film grain, 9:16 vertical, 8 seconds. No Korean text."
+    },
+    {
+      "id": "I01",
+      "kind": "still",
+      "scenes": ["S05"],
+      "risk": "low",
+      "golden_ref": "GP-05",
+      "chars": 0,
+      "prompt": "Cinematic documentary still, wide composition of a subject, deep navy blue tone, low saturation, single directional light, heavy atmospheric haze, silhouette figure at the far edge, no visible faces, subtle film grain, 9:16 vertical, 2K. No Korean text."
+    },
+    {
+      "id": "V02",
+      "kind": "veo",
+      "scenes": ["S07", "S08"],
+      "risk": "low",
+      "golden_ref": "GP-02",
+      "chars": 0,
+      "prompt": "[0-5s] Beat A - wide situation, slow side tracking shot. [5-8s] Beat B - rapid push-in close-up on the decisive detail. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, heavy atmospheric haze, silhouette figures only, no visible faces, subtle film grain, 9:16 vertical, 8 seconds. No Korean text."
+    }
+  ],
+  "scenes": [
+    {"id": "S01", "shot": "V01", "beat": "A", "move": "side_track", "pause": 0.42,
+     "note": "도입 훅",
+     "narration": "(훅 문장)",
+     "subs": ["(자막 1줄)", "*(강조 구간)*"]},
+
+    {"id": "S02", "shot": "V01", "beat": "B", "move": "push_in", "pause": 0.46,
+     "note": "훅 결정타",
+     "narration": "(질문으로 닫는 문장)",
+     "subs": ["(자막)", "*(강조)*"]},
+
+    {"id": "S03", "kind": "diagram", "pause": 0.34,
+     "note": "도해 - 통념 부정",
+     "narration": "(통념을 걷어내는 문장)",
+     "subs": ["(자막)", "*(강조)*"]},
+
+    {"id": "S04", "kind": "diagram", "pause": 0.40,
+     "note": "도해 - 두 조건 수렴",
+     "narration": "(두 조건이 겹쳤다는 문장)",
+     "subs": ["(자막)", "*(강조)*"]},
+
+    {"id": "S05", "shot": "I01", "move": "dolly_in", "pause": 0.34,
+     "note": "조건 1 - 현장",
+     "narration": "(첫째 조건)",
+     "subs": ["(자막)", "*(강조)*"]},
+
+    {"id": "S06", "kind": "diagram", "pause": 0.44,
+     "note": "도해 - 조건 1 의 작동 방식",
+     "narration": "(수치·비교로 조건 1 을 보이는 문장)",
+     "subs": ["(자막)", "*(강조)*"]},
+
+    {"id": "S07", "shot": "V02", "beat": "A", "move": "side_track", "pause": 0.40,
+     "note": "조건 2 - 현장",
+     "narration": "(둘째 조건)",
+     "subs": ["(자막)", "*(강조)*"]},
+
+    {"id": "S08", "shot": "V02", "beat": "B", "move": "push_in", "pause": 0.42,
+     "note": "조건 2 결정타",
+     "narration": "(둘이 겹친 결과)",
+     "subs": ["(자막)", "*(강조)*"]},
+
+    {"id": "S09", "kind": "diagram", "pause": 0.0,
+     "note": "도해 - 인과 요약 + 루프백",
+     "narration": "(S01 훅으로 물리는 마지막 문장)",
+     "subs": ["(자막)", "*(강조)*"]}
+  ]
+}
+JSON
+
+# ------------------------------------------------------------
+# 실행기 — 대본은 들고 있지 않다. scenes.json 만 읽는다.
 # ------------------------------------------------------------
 cat > "$DIR/generate_audio_and_subs.py" <<PY
 """
 ${EP} — 나레이션 · 자막 · 컷 길이 생성
 
-이 파일은 대본만 들고 있다. 처리는 scripts/lib_narration.py 가 한다.
+대본은 이 파일이 아니라 **scenes.json** 에 있다 (단일 권원).
+처리는 scripts/lib_narration.py 가 한다.
 
     python episodes/${EP}/generate_audio_and_subs.py
     → assets/vo/vo.wav · sub.ass · scenes.tsv · timing.json
 
-pause : 이 문장 뒤의 정지 길이(초). 컷 전환이 여기서 일어난다.
-subs  : 화면 자막. *별표* 로 감싼 구간이 ACCENT. 한 컷 최대 2줄, 강조는 한 곳만.
+보통은 이걸 직접 부르지 않고 파이프라인을 쓴다.
 
-바이블 §8  단일 원인 금지 · 학설 구분 명시 · 출처 없는 수치 금지
-바이블 §11 마지막 문장은 S01 의 훅으로 이어지게 쓴다 (루프백)
+    python scripts/pipeline.py ${EP}
 """
 import pathlib
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2] / "scripts"))
-from lib_narration import Beat, generate  # noqa: E402
-
-BEATS = [
-    Beat(
-        scene="S01", kind="ai_hero", move="orbit", pause=0.42,
-        note="도입 훅",
-        vo="여기에 훅 문장.",
-        subs=["여기에 훅 문장."],
-    ),
-    Beat(
-        scene="S02", kind="ai_still", move="dolly_in", pause=0.44,
-        note="난관",
-        vo="왜 그렇게 됐을까요?",
-        subs=["왜 *그렇게* 됐을까요?"],
-    ),
-    Beat(
-        scene="S03", kind="diagram", pause=0.40,
-        note="도해 - 인과 화살표",
-        vo="두 조건이 겹쳤습니다.",
-        subs=["*두 조건*이 겹쳤습니다."],
-    ),
-    Beat(
-        # 마지막 컷은 diagram 요약 + 루프백 (바이블 §7, §11)
-        scene="S04", kind="diagram", pause=0.0,
-        note="도해 - 요약 + 루프백 (끝 프레임 BG 수렴)",
-        vo="그래서 첫 문장으로 되돌아가는 마무리.",
-        subs=["그래서 첫 문장으로", "*되돌아가는 마무리.*"],
-    ),
-]
+from lib_narration import generate_from_scenes  # noqa: E402
 
 if __name__ == "__main__":
-    generate("${EP}", BEATS)
+    generate_from_scenes("${EP}")
 PY
 
 # ------------------------------------------------------------
-# 도해 씬 견본
+# 도해 씬 골격
 # ------------------------------------------------------------
 cat > "$DIR/diagrams/S03.py" <<'PY'
 """
-S03 — 인과 화살표
+S03 — 도해
 
-색·폰트·크기·세이프에어리어는 scripts/lib_style.py 에서만 가져온다.
-직접 색을 쓰거나 이모지를 넣지 않는다 (바이블 §10).
+색·폰트·크기를 직접 쓰지 않는다. lib_style 의 상수만 쓴다.
+모든 요소는 guard() 를 통과해야 하고, 같은 층위는 no_overlap() 으로 검사한다.
 """
 import pathlib
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "scripts"))
-from lib_style import *  # noqa: F403
+from lib_style import *  # noqa: F403,E402
 
 
-class S03Scene(DiagramScene):
+class S03Scene(DiagramScene):  # noqa: F405
     # scenes.tsv 의 dur 과 일치시킨다. 초과하면 렌더가 실패한다.
     DURATION = 4.0
 
     def build(self):
-        head = title_block("제목")
-        self.reveal(head, run_time=1.2, shift=DOWN * 0.25)
-
-        c1 = card(txt("조건 1", size=FS_LEAD), width=7.8)
-        c1.move_to(UP * 4.6)
-        c2 = card(txt("조건 2", size=FS_LEAD), width=7.8)
-        c2.move_to(UP * 2.2)
-        plus = txt("+", size=FS_TITLE, color=DIM).move_to(UP * 3.4)
-
-        result = card(txt("결과", size=FS_LEAD, color=ACCENT), width=7.4, accent=True)
-        result.move_to(DOWN * 1.0)
-
-        for m, n in ((c1, "c1"), (c2, "c2"), (plus, "+"), (result, "result")):
-            guard(m, n)
-        no_overlap((c1, "c1"), (c2, "c2"), (result, "result"))
-
-        self.play(
-            AnimationGroup(FadeIn(c1), FadeIn(plus), FadeIn(c2), lag_ratio=0.3),
-            run_time=1.4,
-        )
-        arrow = Arrow(c2.get_bottom(), result.get_top(), color=ACCENT,
-                      stroke_width=6, buff=0.08)
-        self.play(GrowArrow(arrow), FadeIn(result, shift=UP * 0.25), run_time=1.4)
+        pass
 PY
 
+# scenes.json 골격의 도해 씬 번호와 맞춘다 (S03 · S04 · S06 · S09)
+for N in S04 S06; do
+  sed -e "s/^S03 —.*/${N} — 도해/" -e "s/class S03Scene/class ${N}Scene/" \
+      "$DIR/diagrams/S03.py" > "$DIR/diagrams/${N}.py"
+done
+
 # 마지막 컷: 루프백용 (LOOP_TAIL 로 배경색 수렴)
-sed -e 's/^S03 —.*/S04 — 요약 + 루프백 (마지막 컷)/' \
-    -e 's/class S03Scene/class S04Scene/' \
+sed -e 's/^S03 —.*/S09 — 인과 요약 + 루프백 (마지막 컷)/' \
+    -e 's/class S03Scene/class S09Scene/' \
     -e 's/    DURATION = 4.0/    DURATION = 4.0\n    LOOP_TAIL = 1.25  # 끝 프레임을 BG 로 수렴 → 반복 재생 이음매 제거/' \
-    "$DIR/diagrams/S03.py" > "$DIR/diagrams/S04.py"
+    "$DIR/diagrams/S03.py" > "$DIR/diagrams/S09.py"
 
 cat > "$DIR/script.md" <<MD
 # ${EP}
@@ -129,15 +173,17 @@ cat > "$DIR/script.md" <<MD
 ## 인과 구조 한 줄
 조건 A + 조건 B → 결과 C
 
-> 나레이션 원문과 컷 길이는 \`generate_audio_and_subs.py\` 의 \`BEATS\` 가 단일 권원이다.
-> \`scenes.tsv\` / \`sub.ass\` / \`timing.json\` 은 전부 거기서 자동 생성된다.
-> **scenes.tsv 의 dur 을 손으로 고치지 마라.**
+> 대본·씬 분해·프롬프트의 단일 권원은 \`scenes.json\` 이다.
+> \`scenes.tsv\` / \`sub.ass\` / \`timing.json\` / \`prompts/\` 는 전부 거기서 파생된다.
+> **scenes.tsv 의 dur 을 손으로 고치지 마라.** 대본을 고치고 다시 생성한다.
+>
+> 이 문서는 사람이 읽는 기획서다. 구조를 잡을 때 쓰고, 확정되면 scenes.json 에 옮긴다.
 
 ## 대본
-### ① 도입
-### ② 난관
-### ③ 해결
-### ④ 마무리 · 루프백
+### ① 도입 (S01~S02 · V01 한 클립)
+### ② 난관 (S03~S04)
+### ③ 해결 (S05~S08)
+### ④ 마무리 · 루프백 (S09)
 (마지막 문장이 ①의 훅으로 이어지게 쓴다 — 바이블 §11)
 
 ## 서술 점검 (바이블 §8)
@@ -166,11 +212,15 @@ cat <<EOF
 생성 완료: $DIR
 
 다음 순서:
-  1. $DIR/script.md 에 대본을 쓰고
-     $DIR/generate_audio_and_subs.py 의 BEATS 에 옮긴다
-  2. python $DIR/generate_audio_and_subs.py
-     → scenes.tsv 가 생성된다. 거기 적힌 dur 을 각 도해의 DURATION 에 옮긴다
-  3. AI 이미지/영상을 assets/images · assets/clips 에 넣는다
-  4. ./build.sh ${EP}
-  5. ./scripts/qc.sh ${EP}   (Windows: .\\scripts\\qc.ps1 ${EP})
+  1. $DIR/script.md 로 구조를 잡고 $DIR/scenes.json 을 채운다
+     (프롬프트는 docs/06_골든_프롬프트.md 의 예시를 붙여 만든다)
+  2. $DIR/sources.md 의 빈칸을 채운다 — 비면 GATE1 에서 멈춘다
+  3. python scripts/pipeline.py ${EP}
+     → 구조 검증 → 나레이션 → prompts/ 생성까지 가고 생성물이 없어 멈춘다
+  4. prompts/*.txt 를 생성 서비스에 붙여 결과를 assets/ 에 넣는다
+       veo 클립  → assets/clips/<샷ID>.mp4
+       still 이미지 → assets/images/<샷ID>.png
+  5. scenes.tsv 의 dur 을 각 도해의 DURATION 에 옮기고 씬 코드를 작성한다
+  6. python scripts/pipeline.py ${EP} --to assemble
+  7. ./scripts/qc.sh ${EP}   (Windows: .\\scripts\\qc.ps1 ${EP})
 EOF
