@@ -51,7 +51,11 @@ SATURATION = "eq=saturation=0.90"
 DUST_OPACITY = 0.15
 
 # --- 루프 이음매 ---
-BG_HEX = "0x0E1420"   # 바이블 §1 BG
+# 마지막 컷(도해, LOOP_TAIL)이 알파 0으로 수렴하면 그 자리에 도해 배경색이
+# 그대로 드러난다 — 그러니 이 값은 composite_diagram() 의 PAPER_HEX 와
+# 반드시 같아야 이음매가 진짜로 안 보인다. (2026-08-27 이전에는 여기가
+# 딥네이비였는데, 도해 배경이 종이색이라 실제로는 이음매가 어긋나 있었다.)
+BG_HEX = "0xEAE6DD"   # 바이블 §1 BG. composite_diagram.PAPER_HEX 와 동기화
 LOOP_FADE_IN = 0.35   # 첫 컷을 BG 에서 연다 (마지막 컷은 BG 로 닫힌다)
 AUDIO_FADE_IN = 0.25
 AUDIO_FADE_OUT = 0.90
@@ -61,7 +65,9 @@ AUDIO_FADE_OUT = 0.90
 # 첫 자막 줄("인쇄술은" 같은 4~5글자 파편)은 0.3초에야 뜨고 그마저 짧다 —
 # 스와이프 판정은 그보다 먼저 끝난다. 0초부터 화면에 정보가 있어야 한다.
 HOOK_INK_HEX = "0xE8E4DC"     # 바이블 §1 INK
-HOOK_BOX_HEX = "0x0E1420"     # 바이블 §1 BG — 글자 뒤 다크닝 박스
+# 훅 카드는 첫 컷(veo, 딥네이비 AI 영상) 위에 얹힌다 — 도해의 종이 배경과는
+# 다른 화면이다. 그 위에서 밝은 글자가 읽히도록 어둡게 다크닝하는 박스다.
+HOOK_BOX_HEX = "0x0E1420"
 HOOK_FONTSIZE = 92
 HOOK_Y = 210
 HOOK_DURATION = 2.0
@@ -260,46 +266,33 @@ def render_diagram(ep_dir: Path, scene: str, out: Path):
 
 
 # ============================================================
-# 배경 플레이트 합성 — 도해(알파) 를 전역 루프 위에 얹는다
+# 배경 합성 — 도해(알파) 를 종이 배경 위에 얹는다
 # ============================================================
-PLATES_DIR = ROOT / "assets_global" / "plates"
+# 2026-08-27 이전에는 이 자리에서 assets_global/plates/ 의 딥네이비 루프를
+# 눌러 깐 뒤 그 위에 도해를 얹었다 — AI 컷과 톤을 맞추려는 시도였다.
+#
+# 그런데 lib_style.py 는 애초에 그 가정을 따라간 적이 없다. DiagramScene 은
+# 항상 `camera.background_color = BG`(#EAE6DD, 오래된 종이) 로 시작하고,
+# backdrop() 의 모눈종이 격자는 MUTE, card() 는 #F9F8F6 백지를 칠한다 —
+# 전부 밝은 종이 위에서 읽히도록 설계돼 있었다. 배경만 딥네이비로 눌러
+# 놨더니 화면의 8할이 죽은 암흑이 되고 모눈 격자는 거의 안 보였다.
+#
+# 바이블 §0 원안대로 돌린다: "딥네이비 AI 컷과 확연히 대비되는 밝은 종이".
+# 정지 톤 방지는 플레이트가 아니라 DiagramScene 의 DRIFT(느린 줌인)와
+# 단계별 reveal 애니메이션이 이미 맡고 있다 — 모든 도해 씬이 DRIFT 를
+# 0이 아닌 값으로 쓴다. 그래서 여기서는 순수 배경색이면 충분하다.
+PAPER_HEX = "0xEAE6DD"   # lib_style.BG 와 반드시 같은 값
 
 
-def plate_path(name: str) -> Path:
-    return PLATES_DIR / f"P_{name}.mp4"
-
-
-def _plate_offset(scene_id: str, dur_needed: float) -> float:
-    """같은 플레이트가 반복돼 보이지 않도록 씬마다 다른 지점에서 시작한다."""
-    room = max(CLIP_SEC - dur_needed - 0.1, 0.0)
-    if room <= 0:
-        return 0.0
-    h = int.from_bytes(scene_id.encode("utf-8"), "big") % 997
-    return round(room * (h / 997), 2)
-
-
-# 플레이트 원본은 BG(#0E1420, YAVG≈20) 근처로 너무 어둡게 눌려 있어
-# 합성해도 사실상 안 보인다 (P_fog/P_grid 실측 YAVG 29/33 — BG와 거의 구분 불가).
-# 카드 밖 여백에서 플레이트가 실제로 읽히도록 합성 시점에 들어 올린다.
-# 카드는 자체 불투명(BG 92%) 배경이 있어 텍스트 대비에는 영향이 없다.
-PLATE_GRADE = "eq=brightness=0.20:contrast=1.10:saturation=0.85"
-
-
-def composite_diagram(alpha_src: Path, plate_src: Path, dst: Path,
-                       frames: int, scene_id: str):
-    """투명 도해 위에 배경 플레이트를 깔아 합성한다."""
-    offset = _plate_offset(scene_id, frames / FPS)
-    plate_chain = (f"scale={W}:{H}:force_original_aspect_ratio=increase,"
-                    f"crop={W}:{H},fps={FPS},setsar=1,{PLATE_GRADE}")
-    if offset > 0:
-        plate_chain += f",trim=start={offset},setpts=PTS-STARTPTS"
-    plate_chain += ",tpad=stop_mode=clone:stop_duration=5"
+def composite_diagram(alpha_src: Path, dst: Path, frames: int):
+    """투명 도해 위에 종이색 배경을 깔아 합성한다."""
+    dur = frames / FPS + 0.5
     diagram_chain = f"fps={FPS},format=yuva420p,tpad=stop_mode=clone:stop_duration=5"
-    fc = (f"[0:v]{plate_chain}[bg];"
-          f"[1:v]{diagram_chain}[fg];"
+    fc = (f"color=c={PAPER_HEX}:s={W}x{H}:r={FPS}:d={dur},format=rgba[bg];"
+          f"[0:v]{diagram_chain}[fg];"
           f"[bg][fg]overlay=0:0:format=auto[v]")
     run([FFMPEG, "-y", "-loglevel", "error",
-         "-i", str(plate_src), "-i", str(alpha_src),
+         "-i", str(alpha_src),
          "-filter_complex", fc, "-map", "[v]",
          "-frames:v", str(frames),
          "-c:v", "libx264", "-crf", "18", "-pix_fmt", "yuv420p", str(dst)])
@@ -349,6 +342,10 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("episode")
     ap.add_argument("--keep-work", action="store_true")
+    ap.add_argument(
+        "--allow-still-fallback", action="store_true",
+        help="veo 클립이 없을 때 정지 이미지로 대체하고 계속 진행한다 "
+             "(기본은 중단). 확인용 가조립에만 쓰고 발행본에는 쓰지 말 것.")
     args = ap.parse_args()
 
     ep = args.episode
@@ -393,10 +390,7 @@ def main():
                 # 소스가 더 새로우면 다시 렌더한다 (수정하고 반영을 잊는 사고 방지)
                 if not clip.is_file() or py.stat().st_mtime > clip.stat().st_mtime:
                     render_diagram(ep_dir, name, clip)
-                plate = plate_path(s.get("plate") or "fog")
-                if not plate.is_file():
-                    sys.exit(f"오류: 배경 플레이트가 없습니다 — {plate}")
-                composite_diagram(clip, plate, dst, frames, name)
+                composite_diagram(clip, dst, frames)
 
             elif kind == "ai_still":
                 img = assets / "images" / f"{shot}.png"
@@ -413,11 +407,26 @@ def main():
                         say(f"    [경고] {shot} 이 {src_len:.2f}s 인데 "
                             f"{need:.2f}s 지점까지 필요합니다 → 끝 프레임을 복제합니다.")
                     make_clip(clip, dst, frames, offset)
-                else:  # 생성물이 아직 없으면 정지 이미지로 대체
+                else:
+                    # veo 샷인데 클립이 없다. 예전에는 조용히 정지 이미지로 대체하고
+                    # 빌드를 통과시켰는데, 그러면 유료 생성을 건너뛴 게 '렌더 성공'
+                    # 으로 보인다. EP010 이 그렇게 전편 정지 화면으로 나갔다 —
+                    # veo 6컷이 전부 zoompan 스틸이었고 아무도 몰랐다.
                     img = assets / "images" / f"{shot}.png"
                     if not img.is_file():
                         sys.exit(f"오류: {shot} 의 클립도 이미지도 없습니다.")
-                    say(f"    [경고] {shot} t2v 클립 없음 → 정지 컷으로 대체")
+                    if not args.allow_still_fallback:
+                        sys.exit(
+                            f"오류: {shot} 은 veo 샷인데 "
+                            f"{assets / 'clips' / f'{shot}.mp4'} 가 없습니다.\n"
+                            "      정지 이미지로 대체하면 그 컷은 움직이지 않습니다 — "
+                            "첫 3초가 정지면 배포가 열리지 않습니다.\n"
+                            "      pipeline.py 의 video 단계로 클립을 생성하거나, "
+                            "확인용 가조립이면 --allow-still-fallback 을 붙이세요.\n"
+                            "      정말 정지 컷으로 갈 거면 scenes.json 에서 "
+                            f"{shot} 의 kind 를 still 로 바꾸세요.")
+                    say(f"    [경고] {shot} t2v 클립 없음 → 정지 컷으로 대체 "
+                        "(--allow-still-fallback). 발행본으로 쓰지 마세요.")
                     make_still(img, dst, s.get("move") or "dolly_in", frames)
             else:
                 sys.exit(f"오류: 알 수 없는 kind '{kind}' ({name})")

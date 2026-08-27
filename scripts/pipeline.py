@@ -422,27 +422,16 @@ def stage_package(ep: str, ep_dir: Path):
     err, warn = lib_scenes.validate_package(doc)
     report(err, warn, "패키징 검증")
 
-    timing = load_timing(ep_dir)
-    scenes_by_id = {s["scene"]: s for s in timing["scenes"]}
     p = doc.package
-    sc = scenes_by_id.get(p.thumbnail_scene)
-    if sc is None:
-        die(f"thumbnail_scene '{p.thumbnail_scene}' 이 timing.json 에 없습니다.")
-    abs_t = sc["start"] + max(0.0, min(p.thumbnail_time, sc["dur"] - 1 / 25))
 
     video = ROOT / "render" / f"{ep}_final.mp4"
     if not video.is_file():
         die("렌더 결과가 없습니다. assemble 단계를 먼저 돌리세요.")
 
-    import lib_narration
-    ffmpeg = lib_narration.find_ffmpeg()
-    thumb = ep_dir / "thumbnail.jpg"
-    subprocess.run(
-        [ffmpeg, "-y", "-loglevel", "error", "-ss", f"{abs_t:.3f}",
-         "-i", str(video), "-frames:v", "1", "-q:v", "2", str(thumb)],
-        check=True,
-    )
-    say(f"  썸네일: {thumb}  ({p.thumbnail_scene} @ {p.thumbnail_time:.2f}s → 영상 {abs_t:.2f}s)")
+    # 썸네일은 최종 영상이 아니라 원본 클립에서 뽑는다 — 최종본에는 번인 자막과
+    # 훅 카드가 이미 박혀 있어서 그대로 쓰면 글자가 두 겹으로 겹친다.
+    import make_thumbnail
+    thumb = make_thumbnail.build(ep)
 
     tags = " ".join(f"#{h.lstrip('#')}" for h in p.hashtags)
     md = f"""# {ep} 발행 패키지
@@ -457,7 +446,7 @@ def stage_package(ep: str, ep_dir: Path):
 {tags}
 
 ## 썸네일
-{thumb.relative_to(ROOT).as_posix()}  ({p.thumbnail_scene} @ {p.thumbnail_time:.2f}s)
+{thumb.relative_to(ROOT).as_posix()}  (원본 클립에서 별도 제작 — package.thumbnail)
 
 ## 체크리스트
 - [ ] AI 생성 콘텐츠 라벨 체크 (필수)

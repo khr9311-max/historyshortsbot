@@ -56,10 +56,19 @@ SUB_OUTLINE = 3.5            # 검정 스트로크
 SUB_MARGIN_V = 300           # 쇼츠 하단 UI 회피
 SUB_MARGIN_H = 70
 
-# 바이블 §5: 남성 저음, 차분한 분석가, 속도 0.95배. 음성 변경 금지.
-VOICE = "ko-KR-InJoonNeural"
-RATE = "-5%"
-PITCH = "-2Hz"
+# 바이블 §5: 차분한 분석가, 속도 0.95배 근처.
+#
+# 2026-08-27 교체: ko-KR-InJoonNeural → ko-KR-SunHiNeural.
+# InJoon 은 Edge TTS 무료 한국어 남성 음성이고 역사·미스터리 양산형 채널이
+# 사실상 전부 쓴다. 시청자가 3초 안에 "AI 양산형"으로 판정하는 청각 신호라
+# 채널 정체성에 부채가 됐다. 무료 한국어 음성은 셋뿐이고(InJoon / Hyunsu /
+# SunHi) 여성은 SunHi 하나뿐이다.
+#
+# pitch 를 -25Hz 까지 내려 "차분한 분석가" 톤을 유지한다. 기본값(-2Hz)은
+# 밝고 빨라서 뉴스 요약 채널처럼 들린다.
+VOICE = "ko-KR-SunHiNeural"
+RATE = "-8%"
+PITCH = "-25Hz"
 
 SR, CHANNELS, SAMPWIDTH = 48000, 2, 2
 

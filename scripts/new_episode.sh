@@ -28,7 +28,14 @@ cat > "$DIR/scenes.json" <<JSON
     "description": "(설명란. 인과 구조 한 줄 + 출처)",
     "hashtags": ["역사", "세계사"],
     "thumbnail_scene": "S01",
-    "thumbnail_time": 1.0
+    "thumbnail_time": 1.0,
+    "thumbnail": {
+      "source": "V01",
+      "t": 1.5,
+      "kicker": "(상단 라벨. 8자 이내)",
+      "lines": ["(1줄. 10자 이내)", "(2줄. 10자 이내)"],
+      "accent": "(lines 안의 강조 부분. 한 곳만)"
+    }
   },
   "shots": [
     {
@@ -38,12 +45,12 @@ cat > "$DIR/scenes.json" <<JSON
       "risk": "low",
       "golden_ref": "GP-01",
       "chars": 0,
-      "prompt": "[0-5s] Beat A - wide situation, slow side tracking shot. [5-8s] Beat B - rapid push-in close-up on the decisive detail. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, heavy atmospheric haze, silhouette figures only, no visible faces, subtle film grain, 9:16 vertical, 8 seconds. No Korean text."
+      "prompt": "[0-5s] Beat A - THE STRONGEST MOMENT. A subject event must happen here (collapses / ignites / slams / bursts) - camera motion alone is ignored by the model. Slow side tracking shot. No establishing shot, no wide situation setup. [5-8s] Beat B - rapid push-in close-up on the decisive detail. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, heavy atmospheric haze, silhouette figures only, no visible faces, subtle film grain, 9:16 vertical, 8 seconds. No Korean text."
     },
     {
       "id": "I01",
       "kind": "still",
-      "scenes": ["S05"],
+      "scenes": ["S04"],
       "risk": "low",
       "golden_ref": "GP-05",
       "chars": 0,
@@ -52,17 +59,26 @@ cat > "$DIR/scenes.json" <<JSON
     {
       "id": "V02",
       "kind": "veo",
-      "scenes": ["S07", "S08"],
+      "scenes": ["S05", "S06"],
       "risk": "low",
       "golden_ref": "GP-02",
       "chars": 0,
-      "prompt": "[0-5s] Beat A - wide situation, slow side tracking shot. [5-8s] Beat B - rapid push-in close-up on the decisive detail. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, heavy atmospheric haze, silhouette figures only, no visible faces, subtle film grain, 9:16 vertical, 8 seconds. No Korean text."
+      "prompt": "[0-5s] Beat A - THE STRONGEST MOMENT. A subject event must happen here (collapses / ignites / slams / bursts) - camera motion alone is ignored by the model. Slow side tracking shot. No establishing shot, no wide situation setup. [5-8s] Beat B - rapid push-in close-up on the decisive detail. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, heavy atmospheric haze, silhouette figures only, no visible faces, subtle film grain, 9:16 vertical, 8 seconds. No Korean text."
+    },
+    {
+      "id": "V03",
+      "kind": "veo",
+      "scenes": ["S08", "S09"],
+      "risk": "low",
+      "golden_ref": "GP-04",
+      "chars": 0,
+      "prompt": "[0-5s] Beat A - THE STRONGEST MOMENT. A subject event must happen here (collapses / ignites / slams / bursts) - camera motion alone is ignored by the model. Slow side tracking shot. No establishing shot, no wide situation setup. [5-8s] Beat B - rapid push-in close-up on the decisive detail. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, heavy atmospheric haze, silhouette figures only, no visible faces, subtle film grain, 9:16 vertical, 8 seconds. No Korean text."
     }
   ],
   "scenes": [
     {"id": "S01", "shot": "V01", "beat": "A", "move": "side_track", "pause": 0.42,
-     "note": "도입 훅",
-     "narration": "(훅 문장)",
+     "note": "도입 훅 — 가장 센 장면. 3.2초 이내",
+     "narration": "(훅 문장. 상식을 비트는 모순문)",
      "subs": ["(자막 1줄)", "*(강조 구간)*"]},
 
     {"id": "S02", "shot": "V01", "beat": "B", "move": "push_in", "pause": 0.46,
@@ -71,38 +87,43 @@ cat > "$DIR/scenes.json" <<JSON
      "subs": ["(자막)", "*(강조)*"]},
 
     {"id": "S03", "kind": "diagram", "pause": 0.34,
-     "note": "도해 - 통념 부정",
-     "narration": "(통념을 걷어내는 문장)",
+     "note": "도해 - 통념 부정. 화자가 입장을 드러내는 자리 (문체 §8)",
+     "narration": "(통념을 걷어내는 문장. 4초 = 25자 안팎)",
      "subs": ["(자막)", "*(강조)*"]},
 
-    {"id": "S04", "kind": "diagram", "pause": 0.40,
-     "note": "도해 - 두 조건 수렴",
-     "narration": "(두 조건이 겹쳤다는 문장)",
-     "subs": ["(자막)", "*(강조)*"]},
-
-    {"id": "S05", "shot": "I01", "move": "dolly_in", "pause": 0.34,
+    {"id": "S04", "shot": "I01", "move": "dolly_in", "pause": 0.34,
      "note": "조건 1 - 현장",
      "narration": "(첫째 조건)",
      "subs": ["(자막)", "*(강조)*"]},
 
-    {"id": "S06", "kind": "diagram", "pause": 0.44,
-     "note": "도해 - 조건 1 의 작동 방식",
-     "narration": "(수치·비교로 조건 1 을 보이는 문장)",
-     "subs": ["(자막)", "*(강조)*"]},
-
-    {"id": "S07", "shot": "V02", "beat": "A", "move": "side_track", "pause": 0.40,
+    {"id": "S05", "shot": "V02", "beat": "A", "move": "side_track", "pause": 0.40,
      "note": "조건 2 - 현장",
      "narration": "(둘째 조건)",
      "subs": ["(자막)", "*(강조)*"]},
 
-    {"id": "S08", "shot": "V02", "beat": "B", "move": "push_in", "pause": 0.42,
+    {"id": "S06", "shot": "V02", "beat": "B", "move": "push_in", "pause": 0.42,
      "note": "조건 2 결정타",
-     "narration": "(둘이 겹친 결과)",
+     "narration": "(반박 대신 묻고 즉시 답하는 자리 · 문체 §3)",
      "subs": ["(자막)", "*(강조)*"]},
 
-    {"id": "S09", "kind": "diagram", "pause": 0.0,
-     "note": "도해 - 인과 요약 + 루프백",
-     "narration": "(S01 훅으로 물리는 마지막 문장)",
+    {"id": "S07", "kind": "diagram", "pause": 0.40,
+     "note": "도해 - 두 조건 수렴",
+     "narration": "(두 조건이 겹쳤다는 문장. 4초 이내)",
+     "subs": ["(자막)", "*(강조)*"]},
+
+    {"id": "S08", "shot": "V03", "beat": "A", "move": "side_track", "pause": 0.38,
+     "note": "결과 - 현장",
+     "narration": "(결과가 벌어지는 문장)",
+     "subs": ["(자막)", "*(강조)*"]},
+
+    {"id": "S09", "shot": "V03", "beat": "B", "move": "push_in", "pause": 0.42,
+     "note": "결과 결정타",
+     "narration": "(결정타 문장)",
+     "subs": ["(자막)", "*(강조)*"]},
+
+    {"id": "S10", "kind": "diagram", "pause": 0.0,
+     "note": "도해 - 인과 요약 + 루프백. source_stamp() 로 출처를 박는다",
+     "narration": "(S01 훅으로 물리는 마지막 문장. 4초 이내)",
      "subs": ["(자막)", "*(강조)*"]}
   ]
 }
@@ -160,8 +181,8 @@ class S03Scene(DiagramScene):  # noqa: F405
         pass
 PY
 
-# scenes.json 골격의 도해 씬 번호와 맞춘다 (S03 · S04 · S06 · S09)
-for N in S04 S06; do
+# scenes.json 골격의 도해 씬 번호와 맞춘다 (S03 · S07 · S10)
+for N in S07; do
   sed -e "s/^S03 —.*/${N} — 도해/" -e "s/class S03Scene/class ${N}Scene/" \
       "$DIR/diagrams/S03.py" > "$DIR/diagrams/${N}.py"
 done
@@ -170,7 +191,7 @@ done
 sed -e 's/^S03 —.*/S09 — 인과 요약 + 루프백 (마지막 컷)/' \
     -e 's/class S03Scene/class S09Scene/' \
     -e 's/    DURATION = 4.0/    DURATION = 4.0\n    LOOP_TAIL = 1.25  # 끝 프레임을 BG 로 수렴 → 반복 재생 이음매 제거/' \
-    "$DIR/diagrams/S03.py" > "$DIR/diagrams/S09.py"
+    "$DIR/diagrams/S03.py" > "$DIR/diagrams/S10.py"
 
 cat > "$DIR/script.md" <<MD
 # ${EP}
@@ -190,8 +211,8 @@ cat > "$DIR/script.md" <<MD
 ## 대본
 ### ① 도입 (S01~S02 · V01 한 클립)
 ### ② 난관 (S03~S04)
-### ③ 해결 (S05~S08)
-### ④ 마무리 · 루프백 (S09)
+### ③ 해결 (S05~S09)
+### ④ 마무리 · 루프백 (S10)
 (마지막 문장이 ①의 훅으로 이어지게 쓴다 — 바이블 §11)
 
 ## 서술 점검 (바이블 §8)

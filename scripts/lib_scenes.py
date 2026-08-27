@@ -53,10 +53,18 @@ MOVE_FAMILY = {"side_track": "doc", "push_in": "doc",
 
 MOVES_STILL = ("dolly_in", "orbit", "crane_up")       # 바이블 §5 무브 3종
 RISKS = ("low", "mid", "high")
+
+# 도해 컷 길이 상한. 쇼츠 배포는 완주율이 열고, 완주율은 정적 화면에서 죽는다.
+# EP011 S03 이 9.81초짜리 한 장이었고 그게 훅 직후 구간이었다.
+DIAGRAM_MAX_SEC = 4.0
+# 첫 컷은 스와이프 이탈을 막는 유일한 구간이다. 여기서 길게 끌면 배포가 안 열린다.
+OPENING_MAX_SEC = 3.2
 DIAGRAM_RANGE = (3, 4)          # 서사 클립 3개(=veo 6컷) 기준선 (SOP §4)
 STILL_MAX = 1                   # 정지 톤이 겹치지 않도록 편당 1컷
 
-# 도해 배경 플레이트. assets_global/plates/P_<name>.mp4 로 해석된다 (규칙 §1).
+# 도해 배경 플레이트 — 2026-08-27 부로 build.py 가 더는 읽지 않는다 (바이블
+# §0 원안대로 밝은 종이 단색으로 되돌렸다). 필드는 옛 씬 파일과의 호환을
+# 위해 남겨 두고 계속 검증한다. 새 씬에는 안 써도 된다.
 PLATES = ("fog", "dust", "grid")
 PLATE_DEFAULT = "fog"
 
@@ -82,6 +90,21 @@ _CONJOIN = re.compile(r"[가-힣]+(?:와|과)\s*[가-힣]")
 # 매 클립마다 선과 글자를 새로 그려 흔들리거나 뭉개진다 (EP005 V01,
 # EP007 V01~V03 사고). 화면 정보는 전부 diagram 컷으로 보낸다.
 _ANNOTATION_HINT = re.compile(r"measurement line|numeric annotation|annotation overlaid|leader line", re.I)
+
+# 첫 클립의 비트 A 는 상황 설명이 아니라 가장 센 장면으로 열어야 한다.
+# establishing/wide 로 열면 첫 1~2초가 정지처럼 보이고 거기서 스와이프가 난다
+# (EP011 V01 이 정글 와이드로 열고, 정작 제일 센 프레임은 4.9초에 있었다).
+# 네거티브 지시("no establishing shot", "No Korean text") 는 검사 대상에서 뺀다.
+_NEGATION = re.compile(r"(?<![A-Za-z])no\s+[^.;,]*", re.I)
+_SLOW_OPEN = re.compile(
+    r"establishing shot|wide establishing|slow (?:pan|reveal|drift)|"
+    r"empty landscape|calm (?:sea|field)", re.I)
+# 1초 안에 화면이 실제로 바뀌게 만드는 사건 어휘. 카메라 무브만으로는 부족하다 —
+# 디퓨전 모델이 카메라 지시를 자주 무시한다.
+_MOTION_EVENT = re.compile(
+    r"collaps|topple|ignit|burst|shatter|surge|stumbl|fall|drop|slam|"
+    r"spill|erupt|snap|tear|breach|flood|charge|bolt|swing|hurl|"
+    r"pull(?:s|ing)? away|rush", re.I)
 
 
 def _norm_for_compare(s: str) -> str:
@@ -134,6 +157,9 @@ class Package:
     hashtags: list[str] = field(default_factory=list)
     thumbnail_scene: str = ""
     thumbnail_time: float = 1.0
+    # 썸네일 전용 설정 — scripts/make_thumbnail.py 가 읽는다.
+    # {source, t, lines[], accent, kicker}. 비어 있으면 hook_text 로 폴백한다.
+    thumbnail: dict = field(default_factory=dict)
 
 
 @dataclass
@@ -192,6 +218,7 @@ def load(ep: str) -> Doc:
         hashtags=list(pkg_raw.get("hashtags") or []),
         thumbnail_scene=pkg_raw.get("thumbnail_scene", ""),
         thumbnail_time=float(pkg_raw.get("thumbnail_time", 1.0)),
+        thumbnail=dict(pkg_raw.get("thumbnail") or {}),
     )
 
     return Doc(episode=raw.get("episode", ep), title=raw.get("title", ""),
@@ -302,14 +329,19 @@ def validate(doc: Doc) -> tuple[list[str], list[str]]:
 
     warn += _check_rhythm(doc)
     warn += _check_ending(doc)
+    warn += _check_opening_shot(doc)
 
     # --- 배치 ---
     kinds = [s.kind for s in doc.scenes]
     if kinds and kinds[0] != "veo":
         err.append("1번 씬이 veo 가 아닙니다 (SOP §5).")
-    for i in range(len(kinds) - 2):
-        if kinds[i] == kinds[i + 1] == kinds[i + 2] == "diagram":
-            err.append(f"diagram 이 3연속입니다 ({doc.scenes[i].id} 부터).")
+    # 도해가 연달아 붙으면 그 구간이 통째로 정적 화면이 된다. 쇼츠에서 그건
+    # 이탈 지점이다 (EP009 S03~S04, EP010 S03~S04 가 실제로 그랬다).
+    for i in range(len(kinds) - 1):
+        if kinds[i] == kinds[i + 1] == "diagram":
+            err.append(
+                f"diagram 이 연속입니다 ({doc.scenes[i].id}→{doc.scenes[i + 1].id}). "
+                "사이에 veo/still 컷을 넣거나 둘을 한 씬으로 합치세요.")
     n_dia = kinds.count("diagram")
     if not (DIAGRAM_RANGE[0] <= n_dia <= DIAGRAM_RANGE[1]):
         warn.append(f"diagram 컷이 {n_dia}개입니다 "
@@ -322,6 +354,39 @@ def validate(doc: Doc) -> tuple[list[str], list[str]]:
         warn.append("마지막 컷이 요약 도해가 아닙니다 (SOP §5).")
 
     return err, warn
+
+
+def _check_opening_shot(doc: Doc) -> list[str]:
+    """첫 클립이 '가장 센 장면'으로 여는지 본다.
+
+    쇼츠 조회수는 첫 프레임부터 집계되고, 배포는 시드 오디언스의 스와이프
+    이탈률이 연다. 상황 설명으로 시작하는 도입부는 그 구간을 통째로 버린다.
+    가장 강한 그림을 비트 B 에 두면 이미 스와이프된 뒤다.
+    """
+    if not doc.scenes:
+        return []
+    first = doc.scenes[0]
+    sh = doc.shots.get(first.shot)
+    if sh is None or sh.kind != "veo":
+        return []
+
+    beats = _BEAT_TOKEN.split(sh.prompt)
+    beat_a = beats[1] if len(beats) > 1 else sh.prompt
+    # "No establishing shot" 같은 네거티브 지시는 금지어가 아니라 금지 선언이다.
+    # 그대로 검사하면 규칙을 지킨 프롬프트가 오히려 걸린다.
+    probe = _NEGATION.sub(" ", beat_a)
+
+    warn: list[str] = []
+    m = _SLOW_OPEN.search(probe)
+    if m:
+        warn.append(f"{sh.id}: 첫 클립이 '{m.group(0)}' 로 엽니다 — 상황 설명 도입은 "
+                    "첫 3초를 버립니다. 가장 센 장면을 비트 A 로 올리세요.")
+    if not _MOTION_EVENT.search(probe):
+        warn.append(f"{sh.id}: 첫 클립 비트 A 에 움직임 사건이 없습니다. 카메라 무브만 "
+                    "적으면 모델이 무시하고 거의 정지한 클립을 냅니다 (EP010·EP011 "
+                    "첫 1.5초가 실제로 그랬습니다). 무너진다/불붙는다/쓰러진다 같은 "
+                    "피사체 사건을 넣으세요.")
+    return warn
 
 
 def ending_of(sentence: str) -> str:
@@ -446,7 +511,49 @@ def validate_package(doc: Doc) -> tuple[list[str], list[str]]:
     elif len(doc.hook_text.strip()) > 12:
         warn.append(f"hook_text 가 {len(doc.hook_text.strip())}자입니다 — 12자를 "
                     "넘으면 훅 카드 폭에서 잘리거나 줄어듭니다. 짧게 줄이세요.")
+
+    warn += _check_thumbnail(doc)
     return err, warn
+
+
+def _check_thumbnail(doc: Doc) -> list[str]:
+    """썸네일 설정 점검.
+
+    썸네일은 피드가 아니라 검색·채널 그리드에서 작동한다. 거기서는 200px 폭으로
+    줄어들기 때문에 글자 수와 강조 위치가 전부다.
+    """
+    t = doc.package.thumbnail
+    if not t:
+        return ["package.thumbnail 이 없습니다 — hook_text 를 잘라 쓰지만, "
+                "썸네일 문구는 훅 문구와 목적이 달라 따로 쓰는 편이 낫습니다."]
+
+    warn: list[str] = []
+    src = t.get("source")
+    if src:
+        shot = doc.shots.get(src)
+        if shot is None:
+            warn.append(f"package.thumbnail.source '{src}' 은 shots 에 없는 샷입니다.")
+        elif shot.kind == "diagram":
+            warn.append(f"package.thumbnail.source '{src}' 은 도해입니다 — "
+                        "썸네일은 veo/still 샷에서 뽑으세요.")
+
+    lines = [l for l in (t.get("lines") or []) if str(l).strip()]
+    if len(lines) > 2:
+        warn.append(f"package.thumbnail.lines 가 {len(lines)}줄입니다 — "
+                    "2줄까지만 쓰입니다.")
+    for l in lines[:2]:
+        if len(str(l)) > 12:
+            warn.append(f"썸네일 문구 '{l}' 가 {len(str(l))}자입니다 — "
+                        "12자를 넘으면 글자가 줄어들어 그리드에서 안 읽힙니다.")
+
+    accent = t.get("accent")
+    if accent and not any(accent in str(l) for l in lines):
+        warn.append(f"package.thumbnail.accent '{accent}' 가 lines 안에 없습니다 "
+                    "— 강조가 적용되지 않습니다.")
+    if lines and not accent:
+        warn.append("package.thumbnail.accent 가 없습니다 — 강조 없는 두 줄은 "
+                    "축소됐을 때 어디를 읽어야 할지 알려주지 못합니다.")
+    return warn
 
 
 # ============================================================
@@ -474,7 +581,48 @@ def validate_timing(doc: Doc, timing: dict) -> tuple[list[str], list[str]]:
         elif sh.two_beat and total < PAIR_MIN:
             warn.append(f"{sh.id}: 두 비트 합이 {total:.2f}s 뿐입니다 ({detail}). "
                         f"8초를 사고 {CLIP_SEC - total:.1f}s 를 버립니다.")
+
+    err += _check_retention(doc, dur)
     return err, warn
+
+
+def _check_retention(doc: Doc, dur: dict[str, float]) -> list[str]:
+    """정적 화면이 얼마나 오래 이어지는지 본다.
+
+    쇼츠 배포는 시드 오디언스의 완주율이 연다. 도해 컷은 정보 밀도는 높지만
+    움직임이 거의 없어서, 길어지면 그 구간이 그대로 이탈 지점이 된다.
+    """
+    err: list[str] = []
+
+    for s in doc.scenes:
+        if s.kind != "diagram":
+            continue
+        d = dur.get(s.id, 0.0)
+        if d > DIAGRAM_MAX_SEC + 1e-6:
+            err.append(
+                f"{s.id}: 도해 컷이 {d:.2f}s 입니다 (상한 {DIAGRAM_MAX_SEC:.1f}s).\n"
+                f"        나레이션을 줄이거나 씬을 둘로 쪼개세요. "
+                "쇼츠에서 4초 넘는 정지 화면은 이탈 지점입니다.")
+
+    if doc.scenes:
+        first = doc.scenes[0]
+        d = dur.get(first.id, 0.0)
+        if d > OPENING_MAX_SEC + 1e-6:
+            err.append(
+                f"{first.id}: 첫 컷이 {d:.2f}s 입니다 (상한 {OPENING_MAX_SEC:.1f}s).\n"
+                "        첫 3초가 스와이프 이탈을 막는 유일한 구간입니다. "
+                "한 문장으로 줄이세요.")
+
+    kind_of = {s.id: s.kind for s in doc.scenes}
+    total = sum(dur.values())
+    static = sum(d for sid, d in dur.items()
+                 if kind_of.get(sid) in ("diagram", "still"))
+    if total and static / total > 0.45:
+        err.append(
+            f"정지 톤 컷(diagram+still)이 전체의 {static / total * 100:.0f}% 입니다 "
+            f"({static:.1f}s / {total:.1f}s, 상한 45%).\n"
+            "        veo 컷으로 옮기거나 도해를 줄이세요.")
+    return err
 
 
 def beat_boundary(doc: Doc, shot: Shot, timing: dict) -> float:

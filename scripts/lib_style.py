@@ -87,7 +87,15 @@ FS_LEAD = fs(4.4)     # ~48px  핵심 라벨
 FS_BODY = fs(3.8)     # ~41px  본문 라벨
 FS_CAPTION = fs(3.1)  # ~33px  보조 설명 (하한선)
 FS_TAG = fs(2.6)      # ~28px  태그·단위. 이보다 작게 쓰지 않는다
+FS_SOURCE = fs(3.4)   # ~37px  출처 인장 — 읽으라고 넣는 글자다 (아래 주석)
 FS_NUM = fs(9.5)      # ~103px 숫자는 크게, 단독으로 — 바이블 §2
+
+# 출처를 왜 키우나
+# ---------------
+# 이 채널이 양산형 AI 역사 채널과 갈리는 지점은 실제 학술 출처를 단다는 것
+# 하나뿐이다. 그런데 EP001~EP011 은 그 출처를 28px DIM 각주로 깔아서 세로
+# 화면에서 아무도 못 읽었다. 못 읽는 글자는 정직함의 증거가 아니라 노이즈다.
+# 출처는 숨기는 게 아니라 채널의 인장으로 박는다 — source_stamp() 를 쓴다.
 
 # ============================================================
 # 4. 세이프 에어리어
@@ -265,8 +273,31 @@ def tag(s: str, color: str = SUB) -> Text:
 
 
 def footnote(s: str) -> Text:
-    """학설 구분·출처 각주 — 바이블 §8"""
-    return txt(s, size=FS_TAG, color=DIM, bold=False, outline=True)
+    """학설 구분 각주 — 바이블 §8.
+
+    출처에는 쓰지 않는다. 출처는 source_stamp() 로 화면에 박는다.
+    """
+    return txt(s, size=FS_CAPTION, color=DIM, bold=False, outline=True)
+
+
+def source_stamp(s: str, width: float = 7.6) -> VGroup:
+    """출처 인장 — 이 채널의 서명.
+
+    매 도해 컷 같은 자리(세이프 에어리어 하단)에 같은 모양으로 박힌다.
+    반복되는 형태 자체가 "이 채널은 출처를 단다"는 신호가 된다.
+
+        stamp = source_stamp("van Creveld, Supplying War (1977)")
+        stamp.next_to(...)  또는  stamp.move_to(DOWN * 2.6)
+        guard(stamp, "source")
+
+    카드 안에 넣지 마라. card() 의 fit() 이 본문에 맞춰 같이 줄여 버린다.
+    """
+    label = txt("출처", size=FS_TAG, color=ACCENT, bold=True, outline=True)
+    bar = Line(ORIGIN, RIGHT * 0.24, color=ACCENT, stroke_width=STROKE)
+    body = txt(s, size=FS_SOURCE, color=INK, bold=False, outline=True,
+               max_w=width - 1.6)
+    g = VGroup(bar, label, body).arrange(RIGHT, buff=0.20)
+    return g
 
 
 # ============================================================

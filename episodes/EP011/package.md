@@ -14,7 +14,7 @@
 #역사 #전쟁사 #비대칭전력 #베트남전쟁 #아프가니스탄 #미국 #소련 #국제정치
 
 ## 썸네일
-episodes/EP011/thumbnail.jpg  (S01 @ 1.50s)
+episodes/EP011/thumbnail.jpg  (원본 클립에서 별도 제작 — package.thumbnail)
 
 ## 체크리스트
 - [ ] AI 생성 콘텐츠 라벨 체크 (필수)
