@@ -13,7 +13,17 @@
       "정보혁명"
     ],
     "thumbnail_scene": "S01",
-    "thumbnail_time": 1.2
+    "thumbnail_time": 1.2,
+    "thumbnail": {
+      "source": "V01",
+      "t": 6.5,
+      "kicker": "구텐베르크",
+      "lines": [
+        "성경을 찍던 기계가",
+        "유럽을 갈랐다"
+      ],
+      "accent": "유럽을 갈랐다"
+    }
   },
   "shots": [
     {
@@ -83,7 +93,7 @@
       "shot": "V01",
       "beat": "B",
       "move": "push_in",
-      "pause": 0.30,
+      "pause": 0.3,
       "note": "훅 질문 - 거대한 갈등으로의 비화",
       "narration": "그런데 왜 유럽의 거대한 갈등으로 이어졌을까요?",
       "subs": [
@@ -132,7 +142,7 @@
       "shot": "V02",
       "beat": "A",
       "move": "side_track",
-      "pause": 0.20,
+      "pause": 0.2,
       "note": "조건 2 - 모국어 소책자의 대중화와 흑자 전환",
       "narration": "이들을 살린 건 모국어 소책자였죠.",
       "subs": [
@@ -145,7 +155,7 @@
       "shot": "V02",
       "beat": "B",
       "move": "push_in",
-      "pause": 0.20,
+      "pause": 0.2,
       "note": "셀프 문답 - 분권 구조와 중앙 통제 불가",
       "narration": "왜 못 막았냐고요? 중앙 권력이 없었거든요.",
       "subs": [
@@ -158,7 +168,7 @@
       "shot": "V03",
       "beat": "A",
       "move": "side_track",
-      "pause": 0.20,
+      "pause": 0.2,
       "note": "조건 3 - 자치 도시 인쇄망과 국경을 넘은 논쟁",
       "narration": "자치 도시의 인쇄소들은 국경을 넘어 퍼뜨렸고,",
       "subs": [

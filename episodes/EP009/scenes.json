@@ -13,7 +13,17 @@
       "경제사"
     ],
     "thumbnail_scene": "S01",
-    "thumbnail_time": 1.0
+    "thumbnail_time": 1.0,
+    "thumbnail": {
+      "source": "V01",
+      "t": 6.0,
+      "kicker": "조세와 국가 수명",
+      "lines": [
+        "덜 걷은 나라가",
+        "먼저 망했다"
+      ],
+      "accent": "먼저 망했다"
+    }
   },
   "shots": [
     {
@@ -83,7 +93,7 @@
       "shot": "V01",
       "beat": "B",
       "move": "push_in",
-      "pause": 0.30,
+      "pause": 0.3,
       "note": "훅 질문 - 원인 탐구",
       "narration": "왜 덜 쥐어짜고도 파산했을까요?",
       "subs": [
@@ -158,7 +168,7 @@
       "shot": "V03",
       "beat": "A",
       "move": "side_track",
-      "pause": 0.20,
+      "pause": 0.2,
       "note": "조건 2 - 중간 누수로 인한 국고 고갈",
       "narration": "중간에서 세수가 새어나가자 국고는 바닥났고,",
       "subs": [

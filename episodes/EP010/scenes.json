@@ -14,7 +14,17 @@
       "러시아원정"
     ],
     "thumbnail_scene": "S01",
-    "thumbnail_time": 1.0
+    "thumbnail_time": 1.0,
+    "thumbnail": {
+      "source": "V03",
+      "t": 0.0,
+      "kicker": "보급선의 수학",
+      "lines": [
+        "60만 대군이",
+        "겨울 전에 사라졌다"
+      ],
+      "accent": "겨울 전에"
+    }
   },
   "shots": [
     {
@@ -83,7 +93,7 @@
       "shot": "V01",
       "beat": "B",
       "move": "push_in",
-      "pause": 0.30,
+      "pause": 0.3,
       "note": "훅 질문 - 계절과 피해의 모순 (증발)",
       "narration": "눈이 내리기도 전에 이미 절반이 증발했습니다.",
       "subs": [
@@ -132,7 +142,7 @@
       "shot": "V02",
       "beat": "A",
       "move": "side_track",
-      "pause": 0.30,
+      "pause": 0.3,
       "note": "조건 1 메커니즘 - 500km 거리 한계",
       "narration": "보급선이 500킬로를 넘어가면, 짐칸의 식량은 말이 다 먹어치웁니다.",
       "subs": [
@@ -157,7 +167,7 @@
       "shot": "V03",
       "beat": "A",
       "move": "side_track",
-      "pause": 0.20,
+      "pause": 0.2,
       "note": "조건 결합 - 굶주린 말의 아사",
       "narration": "현지 조달마저 막히자 굶주린 말이 먼저 쓰러졌고,",
       "subs": [

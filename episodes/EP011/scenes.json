@@ -16,7 +16,17 @@
       "국제정치"
     ],
     "thumbnail_scene": "S01",
-    "thumbnail_time": 1.5
+    "thumbnail_time": 1.5,
+    "thumbnail": {
+      "source": "V01",
+      "t": 4.9,
+      "kicker": "비대칭 전쟁",
+      "lines": [
+        "전투는 다 이겼다",
+        "그런데 졌다"
+      ],
+      "accent": "그런데 졌다"
+    }
   },
   "shots": [
     {
@@ -86,7 +96,7 @@
       "shot": "V01",
       "beat": "B",
       "move": "push_in",
-      "pause": 0.40,
+      "pause": 0.4,
       "note": "상황 제시",
       "narration": "압도적인 무력을 가졌는데 왜 졌을까요?",
       "subs": [
@@ -111,7 +121,7 @@
       "shot": "V02",
       "beat": "A",
       "move": "side_track",
-      "pause": 0.30,
+      "pause": 0.3,
       "note": "강대국의 제한전",
       "narration": "강대국에게 원정은 국익을 위한 '제한전'이지만,",
       "subs": [
@@ -124,7 +134,7 @@
       "shot": "V02",
       "beat": "B",
       "move": "push_in",
-      "pause": 0.30,
+      "pause": 0.3,
       "note": "약소국의 생존전",
       "narration": "약소국에겐 명운이 걸린 '생존전'이죠.",
       "subs": [
@@ -161,7 +171,7 @@
       "shot": "V03",
       "beat": "A",
       "move": "side_track",
-      "pause": 0.20,
+      "pause": 0.2,
       "note": "약자의 승리 메커니즘",
       "narration": "약소국은 전투에서 매번 져도,",
       "subs": [
@@ -173,7 +183,7 @@
       "shot": "V03",
       "beat": "B",
       "move": "push_in",
-      "pause": 0.30,
+      "pause": 0.3,
       "note": "인내심의 한계",
       "narration": "적의 인내심이 바닥날 때까지 시간만 끌면 이기는 겁니다.",
       "subs": [
