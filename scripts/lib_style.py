@@ -39,17 +39,17 @@ config.frame_rate = FPS
 # ============================================================
 # 2. 색상 상수 — 바이블 §1
 # ============================================================
-BG = "#0E1420"      # 배경 (딥 네이비)
-INK = "#E8E4DC"     # 기본 텍스트·선
-ACCENT = "#E4483A"  # 강조 1색 — 한 화면에 한 곳만
-SUB = "#F2A73B"     # 보조 강조 (앰버)
-MUTE = "#5A6472"    # 비활성 요소·격자
+BG = "#EAE6DD"      # 배경 (오래된 종이, 오프화이트)
+INK = "#2C2E2A"     # 기본 텍스트·선 (진한 흑연/먹물)
+ACCENT = "#D93829"  # 강조 1색 — 마커펜, 연결 실, 결정적 수치
+SUB = "#F2C94C"     # 보조 강조 (형광펜 효과)
+MUTE = "#C4BCAE"    # 비활성 요소·격자 (모눈종이)
 
 # MUTE 는 대비가 낮아 '읽어야 하는 본문'에 쓰면 안 된다.
 # 비활성이지만 읽혀야 하는 텍스트는 DIM 을 쓴다.
-DIM = "#8C97A8"
+DIM = "#736F66"
 
-STROKE = 3  # 선 굵기 고정 — 바이블 §3
+STROKE = 5  # 선 굵기 고정 — 굵고 힘있는 마커 느낌
 
 # ============================================================
 # 3. 타이포 — 바이블 §2
@@ -229,10 +229,10 @@ def card(
     accent: bool = False,
     pad_y: float = 0.42,
     gap: float = 0.24,
-    corner: float = 0.22,
+    corner: float = 0.04,
 ) -> VGroup:
     """
-    라운드 박스 + 내부 세로 정렬 컨텐츠.
+    조사 보드 스타일: 사진 인화지나 스크랩 느낌의 종이 박스.
     박스 높이를 컨텐츠에 맞춰 계산하므로 텍스트가 박스 밖으로 새지 않는다.
     """
     body = VGroup(*rows).arrange(DOWN, buff=gap)
@@ -243,11 +243,16 @@ def card(
         width=width,
         height=body.height + pad_y * 2,
         color=ACCENT if accent else color,
-        stroke_width=STROKE if accent else 2,
+        stroke_width=STROKE if accent else 3,
     )
-    frame.set_fill(BG, opacity=0.92)
+    frame.set_fill("#F9F8F6", opacity=1.0) # 하얀 종이 질감으로 구별
+    
+    # 윗부분에 반투명한 마스킹 테이프 조각 연출
+    tape = Rectangle(width=1.8, height=0.35, color=MUTE, stroke_width=0)
+    tape.set_fill(MUTE, opacity=0.25).move_to(frame.get_top())
+
     body.move_to(frame.get_center())
-    return VGroup(frame, body)
+    return VGroup(frame, tape, body)
 
 
 def rule(width: float = 6.6, color: str = MUTE) -> Line:
@@ -448,12 +453,12 @@ class DiagramScene(MovingCameraScene):
     # --- 공통 요소 ---
     def backdrop(self) -> NumberPlane:
         return NumberPlane(
-            x_range=[-4.5, 4.5, 1],
-            y_range=[-8, 8, 1],
+            x_range=[-4.5, 4.5, 0.5],
+            y_range=[-8, 8, 0.5],
             background_line_style={
                 "stroke_color": MUTE,
                 "stroke_width": 1,
-                "stroke_opacity": 0.08,
+                "stroke_opacity": 0.35, # 더 뚜렷한 모눈종이 느낌
             },
             axis_config={"stroke_opacity": 0},
         )
@@ -599,6 +604,19 @@ class DiagramScene(MovingCameraScene):
                   rate_func=rate_functions.ease_in_out_sine)
         self.play(FadeOut(line), run_time=0.3)
 
+    def highlight(self, target: Mobject, color: str = SUB, run_time: float = 0.4):
+        """텍스트 뒤에 형광펜(Highlighter)이 찍 그어지는 연출"""
+        hl = Line(
+            target.get_left(), target.get_right(),
+            stroke_color=color, stroke_width=target.height * PPU * 0.85,
+            stroke_opacity=0.6,
+        )
+        # 글자 뒤가 아니라 위에 그리되 혼합(Blend) 효과처럼 보이게 하거나,
+        # 그냥 target을 앞으로 뺀다
+        self.add(hl, target)
+        self.play(Create(hl), run_time=run_time, rate_func=rate_functions.ease_out_quad)
+        return hl
+
     # --- 길이 정합 ---
     def _settle(self):
         if self.LOOP_TAIL > 0:
@@ -656,10 +674,17 @@ def down_arrow(color: str = ACCENT, length: float = 0.9) -> Arrow:
         start=UP * length / 2,
         end=DOWN * length / 2,
         color=color,
-        stroke_width=6,
+        stroke_width=STROKE + 2,
         max_tip_length_to_length_ratio=0.35,
         buff=0,
     )
+
+
+def marker_line(start: Mobject | np.ndarray, end: Mobject | np.ndarray, color: str = ACCENT) -> Line:
+    """조사 보드에서 핀과 핀을 잇는 빨간 마커선(또는 실) 느낌의 굵은 선"""
+    p1 = start.get_center() if isinstance(start, Mobject) else start
+    p2 = end.get_center() if isinstance(end, Mobject) else end
+    return Line(p1, p2, color=color, stroke_width=STROKE + 3, buff=0.2)
 
 
 def converge_arrows(src_a: Mobject, src_b: Mobject, dst: Mobject, color: str = ACCENT):

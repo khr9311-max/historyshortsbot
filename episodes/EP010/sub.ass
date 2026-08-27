@@ -1,0 +1,35 @@
+[Script Info]
+Title: EP010 Subtitles
+ScriptType: v4.00+
+WrapStyle: 0
+ScaledBorderAndShadow: yes
+YCbCr Matrix: TV.601
+PlayResX: 1080
+PlayResY: 1920
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Pretendard,80,&H00DCE4E8,&H000000FF,&H00000000,&HA0000000,-1,0,0,0,100,100,0,0,1,3.5,0,2,70,70,300,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.30,0:00:02.18,Default,,0,0,0,,{\fad(130,90)}1812년 러시아를 친
+Dialogue: 0,0:00:02.18,0:00:04.20,Default,,0,0,0,,{\fad(130,90)}{\c&H3A48E4&}나폴레옹의 60만 대군은,{\c&HDCE4E8&}
+Dialogue: 0,0:00:04.31,0:00:05.51,Default,,0,0,0,,{\fad(130,90)}눈이 내리기도 전에
+Dialogue: 0,0:00:05.51,0:00:07.54,Default,,0,0,0,,{\fad(130,90)}{\c&H3A48E4&}이미 절반이 증발했습니다.{\c&HDCE4E8&}
+Dialogue: 0,0:00:07.70,0:00:08.51,Default,,0,0,0,,{\fad(130,90)}흔히 혹독한
+Dialogue: 0,0:00:08.51,0:00:10.30,Default,,0,0,0,,{\fad(130,90)}{\c&H3A48E4&}'동장군' 탓이라고 하죠.{\c&HDCE4E8&}
+Dialogue: 0,0:00:11.76,0:00:14.38,Default,,0,0,0,,{\fad(130,90)}전염병이나 탈영을 꼽는 반론도 있지만,
+Dialogue: 0,0:00:14.38,0:00:18.06,Default,,0,0,0,,{\fad(130,90)}핵심은 날씨가 아니라 {\c&H3A48E4&}'거리의 수학'{\c&HDCE4E8&}이었습니다.
+Dialogue: 0,0:00:19.12,0:00:21.73,Default,,0,0,0,,{\fad(130,90)}당시 군대의 수송 수단은 마차였고,
+Dialogue: 0,0:00:21.73,0:00:24.73,Default,,0,0,0,,{\fad(130,90)}{\c&H3A48E4&}말의 식량도 싣고 가야 한다는 점이죠.{\c&HDCE4E8&}
+Dialogue: 0,0:00:25.39,0:00:27.65,Default,,0,0,0,,{\fad(130,90)}보급선이 500킬로를 넘어가면,
+Dialogue: 0,0:00:27.65,0:00:30.75,Default,,0,0,0,,{\fad(130,90)}{\c&H3A48E4&}짐칸의 식량은 말이 다 먹어치웁니다.{\c&HDCE4E8&}
+Dialogue: 0,0:00:30.91,0:00:33.33,Default,,0,0,0,,{\fad(130,90)}현지에서 뺏으면 되지 않냐고요?
+Dialogue: 0,0:00:33.33,0:00:38.60,Default,,0,0,0,,{\fad(130,90)}러시아군은 후퇴하며 {\c&H3A48E4&}모든 물자를 불태워버렸습니다.{\c&HDCE4E8&}
+Dialogue: 0,0:00:39.86,0:00:41.31,Default,,0,0,0,,{\fad(130,90)}현지 조달마저 막히자
+Dialogue: 0,0:00:41.31,0:00:43.44,Default,,0,0,0,,{\fad(130,90)}{\c&H3A48E4&}굶주린 말이 먼저 쓰러졌고,{\c&HDCE4E8&}
+Dialogue: 0,0:00:43.50,0:00:45.05,Default,,0,0,0,,{\fad(130,90)}60만 대군의 보급망이
+Dialogue: 0,0:00:45.05,0:00:47.07,Default,,0,0,0,,{\fad(130,90)}{\c&H3A48E4&}도미노처럼 붕괴한 겁니다.{\c&HDCE4E8&}
+Dialogue: 0,0:00:47.18,0:00:50.13,Default,,0,0,0,,{\fad(130,90)}결국 강군을 무너뜨린 건 적의 무기가 아니라,
+Dialogue: 0,0:00:50.13,0:00:53.71,Default,,0,0,0,,{\fad(130,90)}{\c&H3A48E4&}500킬로미터 보급선의 물리적 한계{\c&HDCE4E8&}였습니다.

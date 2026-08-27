@@ -1,0 +1,197 @@
+{
+  "episode": "EP011",
+  "title": "압도적으로 강한 쪽이 지는 경우가 반복되는 이유",
+  "hook_text": "이기고도 진 강대국",
+  "package": {
+    "youtube_title": "미국과 소련이 모든 전투를 이기고도 패배한 진짜 이유 (목표의 비대칭성)",
+    "description": "미국은 베트남에서, 소련은 아프간에서 모든 전투를 이기고도 결국 철수했습니다. 이들이 패배한 진짜 이유는 게릴라 전술이나 험한 지형 때문이 아니었습니다. 국익을 위해 싸우는 '제한전'과 국가의 명운을 건 '생존전'이 부딪힐 때 발생하는 '목표의 비대칭성'이 어떻게 무기의 격차를 뒤집는지 분석합니다.\n\n출처: Andrew Mack, \"Why Big Nations Lose Small Wars: The Politics of Asymmetric Conflict\" (World Politics, 1975) / Ivan Arreguín-Toft, How the Weak Win Wars (Cambridge Univ. Press, 2005)\n\n#역사 #전쟁사 #비대칭전력 #베트남전쟁 #아프가니스탄 #미국 #소련 #국제정치",
+    "hashtags": [
+      "역사",
+      "전쟁사",
+      "비대칭전력",
+      "베트남전쟁",
+      "아프가니스탄",
+      "미국",
+      "소련",
+      "국제정치"
+    ],
+    "thumbnail_scene": "S01",
+    "thumbnail_time": 1.5
+  },
+  "shots": [
+    {
+      "id": "V01",
+      "kind": "veo",
+      "scenes": [
+        "S01",
+        "S02"
+      ],
+      "prompt": "[0-5s] Wide establishing shot of heavily armed silhouetted soldiers advancing cautiously through a dense, ruined jungle landscape at dusk, slow side tracking shot moving left to right, heavy atmospheric haze. [5-8s] Rapid push-in close-up on a discarded modern military helmet and weapon sinking in the mud, catching low directional light. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, silhouette figures only, no visible faces, no Korean text, subtle film grain, 9:16 vertical, 8 seconds.",
+      "chars": 537,
+      "risk": "low",
+      "golden_ref": "GP-01"
+    },
+    {
+      "id": "V02",
+      "kind": "veo",
+      "scenes": [
+        "S04",
+        "S05"
+      ],
+      "prompt": "[0-5s] Backlit crowd of silhouetted figures frantically rebuilding a ruined settlement in a war-torn landscape, slow horizontal panning shot, no visible faces, heavy atmospheric haze. [5-8s] Rapid push-in close-up on a pair of local fighter's calloused hands holding a worn, makeshift tool, catching the low light. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, subtle film grain, 9:16 vertical, 8 seconds. No Korean text.",
+      "chars": 472,
+      "risk": "mid",
+      "golden_ref": "GP-04"
+    },
+    {
+      "id": "I01",
+      "kind": "still",
+      "scenes": [
+        "S07"
+      ],
+      "prompt": "Cinematic documentary still, wide composition of a massive silhouetted crowd of protesters gathering in a dark city street, holding blank signs and banners, deep navy blue tone, low saturation, single directional light, heavy atmospheric haze, no visible faces, subtle film grain, 9:16 vertical, 2K. No Korean text.",
+      "chars": 315,
+      "risk": "low",
+      "golden_ref": "GP-05"
+    },
+    {
+      "id": "V03",
+      "kind": "veo",
+      "scenes": [
+        "S08",
+        "S09"
+      ],
+      "prompt": "[0-5s] Wide shot of a massive military convoy stalled on a muddy dirt road at overcast dawn, slow side tracking shot drifting right, low saturation landscape, heavy haze. [5-8s] Rapid push-in close-up on the slumped shoulders of a silhouetted soldier sitting by the roadside, exhausted and waiting. Cinematic documentary footage, deep navy blue tone, single directional light, subtle film grain, 9:16 vertical, 8 seconds. No Korean text.",
+      "chars": 441,
+      "risk": "low",
+      "golden_ref": "GP-03"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "S01",
+      "shot": "V01",
+      "beat": "A",
+      "move": "side_track",
+      "pause": 0.25,
+      "note": "도입 훅 - 패배의 역설",
+      "narration": "미국은 모든 주요 전투를 이기고도 결국 패배했습니다.",
+      "subs": [
+        "미국은 모든 주요 전투를 이기고도",
+        "*결국 패배했습니다.*"
+      ]
+    },
+    {
+      "id": "S02",
+      "shot": "V01",
+      "beat": "B",
+      "move": "push_in",
+      "pause": 0.40,
+      "note": "상황 제시",
+      "narration": "압도적인 무력을 가졌는데 왜 졌을까요?",
+      "subs": [
+        "압도적인 무력을 가졌는데",
+        "*왜 졌을까요?*"
+      ]
+    },
+    {
+      "id": "S03",
+      "kind": "diagram",
+      "plate": "fog",
+      "pause": 1.2,
+      "note": "통념 부정 - 지형/게릴라 X, 목표 비대칭성 O",
+      "narration": "흔히 게릴라 전술이나 험한 지형 때문이라고 생각하죠. 하지만 진짜 이유는 '목표의 비대칭성'에 있었습니다.",
+      "subs": [
+        "흔히 게릴라 전술이나 험한 지형 때문이라고 생각하죠.",
+        "하지만 진짜 이유는 *'목표의 비대칭성'*에 있었습니다."
+      ]
+    },
+    {
+      "id": "S04",
+      "shot": "V02",
+      "beat": "A",
+      "move": "side_track",
+      "pause": 0.30,
+      "note": "강대국의 제한전",
+      "narration": "강대국에게 원정은 국익을 위한 '제한전'이지만,",
+      "subs": [
+        "강대국에게 원정은",
+        "국익을 위한 *'제한전'*이지만,"
+      ]
+    },
+    {
+      "id": "S05",
+      "shot": "V02",
+      "beat": "B",
+      "move": "push_in",
+      "pause": 0.30,
+      "note": "약소국의 생존전",
+      "narration": "약소국에겐 명운이 걸린 '생존전'이죠.",
+      "subs": [
+        "약소국에겐 명운이 걸린",
+        "*'생존전'*이죠."
+      ]
+    },
+    {
+      "id": "S06",
+      "kind": "diagram",
+      "plate": "grid",
+      "pause": 1.4,
+      "note": "손익 계산의 차이",
+      "narration": "약자는 피해를 따지지 않고 버티지만, 강자는 전비가 예상 이익을 넘어서면 철수를 고민합니다.",
+      "subs": [
+        "약자는 피해를 따지지 않고 버티지만,",
+        "강자는 *전비가 예상 이익을 넘어서면 철수*를 고민합니다."
+      ]
+    },
+    {
+      "id": "S07",
+      "shot": "I01",
+      "move": "dolly_in",
+      "pause": 0.5,
+      "note": "조건 2 - 내부 여론",
+      "narration": "여기에 또 다른 조건, 강대국의 '내부 여론 악화'가 겹칩니다.",
+      "subs": [
+        "여기에 또 다른 조건,",
+        "강대국의 *'내부 여론 악화'*가 겹칩니다."
+      ]
+    },
+    {
+      "id": "S08",
+      "shot": "V03",
+      "beat": "A",
+      "move": "side_track",
+      "pause": 0.20,
+      "note": "약자의 승리 메커니즘",
+      "narration": "약소국은 전투에서 매번 져도,",
+      "subs": [
+        "약소국은 전투에서 매번 져도,"
+      ]
+    },
+    {
+      "id": "S09",
+      "shot": "V03",
+      "beat": "B",
+      "move": "push_in",
+      "pause": 0.30,
+      "note": "인내심의 한계",
+      "narration": "적의 인내심이 바닥날 때까지 시간만 끌면 이기는 겁니다.",
+      "subs": [
+        "적의 인내심이 바닥날 때까지",
+        "*시간만 끌면 이기는 겁니다.*"
+      ]
+    },
+    {
+      "id": "S10",
+      "kind": "diagram",
+      "plate": "fog",
+      "pause": 1.0,
+      "note": "도해 - 시간 싸움 요약 + 루프백",
+      "narration": "결국 전쟁의 승패는 무기가 아니라 인내심이 가릅니다. 그래서 최강국인",
+      "subs": [
+        "결국 전쟁의 승패는 무기가 아니라",
+        "*인내심이 가릅니다.* 그래서 최강국인"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+# V01  (S01, S02)  비트 경계 4.23s / 사용 7.50s of 8s  risk=low  ref=GP-01  541자
+
+[0-4.2s] Wide establishing shot of heavily armed silhouetted soldiers advancing cautiously through a dense, ruined jungle landscape at dusk, slow side tracking shot moving left to right, heavy atmospheric haze. [4.2-8s] Rapid push-in close-up on a discarded modern military helmet and weapon sinking in the mud, catching low directional light. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, silhouette figures only, no visible faces, no Korean text, subtle film grain, 9:16 vertical, 8 seconds.

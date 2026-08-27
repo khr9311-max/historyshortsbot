@@ -1,0 +1,11 @@
+scene	kind	move	dur	note
+S01	ai_hero	side_track	4.32	도입 훅 - 상식을 비트는 모순문
+S02	ai_hero	push_in	3.39	훅 질문 - 계절과 피해의 모순 (증발)
+S03	diagram	-	4.05	도해 - 통념 부정 (동장군 탓)
+S04	diagram	-	7.36	도해 - 학설 구분 및 핵심 인과 (거리의 수학)
+S05	ai_still	dolly_in	6.28	조건 1 - 마차 수송과 건초의 딜레마
+S06	ai_hero	side_track	5.52	조건 1 메커니즘 - 500km 거리 한계
+S07	diagram	-	8.95	조건 2 - 셀프문답 & 청야전술 (지도 이동)
+S08	ai_hero	side_track	3.64	조건 결합 - 굶주린 말의 아사
+S09	ai_hero	push_in	3.68	최종 결과 - 60만 대군 보급망 붕괴
+S10	diagram	-	7.64	도해 - 인과 수렴 요약 + 루프백 (유지)

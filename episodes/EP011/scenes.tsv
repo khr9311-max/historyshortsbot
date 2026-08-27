@@ -1,0 +1,11 @@
+scene	kind	move	dur	note
+S01	ai_hero	side_track	4.23	도입 훅 - 패배의 역설
+S02	ai_hero	push_in	3.27	상황 제시
+S03	diagram	-	9.81	통념 부정 - 지형/게릴라 X, 목표 비대칭성 O
+S04	ai_hero	side_track	3.53	강대국의 제한전
+S05	ai_hero	push_in	2.87	약소국의 생존전
+S06	diagram	-	8.14	손익 계산의 차이
+S07	ai_still	dolly_in	5.13	조건 2 - 내부 여론
+S08	ai_hero	side_track	2.28	약자의 승리 메커니즘
+S09	ai_hero	push_in	4.57	인내심의 한계
+S10	diagram	-	7.65	도해 - 시간 싸움 요약 + 루프백

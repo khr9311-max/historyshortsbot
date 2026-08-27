@@ -1,0 +1,2 @@
+- Andrew Mack, "Why Big Nations Lose Small Wars: The Politics of Asymmetric Conflict" (World Politics, 1975)
+- Ivan Arreguín-Toft, How the Weak Win Wars (Cambridge Univ. Press, 2005)

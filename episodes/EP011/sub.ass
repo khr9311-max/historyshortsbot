@@ -1,0 +1,34 @@
+[Script Info]
+Title: EP011 Subtitles
+ScriptType: v4.00+
+WrapStyle: 0
+ScaledBorderAndShadow: yes
+YCbCr Matrix: TV.601
+PlayResX: 1080
+PlayResY: 1920
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Pretendard,80,&H00DCE4E8,&H000000FF,&H00000000,&HA0000000,-1,0,0,0,100,100,0,0,1,3.5,0,2,70,70,300,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.30,0:00:02.58,Default,,0,0,0,,{\fad(130,90)}미국은 모든 주요 전투를 이기고도
+Dialogue: 0,0:00:02.58,0:00:04.12,Default,,0,0,0,,{\fad(130,90)}{\c&H3A48E4&}결국 패배했습니다.{\c&HDCE4E8&}
+Dialogue: 0,0:00:04.23,0:00:05.86,Default,,0,0,0,,{\fad(130,90)}압도적인 무력을 가졌는데
+Dialogue: 0,0:00:05.86,0:00:07.24,Default,,0,0,0,,{\fad(130,90)}{\c&H3A48E4&}왜 졌을까요?{\c&HDCE4E8&}
+Dialogue: 0,0:00:07.50,0:00:11.07,Default,,0,0,0,,{\fad(130,90)}흔히 게릴라 전술이나 험한 지형 때문이라고 생각하죠.
+Dialogue: 0,0:00:11.07,0:00:16.25,Default,,0,0,0,,{\fad(130,90)}하지만 진짜 이유는 {\c&H3A48E4&}'목표의 비대칭성'{\c&HDCE4E8&}에 있었습니다.
+Dialogue: 0,0:00:17.31,0:00:18.57,Default,,0,0,0,,{\fad(130,90)}강대국에게 원정은
+Dialogue: 0,0:00:18.57,0:00:20.68,Default,,0,0,0,,{\fad(130,90)}국익을 위한 {\c&H3A48E4&}'제한전'{\c&HDCE4E8&}이지만,
+Dialogue: 0,0:00:20.84,0:00:22.41,Default,,0,0,0,,{\fad(130,90)}약소국에겐 명운이 걸린
+Dialogue: 0,0:00:22.41,0:00:23.55,Default,,0,0,0,,{\fad(130,90)}{\c&H3A48E4&}'생존전'{\c&HDCE4E8&}이죠.
+Dialogue: 0,0:00:23.71,0:00:26.20,Default,,0,0,0,,{\fad(130,90)}약자는 피해를 따지지 않고 버티지만,
+Dialogue: 0,0:00:26.20,0:00:30.59,Default,,0,0,0,,{\fad(130,90)}강자는 {\c&H3A48E4&}전비가 예상 이익을 넘어서면 철수{\c&HDCE4E8&}를 고민합니다.
+Dialogue: 0,0:00:31.85,0:00:33.46,Default,,0,0,0,,{\fad(130,90)}여기에 또 다른 조건,
+Dialogue: 0,0:00:33.46,0:00:36.62,Default,,0,0,0,,{\fad(130,90)}강대국의 {\c&H3A48E4&}'내부 여론 악화'{\c&HDCE4E8&}가 겹칩니다.
+Dialogue: 0,0:00:36.98,0:00:39.20,Default,,0,0,0,,{\fad(130,90)}약소국은 전투에서 매번 져도,
+Dialogue: 0,0:00:39.26,0:00:41.46,Default,,0,0,0,,{\fad(130,90)}적의 인내심이 바닥날 때까지
+Dialogue: 0,0:00:41.46,0:00:43.67,Default,,0,0,0,,{\fad(130,90)}{\c&H3A48E4&}시간만 끌면 이기는 겁니다.{\c&HDCE4E8&}
+Dialogue: 0,0:00:43.83,0:00:46.23,Default,,0,0,0,,{\fad(130,90)}결국 전쟁의 승패는 무기가 아니라
+Dialogue: 0,0:00:46.23,0:00:50.37,Default,,0,0,0,,{\fad(130,90)}{\c&H3A48E4&}인내심이 가릅니다.{\c&HDCE4E8&} 그래서 최강국인

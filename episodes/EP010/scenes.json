@@ -1,0 +1,194 @@
+{
+  "episode": "EP010",
+  "title": "보급선 길이가 전쟁 결과를 결정한 구조",
+  "hook_text": "겨울 전에 전멸한 군대",
+  "package": {
+    "youtube_title": "나폴레옹 60만 대군을 겨울 오기 전에 무너뜨린 '거리의 수학'",
+    "description": "1812년 러시아를 침공한 나폴레옹의 60만 대군은 혹독한 '동장군'이 오기도 전인 8월에 이미 절반이 무너졌습니다.\n\n전투력으로 질 수 없던 강군을 무너뜨린 건 적의 무기가 아니었습니다.\n\n진짜 원인은 마차의 건초 소비율이 만들어낸 '500km 보급선 한계선'과, 현지 조달을 원천 차단한 러시아군의 '청야전술'이 결합된 수학적 필연이었습니다.\n\n출처: Martin van Creveld, Supplying War: Logistics from Wallenstein to Patton (Cambridge Univ. Press, 1977) / David G. Chandler, The Campaigns of Napoleon (Scribner, 1966) / Carl von Clausewitz, The Campaign of 1812 in Russia (1843)\n\n#역사 #세계사 #나폴레옹 #전쟁사 #보급선 #러시아원정",
+    "hashtags": [
+      "역사",
+      "세계사",
+      "나폴레옹",
+      "전쟁사",
+      "보급선",
+      "러시아원정"
+    ],
+    "thumbnail_scene": "S01",
+    "thumbnail_time": 1.0
+  },
+  "shots": [
+    {
+      "id": "V01",
+      "kind": "veo",
+      "scenes": [
+        "S01",
+        "S02"
+      ],
+      "risk": "low",
+      "golden_ref": "GP-01",
+      "chars": 561,
+      "prompt": "[0-5s] Wide establishing shot of a massive army marching on a muddy expanse at dusk, slow side tracking shot moving left to right, silhouette cavalry and infantry advancing under heavy atmospheric haze, tiny silhouette figures for scale. [5-8s] Rapid push-in close-up on muddy cart tracks and discarded military gear on the ground, catching low directional light. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, silhouette figures only, no visible faces, no Korean text, subtle film grain, 9:16 vertical, 8 seconds."
+    },
+    {
+      "id": "I01",
+      "kind": "still",
+      "scenes": [
+        "S05"
+      ],
+      "risk": "low",
+      "golden_ref": "GP-05",
+      "chars": 376,
+      "prompt": "Cinematic documentary still, wide composition of a military supply depot at twilight, lines of heavy wooden supply wagons and draft horses resting by a timber storehouse, deep navy blue tone, low saturation, single directional light from a lantern, heavy atmospheric haze, silhouette figures at the edge, no visible faces, no Korean text, subtle film grain, 9:16 vertical, 2K."
+    },
+    {
+      "id": "V02",
+      "kind": "veo",
+      "scenes": [
+        "S06"
+      ],
+      "risk": "low",
+      "golden_ref": "GP-04",
+      "chars": 387,
+      "prompt": "[0-8s] Wide shot of an endless supply convoy moving along a barren dirt road at overcast dawn, slow side tracking shot, silhouette horse-drawn wagons kicking up dust under atmospheric haze. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, silhouette figures only, no visible faces, no Korean text, subtle film grain, 9:16 vertical, 8 seconds."
+    },
+    {
+      "id": "V03",
+      "kind": "veo",
+      "scenes": [
+        "S08",
+        "S09"
+      ],
+      "risk": "low",
+      "golden_ref": "GP-02",
+      "chars": 489,
+      "prompt": "[0-5s] Wide desolate battlefield at dusk, slow side tracking shot moving left to right, silhouette figures abandoning broken carts and fallen horses on the roadside. [5-8s] Rapid push-in close-up on an overturned wagon wheel half-buried in mud, cracked spokes catching low directional light. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, silhouette figures only, no visible faces, no Korean text, subtle film grain, 9:16 vertical, 8 seconds."
+    }
+  ],
+  "scenes": [
+    {
+      "id": "S01",
+      "shot": "V01",
+      "beat": "A",
+      "move": "side_track",
+      "pause": 0.25,
+      "note": "도입 훅 - 상식을 비트는 모순문",
+      "narration": "1812년 러시아를 친 나폴레옹의 60만 대군은,",
+      "subs": [
+        "1812년 러시아를 친",
+        "*나폴레옹의 60만 대군은,*"
+      ]
+    },
+    {
+      "id": "S02",
+      "shot": "V01",
+      "beat": "B",
+      "move": "push_in",
+      "pause": 0.30,
+      "note": "훅 질문 - 계절과 피해의 모순 (증발)",
+      "narration": "눈이 내리기도 전에 이미 절반이 증발했습니다.",
+      "subs": [
+        "눈이 내리기도 전에",
+        "*이미 절반이 증발했습니다.*"
+      ]
+    },
+    {
+      "id": "S03",
+      "kind": "diagram",
+      "plate": "fog",
+      "pause": 1.6,
+      "note": "도해 - 통념 부정 (동장군 탓)",
+      "narration": "흔히 혹독한 '동장군' 탓이라고 하죠.",
+      "subs": [
+        "흔히 혹독한",
+        "*'동장군' 탓이라고 하죠.*"
+      ]
+    },
+    {
+      "id": "S04",
+      "kind": "diagram",
+      "plate": "grid",
+      "pause": 1.2,
+      "note": "도해 - 학설 구분 및 핵심 인과 (거리의 수학)",
+      "narration": "전염병이나 탈영을 꼽는 반론도 있지만, 핵심은 날씨가 아니라 '거리의 수학'이었습니다.",
+      "subs": [
+        "전염병이나 탈영을 꼽는 반론도 있지만,",
+        "핵심은 날씨가 아니라 *'거리의 수학'*이었습니다."
+      ]
+    },
+    {
+      "id": "S05",
+      "shot": "I01",
+      "move": "dolly_in",
+      "pause": 0.8,
+      "note": "조건 1 - 마차 수송과 건초의 딜레마",
+      "narration": "당시 군대의 수송 수단은 마차였고, 말의 식량도 싣고 가야 한다는 점이죠.",
+      "subs": [
+        "당시 군대의 수송 수단은 마차였고,",
+        "*말의 식량도 싣고 가야 한다는 점이죠.*"
+      ]
+    },
+    {
+      "id": "S06",
+      "shot": "V02",
+      "beat": "A",
+      "move": "side_track",
+      "pause": 0.30,
+      "note": "조건 1 메커니즘 - 500km 거리 한계",
+      "narration": "보급선이 500킬로를 넘어가면, 짐칸의 식량은 말이 다 먹어치웁니다.",
+      "subs": [
+        "보급선이 500킬로를 넘어가면,",
+        "*짐칸의 식량은 말이 다 먹어치웁니다.*"
+      ]
+    },
+    {
+      "id": "S07",
+      "kind": "diagram",
+      "plate": "grid",
+      "pause": 1.4,
+      "note": "조건 2 - 셀프문답 & 청야전술 (지도 이동)",
+      "narration": "현지에서 뺏으면 되지 않냐고요? 러시아군은 후퇴하며 모든 물자를 불태워버렸습니다.",
+      "subs": [
+        "현지에서 뺏으면 되지 않냐고요?",
+        "러시아군은 후퇴하며 *모든 물자를 불태워버렸습니다.*"
+      ]
+    },
+    {
+      "id": "S08",
+      "shot": "V03",
+      "beat": "A",
+      "move": "side_track",
+      "pause": 0.20,
+      "note": "조건 결합 - 굶주린 말의 아사",
+      "narration": "현지 조달마저 막히자 굶주린 말이 먼저 쓰러졌고,",
+      "subs": [
+        "현지 조달마저 막히자",
+        "*굶주린 말이 먼저 쓰러졌고,*"
+      ]
+    },
+    {
+      "id": "S09",
+      "shot": "V03",
+      "beat": "B",
+      "move": "push_in",
+      "pause": 0.25,
+      "note": "최종 결과 - 60만 대군 보급망 붕괴",
+      "narration": "60만 대군의 보급망이 도미노처럼 붕괴한 겁니다.",
+      "subs": [
+        "60만 대군의 보급망이",
+        "*도미노처럼 붕괴한 겁니다.*"
+      ]
+    },
+    {
+      "id": "S10",
+      "kind": "diagram",
+      "plate": "fog",
+      "pause": 1.25,
+      "note": "도해 - 인과 수렴 요약 + 루프백 (유지)",
+      "narration": "결국 강군을 무너뜨린 건 적의 무기가 아니라, 500킬로미터 보급선의 물리적 한계였습니다.",
+      "subs": [
+        "결국 강군을 무너뜨린 건 적의 무기가 아니라,",
+        "*500킬로미터 보급선의 물리적 한계*였습니다."
+      ]
+    }
+  ]
+}
