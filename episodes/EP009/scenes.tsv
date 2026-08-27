@@ -1,0 +1,11 @@
+scene	kind	move	dur	note
+S01	ai_hero	side_track	3.44	도입 훅 - 역설적 모순문
+S02	ai_hero	push_in	2.70	훅 질문 - 원인 탐구
+S03	diagram	-	4.13	도해 - 통념 부정 (세율 크기 배제)
+S04	diagram	-	4.21	도해 - 핵심 인과 (누가 어떻게 걷었는가)
+S05	ai_still	dolly_in	6.31	조건 1 - 징세권 민간 매각 (징세 청부제)
+S06	ai_hero	side_track	3.15	조건 1 메커니즘 - 중간 착복 및 수탈
+S07	ai_hero	push_in	4.67	셀프 문답 - 관료 행정망 부재와 민간 외주의 함정
+S08	ai_hero	side_track	3.28	조건 2 - 중간 누수로 인한 국고 고갈
+S09	ai_hero	push_in	4.42	조건 2 결과 - 신용 붕괴와 고금리 부채
+S10	diagram	-	9.07	도해 - 인과 수렴 요약 + 루프백

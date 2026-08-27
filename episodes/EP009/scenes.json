@@ -1,0 +1,195 @@
+{
+  "episode": "EP009",
+  "title": "세금 징수 방식이 국가 수명을 결정한 이유",
+  "hook_text": "덜 걷고 망한 나라",
+  "package": {
+    "youtube_title": "세금을 덜 걷은 나라가 더 빨리 망한 진짜 이유",
+    "description": "18세기 영국은 프랑스보다 1인당 세금을 2배 이상 더 냈지만 세계 제국으로 번영했습니다. 반면 세금을 덜 걷은 프랑스는 국가 파산으로 대혁명을 맞았죠.\n\n왜 국민을 덜 쥐어짜고도 국가가 먼저 무너졌을까요? 원인은 세율의 높고 낮음이 아니었습니다.\n\n진짜 원인은 징세권을 민간에 외주 준 '징세 청부제'의 가혹한 중간 착복과 세수 누수, 그리고 그로 인해 붕괴된 국가 신용이었습니다.\n\n출처: John Brewer, The Sinews of Power (1989) / Douglass North & Barry Weingast (1989) / Philip T. Hoffman, Fiscal Crises, Liberty, and Representative Government (1994)\n\n#역사 #세계사 #세금 #재정군사국가 #경제사",
+    "hashtags": [
+      "역사",
+      "세계사",
+      "세금",
+      "재정군사국가",
+      "경제사"
+    ],
+    "thumbnail_scene": "S01",
+    "thumbnail_time": 1.0
+  },
+  "shots": [
+    {
+      "id": "V01",
+      "kind": "veo",
+      "scenes": [
+        "S01",
+        "S02"
+      ],
+      "risk": "low",
+      "golden_ref": "GP-01",
+      "chars": 546,
+      "prompt": "[0-5s] Wide establishing shot of a dimly lit royal treasury hall in 18th-century Europe at dusk, slow side tracking shot moving left to right, silhouette clerks and royal officials weighing coins under atmospheric haze. [5-8s] Rapid push-in close-up on heavy iron-bound tax chests and ledgers on a wooden table, catching low directional candlelight. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, silhouette figures only, no visible faces, no Korean text, subtle film grain, 9:16 vertical, 8 seconds."
+    },
+    {
+      "id": "I01",
+      "kind": "still",
+      "scenes": [
+        "S05"
+      ],
+      "risk": "low",
+      "golden_ref": "GP-05",
+      "chars": 394,
+      "prompt": "Cinematic documentary still, wide composition of a private tax farmer's opulent study room, parchment contracts and wax-sealed tax farming charters spread on a dark oak desk, deep navy blue tone, low saturation, single directional light from a tall arched window, heavy atmospheric haze, silhouette figure at the far edge, no visible faces, no Korean text, subtle film grain, 9:16 vertical, 2K."
+    },
+    {
+      "id": "V02",
+      "kind": "veo",
+      "scenes": [
+        "S06",
+        "S07"
+      ],
+      "risk": "low",
+      "golden_ref": "GP-04",
+      "chars": 547,
+      "prompt": "[0-5s] Wide shot of an 18th-century rural village market under heavy twilight, slow side tracking shot moving left to right, silhouette peasants and debt collectors gathered near a rustic tavern. [5-8s] Rapid push-in close-up on worn leather tax pouches and confiscated grain measures on a wooden cart, textured burlap catching raking lantern light. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, silhouette figures only, no visible faces, no Korean text, subtle film grain, 9:16 vertical, 8 seconds."
+    },
+    {
+      "id": "V03",
+      "kind": "veo",
+      "scenes": [
+        "S08",
+        "S09"
+      ],
+      "risk": "low",
+      "golden_ref": "GP-02",
+      "chars": 567,
+      "prompt": "[0-5s] Wide shot of a grand state bank exchange floor in financial turmoil at dusk, slow side tracking shot, silhouette bankers and creditors pacing before tall marble pillars under heavy atmospheric haze. [5-8s] Rapid push-in close-up on defaulted sovereign debt bonds and unpaid royal promissory notes scattered on the stone floor, catching low directional light. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, silhouette figures only, no visible faces, no Korean text, subtle film grain, 9:16 vertical, 8 seconds."
+    }
+  ],
+  "scenes": [
+    {
+      "id": "S01",
+      "shot": "V01",
+      "beat": "A",
+      "move": "side_track",
+      "pause": 0.25,
+      "note": "도입 훅 - 역설적 모순문",
+      "narration": "세금을 덜 걷은 나라가 먼저 무너졌습니다.",
+      "subs": [
+        "세금을 덜 걷은 나라가",
+        "*먼저 무너졌습니다.*"
+      ]
+    },
+    {
+      "id": "S02",
+      "shot": "V01",
+      "beat": "B",
+      "move": "push_in",
+      "pause": 0.30,
+      "note": "훅 질문 - 원인 탐구",
+      "narration": "왜 덜 쥐어짜고도 파산했을까요?",
+      "subs": [
+        "왜 덜 쥐어짜고도",
+        "*파산했을까요?*"
+      ]
+    },
+    {
+      "id": "S03",
+      "kind": "diagram",
+      "plate": "fog",
+      "pause": 1.3,
+      "note": "도해 - 통념 부정 (세율 크기 배제)",
+      "narration": "원인은 세율의 높고 낮음이 아니었습니다.",
+      "subs": [
+        "원인은",
+        "*세율의 높고 낮음이 아니었습니다.*"
+      ]
+    },
+    {
+      "id": "S04",
+      "kind": "diagram",
+      "plate": "grid",
+      "pause": 1.3,
+      "note": "도해 - 핵심 인과 (누가 어떻게 걷었는가)",
+      "narration": "핵심은 세금을 누가 어떻게 걷었는가였거든요.",
+      "subs": [
+        "핵심은 세금을",
+        "*누가 어떻게 걷었는가였거든요.*"
+      ]
+    },
+    {
+      "id": "S05",
+      "shot": "I01",
+      "move": "dolly_in",
+      "pause": 1.0,
+      "note": "조건 1 - 징세권 민간 매각 (징세 청부제)",
+      "narration": "당장 목돈이 급했던 국왕들은 징세권을 민간 업자에게 팔아넘겼습니다.",
+      "subs": [
+        "당장 목돈이 급했던 국왕들은",
+        "징세권을 *민간 업자에게 팔아넘겼습니다.*"
+      ]
+    },
+    {
+      "id": "S06",
+      "shot": "V02",
+      "beat": "A",
+      "move": "side_track",
+      "pause": 0.15,
+      "note": "조건 1 메커니즘 - 중간 착복 및 수탈",
+      "narration": "업자들은 본전을 뽑으려 백성을 쥐어짰죠.",
+      "subs": [
+        "업자들은 본전을 뽑으려",
+        "*백성을 쥐어짰죠.*"
+      ]
+    },
+    {
+      "id": "S07",
+      "shot": "V02",
+      "beat": "B",
+      "move": "push_in",
+      "pause": 0.15,
+      "note": "셀프 문답 - 관료 행정망 부재와 민간 외주의 함정",
+      "narration": "왜 넘겼냐고요? 징수할 관료가 없었거든요.",
+      "subs": [
+        "왜 넘겼냐고요?",
+        "*징수할 관료가 없었거든요.*"
+      ]
+    },
+    {
+      "id": "S08",
+      "shot": "V03",
+      "beat": "A",
+      "move": "side_track",
+      "pause": 0.20,
+      "note": "조건 2 - 중간 누수로 인한 국고 고갈",
+      "narration": "중간에서 세수가 새어나가자 국고는 바닥났고,",
+      "subs": [
+        "중간에서 세수가 새어나가자",
+        "*국고는 바닥났고,*"
+      ]
+    },
+    {
+      "id": "S09",
+      "shot": "V03",
+      "beat": "B",
+      "move": "push_in",
+      "pause": 0.25,
+      "note": "조건 2 결과 - 신용 붕괴와 고금리 부채",
+      "narration": "신용을 잃은 국가는 살인적인 고금리 빚더미에 무너졌습니다.",
+      "subs": [
+        "신용을 잃은 국가는",
+        "살인적인 *고금리 빚더미에 무너졌습니다.*"
+      ]
+    },
+    {
+      "id": "S10",
+      "kind": "diagram",
+      "plate": "fog",
+      "pause": 0.0,
+      "note": "도해 - 인과 수렴 요약 + 루프백",
+      "narration": "결국 국가의 수명을 가른 건 세율의 크기가 아니라, 중간 누수를 막고 신용을 지켜낸 세금 징수 방식이었습니다.",
+      "subs": [
+        "결국 국가의 수명을 가른 건 세율의 크기가 아니라,",
+        "중간 누수를 막고 신용을 지켜낸 *세금 징수 방식*이었습니다."
+      ]
+    }
+  ]
+}

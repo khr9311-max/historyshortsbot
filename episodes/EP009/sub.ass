@@ -1,0 +1,35 @@
+[Script Info]
+Title: EP009 Subtitles
+ScriptType: v4.00+
+WrapStyle: 0
+ScaledBorderAndShadow: yes
+YCbCr Matrix: TV.601
+PlayResX: 1080
+PlayResY: 1920
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Pretendard,80,&H00DCE4E8,&H000000FF,&H00000000,&HA0000000,-1,0,0,0,100,100,0,0,1,3.5,0,2,70,70,300,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.30,0:00:01.79,Default,,0,0,0,,{\fad(130,90)}세금을 덜 걷은 나라가
+Dialogue: 0,0:00:01.79,0:00:03.33,Default,,0,0,0,,{\fad(130,90)}{\c&H3A48E4&}먼저 무너졌습니다.{\c&HDCE4E8&}
+Dialogue: 0,0:00:03.44,0:00:04.62,Default,,0,0,0,,{\fad(130,90)}왜 덜 쥐어짜고도
+Dialogue: 0,0:00:04.62,0:00:05.98,Default,,0,0,0,,{\fad(130,90)}{\c&H3A48E4&}파산했을까요?{\c&HDCE4E8&}
+Dialogue: 0,0:00:06.14,0:00:06.69,Default,,0,0,0,,{\fad(130,90)}원인은
+Dialogue: 0,0:00:06.69,0:00:09.11,Default,,0,0,0,,{\fad(130,90)}{\c&H3A48E4&}세율의 높고 낮음이 아니었습니다.{\c&HDCE4E8&}
+Dialogue: 0,0:00:10.27,0:00:11.17,Default,,0,0,0,,{\fad(130,90)}핵심은 세금을
+Dialogue: 0,0:00:11.17,0:00:13.32,Default,,0,0,0,,{\fad(130,90)}{\c&H3A48E4&}누가 어떻게 걷었는가였거든요.{\c&HDCE4E8&}
+Dialogue: 0,0:00:14.48,0:00:16.70,Default,,0,0,0,,{\fad(130,90)}당장 목돈이 급했던 국왕들은
+Dialogue: 0,0:00:16.70,0:00:19.93,Default,,0,0,0,,{\fad(130,90)}징세권을 {\c&H3A48E4&}민간 업자에게 팔아넘겼습니다.{\c&HDCE4E8&}
+Dialogue: 0,0:00:20.79,0:00:22.36,Default,,0,0,0,,{\fad(130,90)}업자들은 본전을 뽑으려
+Dialogue: 0,0:00:22.36,0:00:23.93,Default,,0,0,0,,{\fad(130,90)}{\c&H3A48E4&}백성을 쥐어짰죠.{\c&HDCE4E8&}
+Dialogue: 0,0:00:23.94,0:00:25.34,Default,,0,0,0,,{\fad(130,90)}왜 넘겼냐고요?
+Dialogue: 0,0:00:25.34,0:00:28.60,Default,,0,0,0,,{\fad(130,90)}{\c&H3A48E4&}징수할 관료가 없었거든요.{\c&HDCE4E8&}
+Dialogue: 0,0:00:28.61,0:00:30.31,Default,,0,0,0,,{\fad(130,90)}중간에서 세수가 새어나가자
+Dialogue: 0,0:00:30.31,0:00:31.83,Default,,0,0,0,,{\fad(130,90)}{\c&H3A48E4&}국고는 바닥났고,{\c&HDCE4E8&}
+Dialogue: 0,0:00:31.89,0:00:33.23,Default,,0,0,0,,{\fad(130,90)}신용을 잃은 국가는
+Dialogue: 0,0:00:33.23,0:00:36.20,Default,,0,0,0,,{\fad(130,90)}살인적인 {\c&H3A48E4&}고금리 빚더미에 무너졌습니다.{\c&HDCE4E8&}
+Dialogue: 0,0:00:36.31,0:00:39.47,Default,,0,0,0,,{\fad(130,90)}결국 국가의 수명을 가른 건 세율의 크기가 아니라,
+Dialogue: 0,0:00:39.47,0:00:44.27,Default,,0,0,0,,{\fad(130,90)}중간 누수를 막고 신용을 지켜낸 {\c&H3A48E4&}세금 징수 방식{\c&HDCE4E8&}이었습니다.
