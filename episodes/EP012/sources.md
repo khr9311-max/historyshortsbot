@@ -1,0 +1,3 @@
+- Geoffrey Parker, *The Military Revolution: Military Innovation and the Rise of the West 1500-1800* (Cambridge University Press, 1988/1996)
+- John A. Lynn, "The Trace Italienne and the Growth of Armies: The Art of the Trap" (*The Journal of Military History*, Vol. 55, No. 3, 1991)
+- Christopher Duffy, *Siege Warfare: The Fortress in the Early Modern World 1494–1660* (Routledge, 1979)

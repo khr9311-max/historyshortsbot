@@ -160,6 +160,7 @@ class Package:
     # 썸네일 전용 설정 — scripts/make_thumbnail.py 가 읽는다.
     # {source, t, lines[], accent, kicker}. 비어 있으면 hook_text 로 폴백한다.
     thumbnail: dict = field(default_factory=dict)
+    youtube_video_id: str = ""  # 발행 후 등록되는 유튜브 비디오 ID
 
 
 @dataclass
@@ -219,6 +220,7 @@ def load(ep: str) -> Doc:
         thumbnail_scene=pkg_raw.get("thumbnail_scene", ""),
         thumbnail_time=float(pkg_raw.get("thumbnail_time", 1.0)),
         thumbnail=dict(pkg_raw.get("thumbnail") or {}),
+        youtube_video_id=str(pkg_raw.get("youtube_video_id", "") or "").strip(),
     )
 
     return Doc(episode=raw.get("episode", ep), title=raw.get("title", ""),

@@ -1,0 +1,208 @@
+{
+  "episode": "EP012",
+  "title": "성벽이 무의미해진 것은 대포 때문이 아니다",
+  "hook_text": "대포와 성벽의 거짓말",
+  "package": {
+    "youtube_title": "대포가 나왔는데 성벽은 왜 200년이나 더 강해졌을까? (성벽이 사라진 진짜 이유)",
+    "description": "1453년 거대한 대포가 콘스탄티노플을 무너뜨렸을 때, 사람들은 성벽의 시대가 끝났다고 믿었습니다. 하지만 대포 등장 이후 성벽은 대포에 맞서 '성형 요새'로 진화하며 오히려 200년 넘게 난공불락이 되었습니다. 성벽을 무너뜨린 것은 화약의 파괴력이 아니라, 천문학적인 축성 비용과 20만 대군이 펼친 기동전이었습니다.\n\n출처: Geoffrey Parker, The Military Revolution: Military Innovation and the Rise of the West 1500-1800 (Cambridge Univ. Press) / John A. Lynn, \"The Trace Italienne and the Growth of Armies\" (The Journal of Military History, 1991)\n\n#역사 #전쟁사 #군사혁명 #성벽 #성형요새 #대포 #중세 #세계사",
+    "hashtags": [
+      "역사",
+      "전쟁사",
+      "군사혁명",
+      "성벽",
+      "성형요새",
+      "대포",
+      "중세",
+      "세계사"
+    ],
+    "thumbnail_scene": "S01",
+    "thumbnail_time": 1.5,
+    "thumbnail": {
+      "source": "V01",
+      "t": 2.0,
+      "kicker": "군사 혁명",
+      "lines": [
+        "대포가 나왔는데",
+        "성벽은 더 강해졌다"
+      ],
+      "accent": "더 강해졌다"
+    }
+  },
+  "shots": [
+    {
+      "id": "V01",
+      "kind": "veo",
+      "scenes": [
+        "S01",
+        "S02"
+      ],
+      "prompt": "[0-5s] A massive bronze bombard unleashes a catastrophic fiery blast and billowing smoke, instantly shattering and collapsing high medieval stone battlements in a violent dust cloud, slow side tracking shot. [5-8s] Rapid push-in close-up on crushed stone ramparts and smoking iron cannonballs in the moat. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, silhouette figures only, no visible faces, no Korean text, subtle film grain, 9:16 vertical, 8 seconds.",
+      "chars": 508,
+      "risk": "low",
+      "golden_ref": "GP-01"
+    },
+    {
+      "id": "I01",
+      "kind": "still",
+      "scenes": [
+        "S04"
+      ],
+      "prompt": "Cinematic documentary still, wide composition of a massive geometric star fortress trace italienne viewed from a high angle at dusk, low-lying thick angular stone ramparts and deep trenches, deep navy blue tone, low saturation, single directional light, heavy atmospheric haze, silhouette engineer inspecting maps at the bottom corner, no visible faces, subtle film grain, 9:16 vertical, 2K. No Korean text.",
+      "chars": 409,
+      "risk": "low",
+      "golden_ref": "GP-05"
+    },
+    {
+      "id": "V02",
+      "kind": "veo",
+      "scenes": [
+        "S05",
+        "S06"
+      ],
+      "prompt": "[0-5s] Silhouetted stone masons and workers laboring frantically in a massive construction trench of an angular fortress wall at dawn, slow horizontal panning shot, heavy atmospheric dust and haze. [5-8s] Rapid push-in close-up on a large iron chest overflowing with heavy gold coins and ledger books being slammed shut. Cinematic documentary footage, deep navy blue tone, low saturation, single directional light, no visible faces, subtle film grain, 9:16 vertical, 8 seconds. No Korean text.",
+      "chars": 493,
+      "risk": "low",
+      "golden_ref": "GP-02"
+    },
+    {
+      "id": "V03",
+      "kind": "veo",
+      "scenes": [
+        "S08",
+        "S09"
+      ],
+      "prompt": "[0-5s] Wide shot of an immense army of thousands of silhouetted soldiers and cavalry marching past a massive fortress on the horizon without stopping, slow side tracking shot drifting right, low saturation landscape, heavy haze. [5-8s] Rapid push-in close-up on the lonely, abandoned stone battlements of the fortress overlooking the empty plains, silhouetted sentry standing motionless. Cinematic documentary footage, deep navy blue tone, single directional light, subtle film grain, 9:16 vertical, 8 seconds. No Korean text.",
+      "chars": 530,
+      "risk": "low",
+      "golden_ref": "GP-03"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "S01",
+      "shot": "V01",
+      "beat": "A",
+      "move": "side_track",
+      "pause": 0.25,
+      "note": "도입 훅 - 상식",
+      "narration": "거대한 대포가 성벽을 부쉈습니다.",
+      "subs": [
+        "거대한 대포가",
+        "성벽을 *부쉈습니다.*"
+      ]
+    },
+    {
+      "id": "S02",
+      "shot": "V01",
+      "beat": "B",
+      "move": "push_in",
+      "pause": 0.35,
+      "note": "훅 결정타 - 질문",
+      "narration": "성벽은 200년을 더 버텼습니다. 왜일까요?",
+      "subs": [
+        "성벽은 200년을 더 버텼습니다.",
+        "*왜일까요?*"
+      ]
+    },
+    {
+      "id": "S03",
+      "kind": "diagram",
+      "plate": "fog",
+      "pause": 0.35,
+      "note": "도해 1 - 통념 부정 & 성형 요새 진화",
+      "narration": "대포를 막는 '별모양 요새'로 진화했죠.",
+      "subs": [
+        "대포를 막는",
+        "*'별모양 요새'*로 진화했죠."
+      ]
+    },
+    {
+      "id": "S04",
+      "shot": "I01",
+      "move": "dolly_in",
+      "pause": 0.35,
+      "note": "조건 1 - 천문학적 비용",
+      "narration": "진짜 문제는 성벽을 짓는 '천문학적인 비용'이었죠.",
+      "subs": [
+        "진짜 문제는 성벽을 짓는",
+        "*'천문학적인 비용'*이었죠."
+      ]
+    },
+    {
+      "id": "S05",
+      "shot": "V02",
+      "beat": "A",
+      "move": "side_track",
+      "pause": 0.3,
+      "note": "조건 2 - 재정 압박",
+      "narration": "도시 하나를 요새화하는 데 국가 예산이 거덜 났고,",
+      "subs": [
+        "도시 하나를 요새화하는 데",
+        "*국가 예산이 거덜 났고,*"
+      ]
+    },
+    {
+      "id": "S06",
+      "shot": "V02",
+      "beat": "B",
+      "move": "push_in",
+      "pause": 0.35,
+      "note": "조건 3 - 군대 규모 폭증",
+      "narration": "군대의 규모는 폭발적으로 늘어났습니다.",
+      "subs": [
+        "군대의 규모는",
+        "*폭발적으로 늘어났습니다.*"
+      ]
+    },
+    {
+      "id": "S07",
+      "kind": "diagram",
+      "plate": "grid",
+      "pause": 0.35,
+      "note": "도해 2 - 규모 폭증 & 요새 우회",
+      "narration": "20만 대군은 성벽을 그냥 지나쳤습니다.",
+      "subs": [
+        "20만 대군은 성벽을",
+        "*그냥 지나쳤습니다.*"
+      ]
+    },
+    {
+      "id": "S08",
+      "shot": "V03",
+      "beat": "A",
+      "move": "side_track",
+      "pause": 0.3,
+      "note": "상황 전개 - 요새 우회",
+      "narration": "거대한 요새를 피해 수도로 곧장 진격하자,",
+      "subs": [
+        "거대한 요새를 피해",
+        "*수도로 곧장 진격하자,*"
+      ]
+    },
+    {
+      "id": "S09",
+      "shot": "V03",
+      "beat": "B",
+      "move": "push_in",
+      "pause": 0.35,
+      "note": "결과 - 고립 감옥",
+      "narration": "성벽은 돈만 드는 고립된 감옥이 된 셈입니다.",
+      "subs": [
+        "성벽은 돈만 드는",
+        "*고립된 감옥이 된 셈입니다.*"
+      ]
+    },
+    {
+      "id": "S10",
+      "kind": "diagram",
+      "plate": "fog",
+      "pause": 0.35,
+      "note": "도해 3 - 인과 정리 + 루프백",
+      "narration": "대포가 아니라 기동전이었죠 바로",
+      "subs": [
+        "대포가 아니라 *기동전이었죠*",
+        "바로"
+      ]
+    }
+  ]
+}

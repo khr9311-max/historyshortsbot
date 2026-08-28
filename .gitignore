@@ -25,4 +25,8 @@ Thumbs.db
 
 # 비밀키 — GEMINI_API_KEY 등. 절대 커밋하지 않는다
 .env
+client_secrets.json
+client_secret*.json
+.token.json
+*oauth*.json
 
